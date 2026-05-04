@@ -66,11 +66,11 @@
         h1 { font-size: 4rem; color: #d2b48c; text-align: center; margin-bottom: 10px; }
         h2 { color: #d2b48c; font-size: 2.2rem; margin-bottom: 25px; text-align: center; border-bottom: 1px solid #8b4513; padding-bottom: 10px; }
         
-        /* --- ESTILO DE NOTICIAS DINÁMICAS --- */
-        .news-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .news-item { background: #1a110a; border-left: 4px solid #d2b48c; padding: 20px; border-radius: 4px; }
-        .news-item h3 { color: #d2b48c; margin-bottom: 10px; }
-        .news-date { font-size: 0.8rem; color: #8b4513; font-weight: bold; margin-top: 15px; display: block; }
+        /* --- ESTILO DE CONTENEDORES DINÁMICOS --- */
+        .dynamic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .dynamic-item { background: #1a110a; border-left: 4px solid #d2b48c; padding: 20px; border-radius: 4px; }
+        .dynamic-item h3 { color: #d2b48c; margin-bottom: 10px; }
+        .meta-tag { font-size: 0.8rem; color: #8b4513; font-weight: bold; margin-top: 15px; display: block; text-transform: uppercase; }
 
         /* --- BOTONES --- */
         .btn-action {
@@ -87,7 +87,7 @@
         }
         .btn-action:hover { background: #f1e4c9; transform: scale(1.05); }
 
-        /* --- ADMIN LOGIN DISCRETO --- */
+        /* --- ADMIN LOGIN --- */
         .admin-trigger { position: fixed; bottom: 15px; right: 15px; opacity: 0.3; transition: 0.5s; }
         .admin-trigger:hover { opacity: 1; }
         
@@ -102,7 +102,7 @@
             border-radius: 8px;
             z-index: 1000;
         }
-        #loginBox input { display: block; margin-bottom: 10px; padding: 8px; background: #1a110a; border: 1px solid #8b4513; color: white; }
+        #loginBox input { display: block; margin-bottom: 10px; padding: 8px; background: #1a110a; border: 1px solid #8b4513; color: white; width: 100%; }
     </style>
 </head>
 <body>
@@ -127,11 +127,9 @@
                 </button>
             </div>
 
-            <!-- AQUÍ SE CARGAN LAS NOTICIAS DEL PANEL -->
             <h2 style="font-size: 1.5rem; text-align: left;">Últimas Noticias</h2>
-            <div id="dynamicNews" class="news-container">
-                <!-- Se llena con JS -->
-                <p style="color: #8b4513;">Cargando telegramas de la frontera...</p>
+            <div id="dynamicNews" class="dynamic-grid">
+                <p style="color: #8b4513;">Cargando telegramas...</p>
             </div>
         </div>
     </div>
@@ -153,17 +151,16 @@
     <!-- SECCIÓN: EVENTOS -->
     <div id="eventos" class="section">
         <h2>Eventos Planeados</h2>
-        <div class="card" style="text-align: center; border-style: dashed;">
-            <i class="far fa-calendar-times" style="font-size: 3rem; color: #8b4513; margin-bottom: 15px;"></i>
-            <p>No hay duelos ni diligencias programadas esta semana.</p>
+        <div id="dynamicEvents" class="dynamic-grid">
+            <!-- Se llena con JS -->
         </div>
     </div>
 
     <!-- SECCIÓN: STAFF -->
     <div id="staff" class="section">
         <h2>Conoce al Equipo</h2>
-        <div class="card" style="text-align: center;">
-            <p>El Sheriff y sus ayudantes están patrullando el código.</p>
+        <div id="dynamicStaff" class="dynamic-grid">
+            <!-- Se llena con JS -->
         </div>
     </div>
 
@@ -175,7 +172,7 @@
         </div>
     </div>
 
-    <!-- ACCESO ADMIN OCULTO -->
+    <!-- ACCESO ADMIN -->
     <div class="admin-trigger">
         <button onclick="toggleLogin()" style="background:none; border:none; color:#8b4513; cursor:pointer;">[ Acceso Admin ]</button>
     </div>
@@ -187,7 +184,7 @@
     </div>
 
     <script>
-        // 1. NAVEGACIÓN ENTRE SECCIONES
+        // 1. NAVEGACIÓN
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -197,30 +194,59 @@
         // 2. COPIAR IP
         function copyIP() {
             navigator.clipboard.writeText('play.thenewwest.com');
-            alert('¡IP copiada al portapapeles! Prepárate para el viaje.');
+            alert('¡IP copiada! Nos vemos en el desierto.');
         }
 
-        // 3. CARGAR NOTICIAS DESDE EL PANEL ADMIN (LocalStorage)
-        function loadNews() {
-            const container = document.getElementById('dynamicNews');
-            const savedNews = JSON.parse(localStorage.getItem('news') || '[]');
-
-            if (savedNews.length === 0) {
-                container.innerHTML = `<div class="news-item"><p>No hay noticias recientes en el tablón.</p></div>`;
-                return;
+        // 3. CARGA DE DATOS DINÁMICOS
+        function loadAllContent() {
+            // Cargar Noticias (Inicio)
+            const news = JSON.parse(localStorage.getItem('news') || '[]');
+            const newsContainer = document.getElementById('dynamicNews');
+            if(news.length > 0) {
+                newsContainer.innerHTML = news.reverse().slice(0, 3).map(n => `
+                    <div class="dynamic-item">
+                        <h3>${n.title}</h3>
+                        <p>${n.content}</p>
+                        <span class="meta-tag">${n.date} • NOTICIA</span>
+                    </div>
+                `).join('');
+            } else {
+                newsContainer.innerHTML = "<p>No hay noticias recientes.</p>";
             }
 
-            // Mostramos las últimas 3 noticias
-            container.innerHTML = savedNews.reverse().slice(0, 3).map(n => `
-                <div class="news-item">
-                    <h3>${n.title}</h3>
-                    <p>${n.content}</p>
-                    <span class="news-date">${n.date} • Telegrama Oficial</span>
-                </div>
-            `).join('');
+            // Cargar Eventos
+            const events = JSON.parse(localStorage.getItem('events') || '[]');
+            const eventsContainer = document.getElementById('dynamicEvents');
+            if(events.length > 0) {
+                eventsContainer.innerHTML = events.map(e => `
+                    <div class="dynamic-item">
+                        <h3>${e.title}</h3>
+                        <p>${e.content}</p>
+                        <span class="meta-tag">PRÓXIMAMENTE</span>
+                    </div>
+                `).join('');
+            } else {
+                eventsContainer.innerHTML = "<div class='card' style='grid-column: 1/-1; text-align:center;'><p>No hay eventos programados en este momento.</p></div>";
+            }
+
+            // Cargar Staff
+            const staff = JSON.parse(localStorage.getItem('staff') || '[]');
+            const staffContainer = document.getElementById('dynamicStaff');
+            if(staff.length > 0) {
+                staffContainer.innerHTML = staff.map(s => `
+                    <div class="dynamic-item" style="text-align:center;">
+                        <i class="fas fa-user-circle" style="font-size: 2rem; color: #d2b48c; margin-bottom: 10px;"></i>
+                        <h3>${s.title}</h3>
+                        <p>${s.content}</p>
+                        <span class="meta-tag">MIEMBRO DEL STAFF</span>
+                    </div>
+                `).join('');
+            } else {
+                staffContainer.innerHTML = "<div class='card' style='grid-column: 1/-1; text-align:center;'><p>El equipo está patrullando la frontera.</p></div>";
+            }
         }
 
-        // 4. LÓGICA DE LOGIN
+        // 4. ADMIN LOGIN
         function toggleLogin() {
             const box = document.getElementById('loginBox');
             box.style.display = box.style.display === 'block' ? 'none' : 'block';
@@ -232,12 +258,12 @@
             if(u === "admin" && p === "12345") {
                 window.location.href = "app/admin.html";
             } else {
-                alert("Acceso denegado, vaquero.");
+                alert("Credenciales incorrectas.");
             }
         }
 
-        // Ejecutar al cargar la página
-        window.onload = loadNews;
+        // Inicializar
+        window.onload = loadAllContent;
     </script>
 </body>
 </html>
