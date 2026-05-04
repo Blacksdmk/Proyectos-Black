@@ -34,10 +34,10 @@
         .section-header { text-align: center; margin-bottom: 50px; }
         .section-header h2 { font-size: 2.5rem; color: var(--dark); letter-spacing: -1px; }
 
-        /* --- ESTILOS DE INICIO (HERO & FEATURES) --- */
+        /* --- HERO CON IMAGEN DE DESIERTO --- */
         .hero-premium {
-            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), 
-                        url('https://wallpaperaccess.com/full/133744.jpg'); 
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
+                        url('https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=2070&auto=format&fit=crop'); 
             background-size: cover;
             background-position: center;
             padding: 120px 40px;
@@ -52,37 +52,29 @@
         .hero-premium p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
 
         .hero-actions { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
-        
-        .ip-box { 
-            background: rgba(255,255,255,0.1); 
-            backdrop-filter: blur(10px); 
-            padding: 12px 25px; 
-            border-radius: 12px; 
-            border: 1px solid rgba(255,255,255,0.2); 
-            cursor: pointer; 
-            transition: 0.3s; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px;
-            color: white;
-        }
+        .ip-box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 12px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; color: white; }
         .ip-box:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         .btn-discord { background: #5865F2; color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
         .btn-discord:hover { background: #4752c4; transform: translateY(-2px); }
 
+        /* --- CARDS Y GRIDS --- */
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
         .f-card { padding: 40px 30px; background: var(--light-bg); border-radius: 20px; text-align: center; transition: 0.3s; border: 1px solid transparent; }
         .f-card:hover { transform: translateY(-10px); background: white; border-color: var(--border); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); }
         .f-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
-        .f-card h3 { margin-bottom: 12px; font-size: 1.25rem; }
 
-        /* --- GRID DINÁMICO --- */
         .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        
         .card-post { padding: 30px; border: 1px solid var(--border); border-radius: 16px; background: white; }
         .card-post span { color: var(--primary); font-weight: 700; font-size: 0.8rem; }
         .card-post h3 { margin: 10px 0; font-size: 1.4rem; }
+
+        /* FORMULARIO GALERÍA */
+        .upload-card { background: var(--light-bg); border-radius: 16px; padding: 30px; margin-bottom: 40px; border: 2px dashed var(--border); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
+        .btn-upload { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; }
 
         .staff-card { text-align: center; padding: 30px; border: 1px solid var(--border); border-radius: 16px; background: white; }
         .staff-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--primary); }
@@ -107,83 +99,54 @@
         </div>
     </nav>
 
-    <!-- SECCIÓN INICIO RECARGADA -->
+    <!-- INICIO -->
     <div id="inicio" class="section active">
         <div class="hero-premium">
             <div class="hero-content">
                 <span class="badge">Temporada 1: El Despertar</span>
                 <h1>The New West</h1>
                 <p>Escribe tu propia historia en un mundo donde la ley la dictas tú. Únete a la experiencia definitiva de Rol en el Salvaje Oeste.</p>
-                
                 <div class="hero-actions">
                     <div class="ip-box" onclick="copyIP()">
                         <span id="serverIP">play.thenewwest.com</span>
                         <i class="fas fa-copy"></i>
                     </div>
-                    <a href="https://discord.gg/TU_INVITACION" target="_blank" class="btn-discord">
-                        <i class="fab fa-discord"></i> Unirse al Discord
-                    </a>
+                    <a href="#" class="btn-discord"><i class="fab fa-discord"></i> Discord</a>
                 </div>
             </div>
         </div>
-
         <div class="features-grid">
-            <div class="f-card">
-                <i class="fas fa-horse-head"></i>
-                <h3>Caballos Únicos</h3>
-                <p>Sistemas de crianza y razas con estadísticas reales para cruzar el desierto.</p>
-            </div>
-            <div class="f-card">
-                <i class="fas fa-gun"></i>
-                <h3>Duelos de Honor</h3>
-                <p>Mecánicas de combate personalizadas para resolver tus disputas al sol del mediodía.</p>
-            </div>
-            <div class="f-card">
-                <i class="fas fa-coins"></i>
-                <h3>Economía Viva</h3>
-                <p>Comercia con otros pueblos, asalta bancos o conviértete en un magnate minero.</p>
-            </div>
+            <div class="f-card"><i class="fas fa-horse-head"></i><h3>Caballos Únicos</h3><p>Razas con estadísticas reales para cruzar el desierto.</p></div>
+            <div class="f-card"><i class="fas fa-gun"></i><h3>Duelos de Honor</h3><p>Combate personalizado para resolver disputas.</p></div>
+            <div class="f-card"><i class="fas fa-coins"></i><h3>Economía Viva</h3><p>Asalta bancos o conviértete en un magnate minero.</p></div>
         </div>
     </div>
 
-    <!-- NOTICIAS (DINÁMICO) -->
-    <div id="noticias" class="section">
-        <div class="section-header"><h2>Últimas Noticias</h2></div>
-        <div id="dynamicNews" class="content-grid"></div>
-    </div>
+    <!-- SECCIONES DINÁMICAS -->
+    <div id="noticias" class="section"><div class="section-header"><h2>Últimas Noticias</h2></div><div id="dynamicNews" class="content-grid"></div></div>
+    <div id="lore" class="section"><div class="section-header"><h2>Cronología del Oeste</h2></div><div id="dynamicLore" class="content-grid"></div></div>
+    <div id="staff" class="section"><div class="section-header"><h2>Nuestro Equipo</h2></div><div id="dynamicStaff" class="content-grid"></div></div>
+    <div id="bounties" class="section"><div class="section-header"><h2>Fugitivos de la Ley</h2></div><div id="dynamicBounties" class="content-grid"></div></div>
 
-    <!-- LORE (DINÁMICO) -->
-    <div id="lore" class="section">
-        <div class="section-header"><h2>Cronología del Oeste</h2></div>
-        <div id="dynamicLore" class="content-grid"></div>
-    </div>
-
-    <!-- STAFF (DINÁMICO) -->
-    <div id="staff" class="section">
-        <div class="section-header"><h2>Nuestro Equipo</h2></div>
-        <div id="dynamicStaff" class="content-grid"></div>
-    </div>
-
-    <!-- SE BUSCA (DINÁMICO) -->
-    <div id="bounties" class="section">
-        <div class="section-header"><h2>Fugitivos de la Ley</h2></div>
-        <div id="dynamicBounties" class="content-grid"></div>
-    </div>
-
-    <!-- GALERÍA (DINÁMICO) -->
+    <!-- GALERÍA CON FORMULARIO RESTAURADO -->
     <div id="galeria" class="section">
         <div class="section-header"><h2>Galería de la Comunidad</h2></div>
+        <div class="upload-card">
+            <h3><i class="fas fa-camera"></i> Subir tu captura</h3>
+            <div class="form-group"><label>Título de la imagen</label><input type="text" id="artTitle" placeholder="Ej: Atardecer en el Saloon"></div>
+            <div class="form-group"><label>URL de la imagen (Link)</label><input type="text" id="artUrl" placeholder="https://imgur.com/..."></div>
+            <button class="btn-upload" id="btn-upload-art">Publicar en Galería</button>
+        </div>
         <div id="dynamicArt" class="content-grid"></div>
     </div>
 
     <footer>
         <p>© 2026 The New West - Minecraft Roleplay</p>
-        <a href="app/admin.html" style="color: #cbd5e1; font-size: 0.75rem; text-decoration: none; margin-top: 10px; display: inline-block;">Panel de Administración</a>
+        <a href="app/admin.html" style="color: #cbd5e1; font-size: 0.75rem; text-decoration: none;">Panel Staff</a>
     </footer>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDo7ebAVDvYEjPDscivWWKXLUoGEAGBeIM",
@@ -205,73 +168,43 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // --- COPIAR IP ---
         window.copyIP = () => {
-            const ip = document.getElementById('serverIP').innerText;
+            const ip = "play.thenewwest.com";
             navigator.clipboard.writeText(ip);
-            alert("¡IP Copiada con éxito!");
+            alert("¡IP Copiada!");
         };
 
-        // --- CARGADOR DE DATOS DINÁMICOS ---
+        // --- CARGAR CONTENIDO ---
         const loadContent = (path, containerId, templateFn) => {
             onValue(ref(db, path), (snapshot) => {
                 const data = snapshot.val();
                 const container = document.getElementById(containerId);
-                if (!data) {
-                    container.innerHTML = "<p style='text-align:center; grid-column: 1/-1; color:#94a3b8;'>Aún no hay contenido en esta sección.</p>";
-                    return;
-                }
+                if (!data) { container.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Vacío</p>"; return; }
                 container.innerHTML = Object.values(data).reverse().map(templateFn).join('');
             });
         };
 
-        // Noticias
-        loadContent('news', 'dynamicNews', n => `
-            <div class="card-post">
-                <span>${n.date || 'Reciente'}</span>
-                <h3>${n.title}</h3>
-                <p>${n.content}</p>
-            </div>
-        `);
+        // Renders
+        loadContent('news', 'dynamicNews', n => `<div class="card-post"><span>${n.date || 'Hoy'}</span><h3>${n.title}</h3><p>${n.content}</p></div>`);
+        loadContent('lore', 'dynamicLore', l => `<div class="card-post"><span>Año ${l.year}</span><h3>${l.title}</h3><p>${l.content}</p></div>`);
+        loadContent('staff', 'dynamicStaff', s => `<div class="staff-card"><img src="${s.url}" class="staff-avatar"><h3>${s.name}</h3><p style="color:var(--primary); font-weight:700;">${s.role}</p><p style="font-size:0.8rem; color:var(--text-muted);">${s.desc}</p></div>`);
+        loadContent('bounties', 'dynamicBounties', b => `<div class="bounty-card"><p style="font-weight:900;">WANTED</p><img src="${b.url}"><h3>${b.name}</h3><p>${b.reason}</p><p style="font-weight:bold; font-size:1.2rem;">$${b.reward}</p></div>`);
+        loadContent('art', 'dynamicArt', a => `<div class="card-post" style="padding:10px;"><img src="${a.url}" style="width:100%; border-radius:10px;"><p style="text-align:center; margin-top:10px; font-weight:600;">${a.title}</p></div>`);
 
-        // Lore
-        loadContent('lore', 'dynamicLore', l => `
-            <div class="card-post">
-                <span>Año ${l.year}</span>
-                <h3>${l.title}</h3>
-                <p>${l.content}</p>
-            </div>
-        `);
+        // --- LÓGICA DE SUBIDA DE GALERÍA (PÚBLICA) ---
+        document.getElementById('btn-upload-art').onclick = () => {
+            const title = document.getElementById('artTitle').value;
+            const url = document.getElementById('artUrl').value;
+            if(!title || !url) { alert("Llena todos los campos"); return; }
 
-        // Staff
-        loadContent('staff', 'dynamicStaff', s => `
-            <div class="staff-card">
-                <img src="${s.url || 'https://via.placeholder.com/100'}" class="staff-avatar">
-                <h3>${s.name}</h3>
-                <p style="color:var(--primary); font-weight:700;">${s.role}</p>
-                <p style="font-size:0.85rem; margin-top:10px; color:#64748b;">${s.desc}</p>
-            </div>
-        `);
-
-        // Bounties
-        loadContent('bounties', 'dynamicBounties', b => `
-            <div class="bounty-card">
-                <p style="font-weight:900; letter-spacing:2px;">WANTED</p>
-                <img src="${b.url}">
-                <h3>${b.name}</h3>
-                <p>${b.reason}</p>
-                <p style="font-weight:bold; margin-top:10px; font-size:1.3rem;">$${b.reward}</p>
-            </div>
-        `);
-
-        // Galería
-        loadContent('art', 'dynamicArt', a => `
-            <div class="card-post" style="padding:10px;">
-                <img src="${a.url}" style="width:100%; border-radius:10px; display:block;">
-                <p style="text-align:center; margin-top:10px; font-weight:600;">${a.title}</p>
-            </div>
-        `);
-
+            const newArtRef = push(ref(db, 'art'));
+            set(newArtRef, { title: title, url: url })
+            .then(() => {
+                alert("¡Imagen subida con éxito!");
+                document.getElementById('artTitle').value = "";
+                document.getElementById('artUrl').value = "";
+            });
+        };
     </script>
 </body>
 </html>
