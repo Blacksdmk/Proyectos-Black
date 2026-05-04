@@ -11,27 +11,25 @@
             --bg-light: #f8fafc;
             --text-dark: #1e293b;
             --border-color: #e2e8f0;
+            --success-green: #22c55e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; display: none; } /* Oculto por defecto hasta verificar sesión */
+        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; display: none; } 
 
         header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
         .header-title h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
         .header-title p { color: #64748b; margin-top: 5px; }
 
-        /* --- TABS --- */
-        .tabs { display: flex; gap: 30px; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
-        .tab { padding: 12px 5px; cursor: pointer; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 8px; position: relative; }
+        .tabs { display: flex; gap: 30px; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; overflow-x: auto; }
+        .tab { padding: 12px 5px; cursor: pointer; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 8px; position: relative; white-space: nowrap; }
         .tab.active { color: var(--primary-blue); }
         .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--primary-blue); }
 
-        /* --- LAYOUT --- */
         .main-content { display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
         .card { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; height: fit-content; }
         .card h2 { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 
-        /* --- FORM --- */
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fdfdfd; font-size: 0.9rem; }
@@ -40,20 +38,26 @@
         .btn-publish { width: 100%; background: var(--primary-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn-publish:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        /* --- LIST --- */
         .post-list { display: flex; flex-direction: column; gap: 15px; }
         .post-item { border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
         .post-info h3 { font-size: 0.95rem; margin-bottom: 3px; }
         .post-info p { font-size: 0.85rem; color: #64748b; }
         .post-meta { font-size: 0.7rem; color: #94a3b8; font-weight: 700; margin-top: 5px; }
+        
+        .action-btns { display: flex; gap: 10px; }
         .btn-delete { color: #cbd5e1; cursor: pointer; transition: 0.3s; border: none; background: none; font-size: 1rem; }
         .btn-delete:hover { color: #ef4444; }
+        .btn-approve { color: var(--success-green); cursor: pointer; border: none; background: none; font-size: 1rem; }
 
         .content-section { display: none; }
         .content-section.active { display: grid; }
 
         .admin-nav-btns { display: flex; gap: 10px; }
         .btn-logout { background: #ef4444; }
+        
+        /* Thumbnail para arte */
+        .art-thumb { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; margin-right: 15px; border: 1px solid var(--border-color); }
+        .post-flex { display: flex; align-items: center; }
     </style>
 </head>
 <body>
@@ -74,9 +78,10 @@
         <div class="tab" onclick="switchTab(event, 'eventos')"><i class="far fa-calendar-alt"></i> Eventos</div>
         <div class="tab" onclick="switchTab(event, 'staff')"><i class="far fa-user"></i> Staff</div>
         <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Cronología</div>
+        <div class="tab" onclick="switchTab(event, 'arte-admin')"><i class="fas fa-paint-brush"></i> Arte y Galería</div>
     </div>
 
-    <!-- SECCIONES (SE MANTIENEN IGUAL QUE TU CÓDIGO) -->
+    <!-- SECCIONES NOTICIAS, EVENTOS, STAFF, LORE SE MANTIENEN... -->
     <div id="noticias" class="content-section active main-content">
         <div class="card">
             <h2><i class="fas fa-plus"></i> Nueva Noticia</h2>
@@ -127,7 +132,7 @@
                 <input type="text" id="staffRange" placeholder="Ej: Sheriff, Admin, Mod">
             </div>
             <div class="form-group">
-                <label>Discord Tag (Opcional)</label>
+                <label>Discord Tag</label>
                 <input type="text" id="staffDiscord" placeholder="Usuario#0000">
             </div>
             <button class="btn-publish" id="btn-save-staff">Agregar al Staff</button>
@@ -140,34 +145,52 @@
 
     <div id="lore-admin" class="content-section main-content">
         <div class="card">
-            <h2><i class="fas fa-feather-alt"></i> Nuevo Hito Histórico</h2>
-            <div class="form-group">
-                <label>Año (ej: 1873)</label>
-                <input type="text" id="loreYear" placeholder="Año del suceso">
-            </div>
-            <div class="form-group">
-                <label>Título del Suceso</label>
-                <input type="text" id="loreTitle" placeholder="Ej: El Gran Descubrimiento">
-            </div>
-            <div class="form-group">
-                <label>Categoría</label>
-                <input type="text" id="loreTag" placeholder="HISTORIA, EVENTO, FACCIONES...">
-            </div>
-            <div class="form-group">
-                <label>Relato</label>
-                <textarea id="loreContent" placeholder="Escribe la historia aquí..."></textarea>
-            </div>
-            <button class="btn-publish" id="btn-save-lore">Registrar en la Historia</button>
+            <h2><i class="fas fa-feather-alt"></i> Nuevo Hito</h2>
+            <div class="form-group"><label>Año</label><input type="text" id="loreYear"></div>
+            <div class="form-group"><label>Título</label><input type="text" id="loreTitle"></div>
+            <div class="form-group"><label>Categoría</label><input type="text" id="loreTag"></div>
+            <div class="form-group"><label>Relato</label><textarea id="loreContent"></textarea></div>
+            <button class="btn-publish" id="btn-save-lore">Registrar Hito</button>
         </div>
         <div class="card">
-            <h2><i class="fas fa-monument"></i> Cronología Actual</h2>
+            <h2><i class="fas fa-monument"></i> Cronología</h2>
             <div id="loreAdminList" class="post-list"></div>
+        </div>
+    </div>
+
+    <!-- NUEVA SECCIÓN: ARTE -->
+    <div id="arte-admin" class="content-section main-content">
+        <div class="card">
+            <h2><i class="fas fa-check-circle"></i> Pendientes de Aprobación</h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Dibujos enviados por la comunidad.</p>
+            <div id="artPendingList" class="post-list"></div>
+            
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid var(--border-color);">
+            
+            <h2><i class="fas fa-plus-circle"></i> Subir Arte Oficial</h2>
+            <div class="form-group">
+                <label>Artista (Nombre)</label>
+                <input type="text" id="artAuthor" placeholder="Nombre del autor">
+            </div>
+            <div class="form-group">
+                <label>URL de la Imagen</label>
+                <input type="text" id="artUrl" placeholder="https://link-de-la-imagen.jpg">
+            </div>
+            <div class="form-group">
+                <label>Título del Dibujo</label>
+                <input type="text" id="artTitle" placeholder="Ej: Mi personaje en el desierto">
+            </div>
+            <button class="btn-publish" id="btn-save-art">Subir a la Galería</button>
+        </div>
+        <div class="card">
+            <h2><i class="fas fa-images"></i> Galería Pública</h2>
+            <div id="artList" class="post-list"></div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, push, set, onValue, remove, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const firebaseConfig = {
@@ -184,26 +207,19 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // --- GUARDIÁN DE SEGURIDAD ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Usuario autenticado: mostrar página y dar bienvenida
                 document.body.style.display = "block";
                 document.getElementById('welcomeUser').innerText = `Bienvenido, ${user.email}`;
             } else {
-                // Sin sesión: expulsar al index
                 window.location.href = "../index.html";
             }
         });
 
-        // Botón de cerrar sesión
         document.getElementById('btnLogout').onclick = () => {
-            signOut(auth).then(() => {
-                window.location.href = "../index.html";
-            });
+            signOut(auth).then(() => { window.location.href = "../index.html"; });
         };
 
-        // --- NAVEGACIÓN ---
         window.switchTab = (event, sectionId) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -211,37 +227,31 @@
             document.getElementById(sectionId).classList.add('active');
         };
 
-        // --- GUARDAR DATOS ---
         const saveItem = (path, data) => {
             const newRef = push(ref(db, path));
             set(newRef, { ...data, date: new Date().toLocaleDateString() })
-                .then(() => alert("¡Publicado en la frontera!"))
-                .catch(err => alert("Error de permiso: " + err));
+                .then(() => alert("¡Publicado!"))
+                .catch(err => alert("Error: " + err));
         };
 
+        // --- HANDLERS ---
         document.getElementById('btn-save-news').onclick = () => {
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
-            if(!title || !content) return alert("El telegrama está vacío");
-            saveItem('news', { title, content });
-            document.getElementById('newsTitle').value = ''; document.getElementById('newsContent').value = '';
+            if(title && content) { saveItem('news', { title, content }); document.getElementById('newsTitle').value=''; document.getElementById('newsContent').value=''; }
         };
 
         document.getElementById('btn-save-event').onclick = () => {
             const title = document.getElementById('eventTitle').value;
             const content = document.getElementById('eventContent').value;
-            if(!title || !content) return alert("Faltan detalles del evento");
-            saveItem('events', { title, content });
-            document.getElementById('eventTitle').value = ''; document.getElementById('eventContent').value = '';
+            if(title && content) { saveItem('events', { title, content }); document.getElementById('eventTitle').value=''; document.getElementById('eventContent').value=''; }
         };
 
         document.getElementById('btn-save-staff').onclick = () => {
             const title = document.getElementById('staffName').value;
             const content = document.getElementById('staffRange').value;
             const discord = document.getElementById('staffDiscord').value;
-            if(!title || !content) return alert("Falta información del miembro");
-            saveItem('staff', { title, content, discord });
-            document.getElementById('staffName').value = ''; document.getElementById('staffRange').value = ''; document.getElementById('staffDiscord').value = '';
+            if(title && content) { saveItem('staff', { title, content, discord }); document.getElementById('staffName').value=''; document.getElementById('staffRange').value=''; }
         };
 
         document.getElementById('btn-save-lore').onclick = () => {
@@ -249,40 +259,58 @@
             const title = document.getElementById('loreTitle').value;
             const tag = document.getElementById('loreTag').value;
             const content = document.getElementById('loreContent').value;
-            if(!year || !title || !content) return alert("La historia requiere más detalles");
-            
-            const newRef = push(ref(db, 'lore'));
-            set(newRef, { year, title, tag, content, date: new Date().toLocaleDateString() })
-                .then(() => alert("Cronología actualizada"))
-                .catch(err => alert(err));
-
-            document.getElementById('loreYear').value = '';
-            document.getElementById('loreTitle').value = '';
-            document.getElementById('loreTag').value = '';
-            document.getElementById('loreContent').value = '';
+            if(year && title) { saveItem('lore', { year, title, tag, content }); document.getElementById('loreYear').value=''; document.getElementById('loreTitle').value=''; }
         };
 
-        // --- RENDERIZAR LISTAS ---
-        const renderList = (path, listId, metaPrefix) => {
+        // --- ARTE LOGIC ---
+        document.getElementById('btn-save-art').onclick = () => {
+            const author = document.getElementById('artAuthor').value;
+            const url = document.getElementById('artUrl').value;
+            const title = document.getElementById('artTitle').value;
+            if(author && url) { 
+                saveItem('art', { author, url, title: title || "Sin título" }); 
+                document.getElementById('artAuthor').value=''; document.getElementById('artUrl').value=''; document.getElementById('artTitle').value='';
+            }
+        };
+
+        window.approveArt = (id) => {
+            const pendingRef = ref(db, `art_submissions/${id}`);
+            get(pendingRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const newPublicRef = push(ref(db, 'art'));
+                    set(newPublicRef, data).then(() => {
+                        remove(pendingRef);
+                        alert("¡Arte aprobado y publicado!");
+                    });
+                }
+            });
+        };
+
+        // --- RENDER LISTAS ---
+        const renderList = (path, listId, metaPrefix, isPendingArt = false) => {
             onValue(ref(db, path), (snapshot) => {
                 const list = document.getElementById(listId);
                 const data = snapshot.val();
-                if (!data) {
-                    list.innerHTML = '<p style="color:#94a3b8; font-size:0.9rem; text-align:center;">Archivos vacíos.</p>';
-                    return;
-                }
+                if (!data) { list.innerHTML = '<p style="text-align:center; color:#94a3b8;">Vacío.</p>'; return; }
 
                 list.innerHTML = Object.keys(data).map(id => {
                     const item = data[id];
-                    const displayTitle = item.year ? `[${item.year}] ${item.title}` : item.title;
+                    const isArt = path.includes('art');
                     return `
                         <div class="post-item">
-                            <div class="post-info">
-                                <h3>${displayTitle}</h3>
-                                <p>${item.content.substring(0, 60)}${item.content.length > 60 ? '...' : ''}</p>
-                                <div class="post-meta">${item.date || ''} • ${metaPrefix}</div>
+                            <div class="post-flex">
+                                ${isArt ? `<img src="${item.url}" class="art-thumb" onerror="this.src='https://via.placeholder.com/50?text=Error'">` : ''}
+                                <div class="post-info">
+                                    <h3>${item.title || item.year || 'Sin título'}</h3>
+                                    <p>${isArt ? 'Por: ' + item.author : item.content?.substring(0, 40) + '...'}</p>
+                                    <div class="post-meta">${item.date || ''} • ${metaPrefix}</div>
+                                </div>
                             </div>
-                            <button class="btn-delete" onclick="window.deleteItem('${path}', '${id}')"><i class="fas fa-trash"></i></button>
+                            <div class="action-btns">
+                                ${isPendingArt ? `<button class="btn-approve" onclick="window.approveArt('${id}')"><i class="fas fa-check-circle"></i></button>` : ''}
+                                <button class="btn-delete" onclick="window.deleteItem('${path}', '${id}')"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     `;
                 }).join('');
@@ -290,16 +318,15 @@
         };
 
         window.deleteItem = (path, id) => {
-            if(confirm("¿Seguro que quieres borrar este registro histórico?")) {
-                remove(ref(db, `${path}/${id}`));
-            }
+            if(confirm("¿Eliminar permanentemente?")) remove(ref(db, `${path}/${id}`));
         };
 
-        // Iniciar listas
         renderList('news', 'newsList', 'NOTICIA');
         renderList('events', 'eventsList', 'EVENTO');
         renderList('staff', 'staffList', 'STAFF');
         renderList('lore', 'loreAdminList', 'HITO');
+        renderList('art', 'artList', 'GALERÍA');
+        renderList('art_submissions', 'artPendingList', 'PENDIENTE', true);
 
     </script>
 </body>
