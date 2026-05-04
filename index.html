@@ -3,322 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The New West - Servidor de Minecraft con Mods</title>
+    <title>The New West - Servidor de Minecraft</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- RESET Y FUENTES --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
+        /* --- ESTILOS BASE Y FONDO RÚSTICO --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+        
         body {
             background-color: #2c1b10;
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
             color: #f1e4c9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
-            position: relative;
         }
 
-        /* --- PANEL ADMIN (ESTILO ACTUALIZADO) --- */
-        .admin-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        /* --- MENÚ DE NAVEGACIÓN --- */
+        nav {
+            background-color: rgba(26, 17, 10, 0.9);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #8b4513;
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            z-index: 1000;
+            justify-content: center;
+            gap: 30px;
         }
 
-        .btn-admin {
-            background-color: transparent;
+        nav a {
             color: #d2b48c;
             text-decoration: none;
-            border: 1px solid #d2b48c;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: 0.3s;
             cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .btn-admin:hover {
-            background-color: #d2b48c;
-            color: #2c1b10;
+        nav a:hover { color: #f1e4c9; text-shadow: 0 0 10px #d2b48c; }
+
+        /* --- CONTENEDORES DE SECCIÓN --- */
+        .section {
+            display: none; /* Ocultas por defecto */
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+            animation: fadeIn 0.5s ease;
         }
 
-        /* Formulario Flotante de Login */
-        .login-box {
-            display: none;
+        .section.active { display: block; } /* Solo se muestra la activa */
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- ESTILOS DE TARJETAS Y CONTENIDO --- */
+        .card {
             background-color: #3e2716;
             border: 2px solid #8b4513;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            width: 200px;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
         }
 
-        .login-box input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            background: #1a110a;
-            border: 1px solid #8b4513;
-            color: #f1e4c9;
-            font-size: 0.8rem;
-        }
-
-        .btn-login-submit {
-            width: 100%;
-            background: #d2b48c;
-            color: #2c1b10;
-            border: none;
-            padding: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* --- CONTENEDOR PRINCIPAL --- */
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 80px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .status-badge {
-            background-color: rgba(144, 238, 144, 0.15);
-            color: #90ee90;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-badge .dot {
-            width: 8px;
-            height: 8px;
-            background-color: #90ee90;
-            border-radius: 50%;
-        }
-
-        h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            color: #d2b48c;
-        }
-
-        .hero-text {
-            font-size: 1.2rem;
-            color: #e6dfc3;
-            max-width: 600px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .cta-buttons {
+        h2 { color: #d2b48c; font-size: 2.5rem; margin-bottom: 20px; text-align: center; }
+        
+        /* --- LORE TIMELINE --- */
+        .timeline-item {
             display: flex;
             gap: 20px;
-            margin-bottom: 70px;
+            margin-bottom: 20px;
         }
+        .year { background: #d2b48c; color: #2c1b10; padding: 5px 15px; border-radius: 5px; height: fit-content; font-weight: bold; }
 
-        .btn {
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-ip {
-            background-color: #d2b48c;
+        /* --- BOTONES --- */
+        .btn-action {
+            display: inline-block;
+            background: #d2b48c;
             color: #2c1b10;
-            border: 2px solid transparent;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 15px;
         }
 
-        .btn-discord {
-            border: 2px solid #8b4513;
-            color: #f1e4c9;
-            background-color: #3e2716;
-        }
-
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            width: 100%;
-            margin-bottom: 70px;
-        }
-
-        .status-card {
-            background-color: #3e2716;
-            border: 1px solid #8b4513;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: left;
-        }
-
-        .system-section {
-            width: 100%;
-            background-color: #1a110a;
-            border: 1px solid #8b4513;
-            border-radius: 12px;
-            padding: 50px;
-            text-align: left;
-            margin-bottom: 70px;
-        }
-
-        .system-section h2 {
-            font-size: 2.5rem;
-            color: #d2b48c;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #8b4513;
-            padding-bottom: 10px;
-        }
-
-        .news-section {
-            width: 100%;
-            text-align: left;
-        }
-
-        .news-header {
-            font-size: 1.8rem;
-            color: #f1e4c9;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .news-card {
-            background-color: #3e2716;
-            border: 1px solid #8b4513;
-            padding: 30px;
-            border-radius: 12px;
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .status-grid { grid-template-columns: 1fr; }
-        }
+        /* --- LOGIN ADMIN (Flotante) --- */
+        .admin-trigger { position: fixed; bottom: 20px; right: 20px; opacity: 0.5; transition: 0.3s; }
+        .admin-trigger:hover { opacity: 1; }
     </style>
 </head>
 <body>
 
-    <!-- CONTENEDOR ADMIN CON LOGIN -->
-    <div class="admin-container">
-        <button class="btn-admin" id="toggleLogin">
-            <i class="fas fa-user-shield"></i> Panel Admin
-        </button>
-        
-        <div class="login-box" id="loginBox">
-            <input type="text" id="userField" placeholder="Usuario">
-            <input type="password" id="passField" placeholder="Contraseña">
-            <button class="btn-login-submit" onclick="attemptLogin()">ENTRAR</button>
+    <nav>
+        <a onclick="showSection('inicio')">Inicio</a>
+        <a onclick="showSection('lore')">Lore</a>
+        <a onclick="showSection('eventos')">Eventos</a>
+        <a onclick="showSection('staff')">Staff</a>
+        <a onclick="showSection('raphael')">Sistema Raphael</a>
+    </nav>
+
+    <!-- SECCIÓN: INICIO -->
+    <div id="inicio" class="section active">
+        <div style="text-align: center; margin-top: 100px;">
+            <h1 style="font-size: 4rem; color: #d2b48c;">The New West</h1>
+            <p style="font-size: 1.5rem;">Bienvenido a la frontera del Nuevo México.</p>
+            <div style="margin-top: 40px;">
+                <button class="btn-action" onclick="navigator.clipboard.writeText('play.thenewwest.com'); alert('IP Copiada')">IP: play.thenewwest.com</button>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="status-badge">
-            <div class="dot"></div> Servidor Online
+    <!-- SECCIÓN: LORE -->
+    <div id="lore" class="section">
+        <h2>El Lore de The New West</h2>
+        <div class="card">
+            <div class="timeline-item">
+                <div class="year">1873</div>
+                <div>
+                    <h3>El Origen</h3>
+                    <p>Los primeros colonos llegaron buscando oro y libertad en las tierras salvajes de Nuevo México.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1875</div>
+                <div>
+                    <h3>La Llegada de los Mods</h3>
+                    <p>Un cometa azul cruzó el cielo, otorgando habilidades extrañas a ciertos individuos: los Ungidos.</p>
+                </div>
+            </div>
         </div>
-        <h1>The New West</h1>
-        <p class="hero-text">Una experiencia de Minecraft con mods ambientada en el salvaje oeste. Forja tu propio destino en la frontera.</p>
+        <h2 style="font-size: 1.8rem;">Las Facciones</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="card"><h4>Vigilantes del Desierto</h4><p>Justicia rápida y orden en los asentamientos.</p></div>
+            <div class="card"><h4>Forjadores del Cañón</h4><p>Viviendo bajo sus propias reglas fuera de la ley.</p></div>
+        </div>
+    </div>
 
-        <div class="cta-buttons">
-            <button class="btn btn-ip" onclick="navigator.clipboard.writeText('play.thenewwest.com'); alert('IP copiada: play.thenewwest.com')">
-                <i class="far fa-copy"></i> play.thenewwest.com
-            </button>
-            <a href="#" class="btn btn-discord">
-                Únete al Discord <i class="fas fa-arrow-right"></i>
-            </a>
+    <!-- SECCIÓN: EVENTOS -->
+    <div id="eventos" class="section">
+        <h2>Eventos Planeados</h2>
+        <div class="card" style="text-align: center; border-style: dashed;">
+            <i class="far fa-calendar-alt" style="font-size: 3rem; color: #8b4513;"></i>
+            <p style="margin-top: 15px;">No hay eventos próximos por ahora. Síguenos en Discord para enterarte primero.</p>
         </div>
+        <div class="card" style="text-align: center; background-color: #1a110a;">
+            <h3>¿Tienes una idea para un evento?</h3>
+            <a href="#" class="btn-action">Ir al Discord</a>
+        </div>
+    </div>
 
-        <div class="status-grid">
-            <div class="status-card">
-                <i class="fas fa-users card-icon" style="color: #d2b48c; font-size: 1.8rem;"></i>
-                <p style="font-weight:bold; margin-top:10px;">Jugadores Activos</p>
-                <p style="font-size: 2.2rem; font-weight:800;">12 / 100</p>
-            </div>
-            <div class="status-card">
-                <i class="fas fa-code card-icon" style="color: #d2b48c; font-size: 1.8rem;"></i>
-                <p style="font-weight:bold; margin-top:10px;">Versión</p>
-                <p style="font-size: 2.2rem; font-weight:800;">1.20.1</p>
-            </div>
-            <div class="status-card">
-                <i class="fas fa-server card-icon" style="color: #d2b48c; font-size: 1.8rem;"></i>
-                <p style="font-weight:bold; margin-top:10px;">Estabilidad</p>
-                <p style="font-size: 2.2rem; font-weight:800;">99.9%</p>
-            </div>
+    <!-- SECCIÓN: STAFF -->
+    <div id="staff" class="section">
+        <h2>Conoce al Staff</h2>
+        <div class="card" style="text-align: center;">
+            <p>Aún no hay miembros del staff agregados. El admin puede añadirlos desde el panel.</p>
         </div>
+        <div class="card" style="text-align: center;">
+            <h3>¿Quieres unirte al equipo?</h3>
+            <p>Buscamos moderadores y constructores comprometidos.</p>
+            <a href="#" class="btn-action">Postulate en Discord</a>
+        </div>
+    </div>
 
-        <div class="system-section">
-            <h2>Sistema Raphael</h2>
-            <div class="system-content" style="line-height: 1.8;">
-                <p>El <strong>Sistema Raphael</strong> es el motor exclusivo de progresión y gestión logística que impulsa la experiencia en el servidor.</p>
-                <p><strong>Progresión No Lineal:</strong> Olvida la obtención inmediata de recursos. Deberás completar misiones y dominar procesos complejos para avanzar.</p>
-                <ul style="margin-left: 20px; margin-bottom: 20px;">
-                    <li><strong>Módulo de Roles:</strong> Sheriff, Doctor o Bandido. Tú eliges.</li>
-                    <li><strong>Economía Dinámica:</strong> Divisas virtuales vinculadas al valor de los asentamientos.</li>
-                </ul>
-                <p>Consulta las guías completas en Discord.</p>
-            </div>
+    <!-- SECCIÓN: RAPHAEL -->
+    <div id="raphael" class="section">
+        <h2>Sistema Raphael</h2>
+        <div class="card">
+            <h3>¿Qué es el Sistema Raphael?</h3>
+            <p>Es nuestro motor exclusivo de gestión de mods y economía dinámica. Permite que el servidor evolucione según las acciones de los jugadores.</p>
         </div>
+    </div>
 
-        <div class="news-section">
-            <div class="news-header">Últimas Noticias</div>
-            <div class="news-card">
-                <p style="color: #d2b48c; font-weight:bold;">¡Bienvenidos al Nuevo Oeste!</p>
-                <p style="margin-top:10px;">Estamos emocionados de abrir las puertas de The New West. Prepara tus espuelas.</p>
-            </div>
-        </div>
+    <!-- BOTÓN OCULTO PANEL ADMIN -->
+    <div class="admin-trigger">
+        <a onclick="promptAdmin()" style="color: #8b4513; text-decoration: none; font-size: 0.8rem;">[ Acceso Admin ]</a>
     </div>
 
     <script>
-        // Lógica para mostrar/ocultar el cuadro de login
-        const toggleBtn = document.getElementById('toggleLogin');
-        const loginBox = document.getElementById('loginBox');
+        // Función para cambiar de sección
+        function showSection(sectionId) {
+            // Quitar clase active de todas
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Añadir a la seleccionada
+            document.getElementById(sectionId).classList.add('active');
+        }
 
-        toggleBtn.onclick = () => {
-            loginBox.style.display = loginBox.style.display === 'block' ? 'none' : 'block';
-        };
-
-        // Lógica de acceso
-        function attemptLogin() {
-            const user = document.getElementById('userField').value;
-            const pass = document.getElementById('passField').value;
-
-            // CONFIGURA AQUÍ TU USUARIO Y CONTRASEÑA
-            if (user === 'admin' && pass === '12345') {
-                // Redirige al archivo HTML del panel admin
+        // Función simple para acceso admin (temporal hasta configurar el panel completo)
+        function promptAdmin() {
+            const pass = prompt("Introduce la clave de administración:");
+            if (pass === "12345") {
                 window.location.href = "app/admin.html";
             } else {
-                alert("Acceso denegado: Usuario o clave incorrectos.");
+                alert("Clave incorrecta");
             }
         }
     </script>
-
 </body>
 </html>
