@@ -67,6 +67,7 @@
         <div class="tab active" onclick="switchTab(event, 'noticias')"><i class="far fa-newspaper"></i> Noticias</div>
         <div class="tab" onclick="switchTab(event, 'eventos')"><i class="far fa-calendar-alt"></i> Eventos</div>
         <div class="tab" onclick="switchTab(event, 'staff')"><i class="far fa-user"></i> Staff</div>
+        <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Cronología</div>
     </div>
 
     <!-- SECCIÓN NOTICIAS -->
@@ -83,7 +84,6 @@
             </div>
             <button class="btn-publish" id="btn-save-news">Publicar Noticia</button>
         </div>
-
         <div class="card">
             <h2><i class="fas fa-chart-line"></i> Noticias Publicadas</h2>
             <div id="newsList" class="post-list"></div>
@@ -104,7 +104,6 @@
             </div>
             <button class="btn-publish" id="btn-save-event">Programar Evento</button>
         </div>
-
         <div class="card">
             <h2><i class="fas fa-history"></i> Eventos en Agenda</h2>
             <div id="eventsList" class="post-list"></div>
@@ -129,40 +128,39 @@
             </div>
             <button class="btn-publish" id="btn-save-staff">Agregar al Staff</button>
         </div>
-
         <div class="card">
             <h2><i class="fas fa-users-cog"></i> Equipo Actual</h2>
             <div id="staffList" class="post-list"></div>
         </div>
     </div>
- <!-- SECCIÓN LORE -->
-    <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Cronología</div>
-     <div id="lore-admin" class="content-section main-content">
-     <div class="card">
-        <h2><i class="fas fa-feather-alt"></i> Nuevo Hito Histórico</h2>
-        <div class="form-group">
-            <label>Año (ej: 1873)</label>
-            <input type="text" id="loreYear" placeholder="Año del suceso">
+
+    <!-- SECCIÓN LORE -->
+    <div id="lore-admin" class="content-section main-content">
+        <div class="card">
+            <h2><i class="fas fa-feather-alt"></i> Nuevo Hito Histórico</h2>
+            <div class="form-group">
+                <label>Año (ej: 1873)</label>
+                <input type="text" id="loreYear" placeholder="Año del suceso">
+            </div>
+            <div class="form-group">
+                <label>Título del Suceso</label>
+                <input type="text" id="loreTitle" placeholder="Ej: El Gran Descubrimiento">
+            </div>
+            <div class="form-group">
+                <label>Categoría</label>
+                <input type="text" id="loreTag" placeholder="HISTORIA, EVENTO, FACCIONES...">
+            </div>
+            <div class="form-group">
+                <label>Relato</label>
+                <textarea id="loreContent" placeholder="Escribe la historia aquí..."></textarea>
+            </div>
+            <button class="btn-publish" id="btn-save-lore">Registrar en la Historia</button>
         </div>
-        <div class="form-group">
-            <label>Título del Suceso</label>
-            <input type="text" id="loreTitle" placeholder="Ej: El Gran Descubrimiento">
+        <div class="card">
+            <h2><i class="fas fa-monument"></i> Cronología Actual</h2>
+            <div id="loreAdminList" class="post-list"></div>
         </div>
-        <div class="form-group">
-            <label>Categoría</label>
-            <input type="text" id="loreTag" placeholder="HISTORIA, EVENTO, FACCIONES...">
-        </div>
-        <div class="form-group">
-            <label>Relato</label>
-            <textarea id="loreContent" placeholder="Escribe la historia aquí..."></textarea>
-        </div>
-        <button class="btn-publish" id="btn-save-lore">Registrar en la Historia</button>
     </div>
-    <div class="card">
-        <h2><i class="fas fa-monument"></i> Cronología Actual</h2>
-        <div id="loreAdminList" class="post-list"></div>
-    </div>
-</div>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -223,26 +221,22 @@
         };
 
         document.getElementById('btn-save-lore').onclick = () => {
-    const year = document.getElementById('loreYear').value;
-    const title = document.getElementById('loreTitle').value;
-    const tag = document.getElementById('loreTag').value;
-    const content = document.getElementById('loreContent').value;
-    
-    if(!year || !title || !content) return alert("Faltan datos históricos");
-    
-    // Guardamos en la ruta 'lore'
-    const newRef = push(ref(db, 'lore'));
-    set(newRef, { year, title, tag, content });
-    
-    // Limpiar campos
-    document.getElementById('loreYear').value = '';
-    document.getElementById('loreTitle').value = '';
-    document.getElementById('loreTag').value = '';
-    document.getElementById('loreContent').value = '';
-};
+            const year = document.getElementById('loreYear').value;
+            const title = document.getElementById('loreTitle').value;
+            const tag = document.getElementById('loreTag').value;
+            const content = document.getElementById('loreContent').value;
+            if(!year || !title || !content) return alert("Faltan datos históricos");
+            
+            const newRef = push(ref(db, 'lore'));
+            set(newRef, { year, title, tag, content, date: new Date().toLocaleDateString() })
+                .then(() => alert("Hito registrado"))
+                .catch(err => alert(err));
 
-// Renderizar la lista en el admin
-renderList('lore', 'loreAdminList', 'HITO');
+            document.getElementById('loreYear').value = '';
+            document.getElementById('loreTitle').value = '';
+            document.getElementById('loreTag').value = '';
+            document.getElementById('loreContent').value = '';
+        };
 
         // --- RENDERIZAR LISTAS ---
         const renderList = (path, listId, metaPrefix) => {
@@ -256,12 +250,14 @@ renderList('lore', 'loreAdminList', 'HITO');
 
                 list.innerHTML = Object.keys(data).map(id => {
                     const item = data[id];
+                    // Usar year si existe (para lore), si no title
+                    const displayTitle = item.year ? `[${item.year}] ${item.title}` : item.title;
                     return `
                         <div class="post-item">
                             <div class="post-info">
-                                <h3>${item.title}</h3>
+                                <h3>${displayTitle}</h3>
                                 <p>${item.content.substring(0, 60)}${item.content.length > 60 ? '...' : ''}</p>
-                                <div class="post-meta">${item.date} • ${metaPrefix}</div>
+                                <div class="post-meta">${item.date || ''} • ${metaPrefix}</div>
                             </div>
                             <button class="btn-delete" onclick="window.deleteItem('${path}', '${id}')"><i class="fas fa-trash"></i></button>
                         </div>
@@ -276,9 +272,11 @@ renderList('lore', 'loreAdminList', 'HITO');
             }
         };
 
+        // Iniciar las listas
         renderList('news', 'newsList', 'NOTICIA');
         renderList('events', 'eventsList', 'EVENTO');
         renderList('staff', 'staffList', 'STAFF');
+        renderList('lore', 'loreAdminList', 'HITO');
 
     </script>
 </body>
