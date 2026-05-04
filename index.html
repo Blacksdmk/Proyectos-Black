@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The New West - Servidor de Minecraft con Mods</title>
-    <!-- Incluimos iconos de FontAwesome para el aspecto visual de la imagen -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* --- RESET Y FUENTES --- */
@@ -12,15 +11,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace; /* Fuente de estilo mecanografiado del viejo oeste */
+            font-family: 'Courier New', Courier, monospace;
         }
 
         body {
-            background-color: #2c1b10; /* Color de fondo rústico */
-            /* Textura de fondo (Madera desgastada - Opcional, si no tienes la imagen, usa el color de arriba) */
-            /* Puedes usar esta URL de ejemplo o subir tu propia imagen */
+            background-color: #2c1b10;
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
-            color: #f1e4c9; /* Texto color arena/crema */
+            color: #f1e4c9;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -28,36 +25,80 @@
             position: relative;
         }
 
-        /* --- PANEL ADMIN (NUEVO) --- */
-        .admin-link {
+        /* --- PANEL ADMIN (ESTILO ACTUALIZADO) --- */
+        .admin-container {
             position: absolute;
             top: 20px;
             right: 20px;
-            font-size: 0.9rem;
-            color: #d2b48c; /* Marrón claro */
-            text-decoration: none;
-            border: 1px solid #d2b48c;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 1000;
         }
 
-        .admin-link:hover {
-            background-color: rgba(210, 180, 140, 0.2);
+        .btn-admin {
+            background-color: transparent;
+            color: #d2b48c;
+            text-decoration: none;
+            border: 1px solid #d2b48c;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-admin:hover {
+            background-color: #d2b48c;
+            color: #2c1b10;
+        }
+
+        /* Formulario Flotante de Login */
+        .login-box {
+            display: none;
+            background-color: #3e2716;
+            border: 2px solid #8b4513;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 200px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background: #1a110a;
+            border: 1px solid #8b4513;
+            color: #f1e4c9;
+            font-size: 0.8rem;
+        }
+
+        .btn-login-submit {
+            width: 100%;
+            background: #d2b48c;
+            color: #2c1b10;
+            border: none;
+            padding: 8px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         /* --- CONTENEDOR PRINCIPAL --- */
         .container {
             width: 90%;
             max-width: 1200px;
-            margin: 80px auto; /* Más espacio arriba para el panel admin */
+            margin: 80px auto;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
 
-        /* --- CABECERA (Como en la imagen) --- */
         .status-badge {
             background-color: rgba(144, 238, 144, 0.15);
             color: #90ee90;
@@ -81,7 +122,7 @@
             font-size: 4rem;
             font-weight: 800;
             margin-bottom: 15px;
-            color: #d2b48c; /* Marrón claro/cuero */
+            color: #d2b48c;
         }
 
         .hero-text {
@@ -92,7 +133,6 @@
             line-height: 1.6;
         }
 
-        /* --- BOTONES DE ACCIÓN (Ajustados) --- */
         .cta-buttons {
             display: flex;
             gap: 20px;
@@ -118,23 +158,12 @@
             border: 2px solid transparent;
         }
 
-        .btn-ip:hover {
-            background-color: transparent;
-            color: #d2b48c;
-            border-color: #d2b48c;
-        }
-
         .btn-discord {
-            border: 2px solid #8b4513; /* Marrón oscuro */
+            border: 2px solid #8b4513;
             color: #f1e4c9;
             background-color: #3e2716;
         }
 
-        .btn-discord:hover {
-            background-color: #8b4513;
-        }
-
-        /* --- TARJETAS DE ESTADO (Estilo Rústico) --- */
         .status-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -149,42 +178,11 @@
             border-radius: 12px;
             padding: 30px;
             text-align: left;
-            transition: border-color 0.3s;
         }
 
-        .status-card:hover {
-            border-color: #d2b48c;
-        }
-
-        .card-icon {
-            font-size: 1.8rem;
-            color: #d2b48c;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            color: #e6dfc3;
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .card-value {
-            color: #f1e4c9;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .card-subtitle {
-            color: #a19379;
-            font-size: 0.85rem;
-        }
-
-        /* --- SISTEMA RAPHAEL (NUEVO) --- */
         .system-section {
             width: 100%;
-            background-color: #1a110a; /* Fondo muy oscuro para contraste */
+            background-color: #1a110a;
             border: 1px solid #8b4513;
             border-radius: 12px;
             padding: 50px;
@@ -200,23 +198,6 @@
             padding-bottom: 10px;
         }
 
-        .system-content {
-            color: #e6dfc3;
-            line-height: 1.8;
-            font-size: 1.1rem;
-        }
-
-        .system-content p {
-            margin-bottom: 20px;
-        }
-
-        .system-content ul {
-            list-style: square;
-            margin-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        /* --- ÚLTIMAS NOTICIAS (Estilo Rústico) --- */
         .news-section {
             width: 100%;
             text-align: left;
@@ -226,164 +207,118 @@
             font-size: 1.8rem;
             color: #f1e4c9;
             margin-bottom: 30px;
-            font-weight: bold;
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .news-header::after {
-            content: '';
-            flex-grow: 1;
-            height: 1px;
-            background-color: #8b4513;
-        }
-
         .news-card {
             background-color: #3e2716;
             border: 1px solid #8b4513;
-            border-radius: 12px;
             padding: 30px;
-            max-width: 600px;
-            transition: border-color 0.3s;
+            border-radius: 12px;
         }
 
-        .news-card:hover {
-            border-color: #d2b48c;
-        }
-
-        .news-meta {
-            font-size: 0.8rem;
-            color: #a19379;
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .news-meta span {
-            background-color: #1a110a;
-            padding: 4px 10px;
-            border-radius: 5px;
-        }
-
-        .news-title {
-            color: #d2b48c;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .news-excerpt {
-            color: #e6dfc3;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .read-more {
-            color: #d2b48c;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: bold;
-        }
-
-        /* --- RESPONSIVO --- */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
-            .hero-text { font-size: 1rem; }
             .status-grid { grid-template-columns: 1fr; }
-            .system-section { padding: 30px; }
-            .system-section h2 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Cambia el enlace del botón por este -->
-<a href="app/admin.tsx" class="btn-admin">Panel Admin</a>
-        <i class="fas fa-user-shield"></i> Panel Admin
-    </a>
+    <!-- CONTENEDOR ADMIN CON LOGIN -->
+    <div class="admin-container">
+        <button class="btn-admin" id="toggleLogin">
+            <i class="fas fa-user-shield"></i> Panel Admin
+        </button>
+        
+        <div class="login-box" id="loginBox">
+            <input type="text" id="userField" placeholder="Usuario">
+            <input type="password" id="passField" placeholder="Contraseña">
+            <button class="btn-login-submit" onclick="attemptLogin()">ENTRAR</button>
+        </div>
+    </div>
 
     <div class="container">
-        <!-- Cabecera y Hero -->
         <div class="status-badge">
             <div class="dot"></div> Servidor Online
         </div>
         <h1>The New West</h1>
         <p class="hero-text">Una experiencia de Minecraft con mods ambientada en el salvaje oeste. Forja tu propio destino en la frontera.</p>
 
-        <!-- Botones de Acción -->
         <div class="cta-buttons">
-            <!-- BOTÓN IP: Asegúrate de cambiar 'play.thenewwest.com' por tu IP real -->
             <button class="btn btn-ip" onclick="navigator.clipboard.writeText('play.thenewwest.com'); alert('IP copiada: play.thenewwest.com')">
                 <i class="far fa-copy"></i> play.thenewwest.com
             </button>
-            <!-- BOTÓN DISCORD: Asegúrate de cambiar '#' por tu enlace real de Discord -->
-            <a href="[AQUÍ TU ENLACE DE DISCORD]" class="btn btn-discord">
+            <a href="#" class="btn btn-discord">
                 Únete al Discord <i class="fas fa-arrow-right"></i>
             </a>
         </div>
 
-        <!-- Grilla de Estado (Rústica) -->
         <div class="status-grid">
-            <!-- Jugadores (Cambia '12 / 100' manualmente o con PHP/JS más adelante) -->
             <div class="status-card">
-                <i class="fas fa-users card-icon"></i>
-                <p class="card-title">Jugadores Activos</p>
-                <p class="card-value">12 / 100</p>
-                <p class="card-subtitle">Creciendo cada día</p>
+                <i class="fas fa-users card-icon" style="color: #d2b48c; font-size: 1.8rem;"></i>
+                <p style="font-weight:bold; margin-top:10px;">Jugadores Activos</p>
+                <p style="font-size: 2.2rem; font-weight:800;">12 / 100</p>
             </div>
-            <!-- Versión -->
             <div class="status-card">
-                <i class="fas fa-code card-icon"></i>
-                <p class="card-title">Versión</p>
-                <p class="card-value">1.20.1 (Forge)</p>
-                <p class="card-subtitle">Requiere Modpack oficial</p>
+                <i class="fas fa-code card-icon" style="color: #d2b48c; font-size: 1.8rem;"></i>
+                <p style="font-weight:bold; margin-top:10px;">Versión</p>
+                <p style="font-size: 2.2rem; font-weight:800;">1.20.1</p>
             </div>
-            <!-- Estabilidad -->
             <div class="status-card">
-                <i class="fas fa-server card-icon"></i>
-                <p class="card-title">Estabilidad</p>
-                <p class="card-value">99.9%</p>
-                <p class="card-subtitle">Hardware dedicado</p>
+                <i class="fas fa-server card-icon" style="color: #d2b48c; font-size: 1.8rem;"></i>
+                <p style="font-weight:bold; margin-top:10px;">Estabilidad</p>
+                <p style="font-size: 2.2rem; font-weight:800;">99.9%</p>
             </div>
         </div>
 
-       <!-- SISTEMA RAPHAEL (ACTUALIZADO) -->
-<div class="system-section">
-    <h2>Sistema Raphael</h2>
-    <div class="system-content">
-        <p>El <strong>Sistema Raphael</strong> es el motor exclusivo de progresión y gestión logística que impulsa la experiencia en el servidor. Olvídate del Minecraft tradicional; aquí, cada acción cuenta y el avance es un reflejo directo de tu esfuerzo y decisiones estratégicas.</p>
-        
-        <p><strong>Progresión No Lineal:</strong> A diferencia del modelo convencional, Raphael elimina la obtención masiva e inmediata de recursos. Para avanzar, deberás interactuar con NPCs, completar misiones en áreas designadas y dominar procesos de fabricación complejos para desbloquear armaduras y herramientas de élite.</p>
+        <div class="system-section">
+            <h2>Sistema Raphael</h2>
+            <div class="system-content" style="line-height: 1.8;">
+                <p>El <strong>Sistema Raphael</strong> es el motor exclusivo de progresión y gestión logística que impulsa la experiencia en el servidor.</p>
+                <p><strong>Progresión No Lineal:</strong> Olvida la obtención inmediata de recursos. Deberás completar misiones y dominar procesos complejos para avanzar.</p>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Módulo de Roles:</strong> Sheriff, Doctor o Bandido. Tú eliges.</li>
+                    <li><strong>Economía Dinámica:</strong> Divisas virtuales vinculadas al valor de los asentamientos.</li>
+                </ul>
+                <p>Consulta las guías completas en Discord.</p>
+            </div>
+        </div>
 
-        <ul>
-            <li><strong>Módulo de Roles Especializados:</strong> Tú eliges tu función en la sociedad. ¿Serás un Sheriff manteniendo el orden, un Doctor salvando vidas o un Bandido forjando su propia ley? Cada rol posee un sistema de progresión con acciones específicas.</li>
-            <li><strong>Economía Virtual Dinámica:</strong> El dinero físico es cosa del pasado. El sistema utiliza divisas virtuales vinculadas al valor de cada asentamiento. El valor de tu moneda puede fluctuar en tiempo real según la estabilidad y el comercio de tu pueblo.</li>
-            <li><strong>Evolución Individual Protegida:</strong> El sistema equilibra la experiencia para todos mediante filtros de recursos, asegurando que la exploración sea satisfactoria para cada jugador, sin importar cuándo haya iniciado su travesía.</li>
-        </ul>
-
-        <p>Para más información detallada sobre cómo empezar y los requisitos de cada módulo, consulta las guías completas en nuestro canal de Discord.</p>
-    </div>
-</div>
-
-        <!-- Últimas Noticias (Rústica) -->
         <div class="news-section">
             <div class="news-header">Últimas Noticias</div>
             <div class="news-card">
-                <div class="news-meta">
-                    <span>3/5/2026</span>
-                    <span>Por Staff</span>
-                </div>
-                <p class="news-title">¡Bienvenidos al Nuevo Oeste!</p>
-                <p class="news-excerpt">Estamos emocionados de abrir las puertas de The New West. Prepara tus espuelas, carga tu revólver y forja tu legado.</p>
-                <a href="#" class="read-more">Leer más <i class="fas fa-arrow-right"></i></a>
+                <p style="color: #d2b48c; font-weight:bold;">¡Bienvenidos al Nuevo Oeste!</p>
+                <p style="margin-top:10px;">Estamos emocionados de abrir las puertas de The New West. Prepara tus espuelas.</p>
             </div>
         </div>
-
     </div>
+
+    <script>
+        // Lógica para mostrar/ocultar el cuadro de login
+        const toggleBtn = document.getElementById('toggleLogin');
+        const loginBox = document.getElementById('loginBox');
+
+        toggleBtn.onclick = () => {
+            loginBox.style.display = loginBox.style.display === 'block' ? 'none' : 'block';
+        };
+
+        // Lógica de acceso
+        function attemptLogin() {
+            const user = document.getElementById('userField').value;
+            const pass = document.getElementById('passField').value;
+
+            // CONFIGURA AQUÍ TU USUARIO Y CONTRASEÑA
+            if (user === 'admin' && pass === '12345') {
+                // Redirige al archivo HTML del panel admin
+                window.location.href = "app/admin.html";
+            } else {
+                alert("Acceso denegado: Usuario o clave incorrectos.");
+            }
+        }
+    </script>
 
 </body>
 </html>
