@@ -14,7 +14,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; }
+        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; display: none; } /* Oculto por defecto hasta verificar sesión */
 
         header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
         .header-title h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
@@ -51,6 +51,9 @@
 
         .content-section { display: none; }
         .content-section.active { display: grid; }
+
+        .admin-nav-btns { display: flex; gap: 10px; }
+        .btn-logout { background: #ef4444; }
     </style>
 </head>
 <body>
@@ -58,9 +61,12 @@
     <header>
         <div class="header-title">
             <h1>Panel de Administración</h1>
-            <p>Gestiona el contenido de la frontera desde un solo lugar.</p>
+            <p id="welcomeUser">Gestiona el contenido de la frontera.</p>
         </div>
-        <button class="btn-publish" style="width: auto; padding: 8px 16px;" onclick="location.href='../index.html'">Volver a la Web</button>
+        <div class="admin-nav-btns">
+            <button class="btn-publish" style="width: auto; padding: 8px 16px;" onclick="location.href='../index.html'">Volver a la Web</button>
+            <button class="btn-publish btn-logout" style="width: auto; padding: 8px 16px;" id="btnLogout">Cerrar Sesión</button>
+        </div>
     </header>
 
     <div class="tabs">
@@ -70,7 +76,7 @@
         <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Cronología</div>
     </div>
 
-    <!-- SECCIÓN NOTICIAS -->
+    <!-- SECCIONES (SE MANTIENEN IGUAL QUE TU CÓDIGO) -->
     <div id="noticias" class="content-section active main-content">
         <div class="card">
             <h2><i class="fas fa-plus"></i> Nueva Noticia</h2>
@@ -90,7 +96,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN EVENTOS -->
     <div id="eventos" class="content-section main-content">
         <div class="card">
             <h2><i class="fas fa-calendar-plus"></i> Nuevo Evento</h2>
@@ -110,7 +115,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN STAFF -->
     <div id="staff" class="content-section main-content">
         <div class="card">
             <h2><i class="fas fa-user-plus"></i> Nuevo Miembro</h2>
@@ -134,7 +138,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN LORE -->
     <div id="lore-admin" class="content-section main-content">
         <div class="card">
             <h2><i class="fas fa-feather-alt"></i> Nuevo Hito Histórico</h2>
@@ -161,10 +164,11 @@
             <div id="loreAdminList" class="post-list"></div>
         </div>
     </div>
-    
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDo7ebAVDvYEjPDscivWWKXLUoGEAGBeIM",
@@ -178,6 +182,26 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // --- GUARDIÁN DE SEGURIDAD ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuario autenticado: mostrar página y dar bienvenida
+                document.body.style.display = "block";
+                document.getElementById('welcomeUser').innerText = `Bienvenido, ${user.email}`;
+            } else {
+                // Sin sesión: expulsar al index
+                window.location.href = "../index.html";
+            }
+        });
+
+        // Botón de cerrar sesión
+        document.getElementById('btnLogout').onclick = () => {
+            signOut(auth).then(() => {
+                window.location.href = "../index.html";
+            });
+        };
 
         // --- NAVEGACIÓN ---
         window.switchTab = (event, sectionId) => {
@@ -191,14 +215,14 @@
         const saveItem = (path, data) => {
             const newRef = push(ref(db, path));
             set(newRef, { ...data, date: new Date().toLocaleDateString() })
-                .then(() => alert("¡Guardado con éxito!"))
-                .catch(err => alert("Error: " + err));
+                .then(() => alert("¡Publicado en la frontera!"))
+                .catch(err => alert("Error de permiso: " + err));
         };
 
         document.getElementById('btn-save-news').onclick = () => {
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
-            if(!title || !content) return alert("Faltan datos");
+            if(!title || !content) return alert("El telegrama está vacío");
             saveItem('news', { title, content });
             document.getElementById('newsTitle').value = ''; document.getElementById('newsContent').value = '';
         };
@@ -206,7 +230,7 @@
         document.getElementById('btn-save-event').onclick = () => {
             const title = document.getElementById('eventTitle').value;
             const content = document.getElementById('eventContent').value;
-            if(!title || !content) return alert("Faltan datos");
+            if(!title || !content) return alert("Faltan detalles del evento");
             saveItem('events', { title, content });
             document.getElementById('eventTitle').value = ''; document.getElementById('eventContent').value = '';
         };
@@ -215,7 +239,7 @@
             const title = document.getElementById('staffName').value;
             const content = document.getElementById('staffRange').value;
             const discord = document.getElementById('staffDiscord').value;
-            if(!title || !content) return alert("Faltan datos");
+            if(!title || !content) return alert("Falta información del miembro");
             saveItem('staff', { title, content, discord });
             document.getElementById('staffName').value = ''; document.getElementById('staffRange').value = ''; document.getElementById('staffDiscord').value = '';
         };
@@ -225,11 +249,11 @@
             const title = document.getElementById('loreTitle').value;
             const tag = document.getElementById('loreTag').value;
             const content = document.getElementById('loreContent').value;
-            if(!year || !title || !content) return alert("Faltan datos históricos");
+            if(!year || !title || !content) return alert("La historia requiere más detalles");
             
             const newRef = push(ref(db, 'lore'));
             set(newRef, { year, title, tag, content, date: new Date().toLocaleDateString() })
-                .then(() => alert("Hito registrado"))
+                .then(() => alert("Cronología actualizada"))
                 .catch(err => alert(err));
 
             document.getElementById('loreYear').value = '';
@@ -244,13 +268,12 @@
                 const list = document.getElementById(listId);
                 const data = snapshot.val();
                 if (!data) {
-                    list.innerHTML = '<p style="color:#94a3b8; font-size:0.9rem; text-align:center;">No hay registros aún.</p>';
+                    list.innerHTML = '<p style="color:#94a3b8; font-size:0.9rem; text-align:center;">Archivos vacíos.</p>';
                     return;
                 }
 
                 list.innerHTML = Object.keys(data).map(id => {
                     const item = data[id];
-                    // Usar year si existe (para lore), si no title
                     const displayTitle = item.year ? `[${item.year}] ${item.title}` : item.title;
                     return `
                         <div class="post-item">
@@ -267,12 +290,12 @@
         };
 
         window.deleteItem = (path, id) => {
-            if(confirm("¿Seguro que quieres borrar esto?")) {
+            if(confirm("¿Seguro que quieres borrar este registro histórico?")) {
                 remove(ref(db, `${path}/${id}`));
             }
         };
 
-        // Iniciar las listas
+        // Iniciar listas
         renderList('news', 'newsList', 'NOTICIA');
         renderList('events', 'eventsList', 'EVENTO');
         renderList('staff', 'staffList', 'STAFF');
