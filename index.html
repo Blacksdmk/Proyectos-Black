@@ -87,6 +87,17 @@
         }
         .btn-action:hover { background: #f1e4c9; transform: scale(1.05); }
 
+        /* --- INPUTS ESTILIZADOS --- */
+        input.form-input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            background: #1a110a; 
+            border: 1px solid #8b4513; 
+            color: #f1e4c9; 
+            border-radius: 4px;
+        }
+
         /* --- ADMIN LOGIN --- */
         .admin-trigger { position: fixed; bottom: 15px; right: 15px; opacity: 0.3; transition: 0.5s; }
         .admin-trigger:hover { opacity: 1; }
@@ -111,6 +122,7 @@
         <a onclick="showSection('inicio')">Inicio</a>
         <a onclick="showSection('lore')">Lore</a>
         <a onclick="showSection('eventos')">Eventos</a>
+        <a onclick="showSection('galeria')">Galería</a>
         <a onclick="showSection('staff')">Staff</a>
         <a onclick="showSection('raphael')">Sistema Raphael</a>
     </nav>
@@ -145,6 +157,25 @@
         </div>
     </div>
 
+    <div id="galeria" class="section">
+        <h2>Galería de la Frontera</h2>
+        
+        <!-- Formulario de Envío -->
+        <div class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-style: dashed;">
+            <h3 style="color: #d2b48c; margin-bottom: 15px; text-align: center;">¿Tienes un dibujo? ¡Publícalo!</h3>
+            <input type="text" id="artAuthor" class="form-input" placeholder="Tu nombre o nick">
+            <input type="text" id="artTitle" class="form-input" placeholder="Título de la obra">
+            <input type="text" id="artUrl" class="form-input" placeholder="URL de la imagen (Discord, Imgur, etc.)">
+            <button class="btn-action" style="width:100%" onclick="submitArt()">Enviar Solicitud</button>
+            <p style="font-size: 0.7rem; color: #8b4513; margin-top: 10px; text-align: center;">* El staff revisará tu dibujo antes de publicarlo.</p>
+        </div>
+
+        <!-- Mosaico de Arte Aprobado -->
+        <div id="dynamicArt" class="dynamic-grid">
+            <p style="color: #8b4513; text-align: center; grid-column: 1/-1;">Cargando obras de arte...</p>
+        </div>
+    </div>
+
     <div id="staff" class="section">
         <h2>Conoce al Equipo</h2>
         <div id="dynamicStaff" class="dynamic-grid">
@@ -171,7 +202,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const firebaseConfig = {
@@ -188,6 +219,7 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
+        // --- CARGADOR DE SECCIONES ---
         const loadSection = (path, containerId, templateFn, emptyMsg) => {
             const contentRef = ref(db, path);
             onValue(contentRef, (snapshot) => {
@@ -202,6 +234,7 @@
             });
         };
 
+        // --- CARGA DE CONTENIDOS ---
         loadSection('news', 'dynamicNews', n => `
             <div class="dynamic-item">
                 <h3>${n.title}</h3>
@@ -239,6 +272,40 @@
             </div>
         `, "La historia aún no ha sido escrita...");
 
+        loadSection('art', 'dynamicArt', a => `
+            <div class="dynamic-item" style="padding:0; overflow:hidden;">
+                <img src="${a.url}" style="width:100%; height:200px; object-fit:cover; border-bottom: 2px solid #d2b48c;">
+                <div style="padding:15px;">
+                    <h3 style="font-size:1.1rem;">${a.title}</h3>
+                    <p style="font-size:0.8rem; color:#d2b48c;">Por: ${a.author}</p>
+                </div>
+            </div>
+        `, "¡La galería está vacía! Envía tu dibujo.");
+
+        // --- FUNCIONES GLOBALES ---
+        window.submitArt = () => {
+            const author = document.getElementById('artAuthor').value;
+            const title = document.getElementById('artTitle').value;
+            const url = document.getElementById('artUrl').value;
+
+            if(!author || !url) {
+                alert("Necesitamos al menos tu nombre y el enlace de la imagen.");
+                return;
+            }
+
+            const submissionsRef = ref(db, 'art_submissions');
+            const newSubRef = push(submissionsRef);
+            set(newSubRef, {
+                author, title, url, 
+                date: new Date().toLocaleDateString()
+            }).then(() => {
+                alert("¡Solicitud enviada! El staff la revisará pronto.");
+                document.getElementById('artAuthor').value = "";
+                document.getElementById('artTitle').value = "";
+                document.getElementById('artUrl').value = "";
+            });
+        };
+
         window.showSection = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -258,8 +325,6 @@
         window.checkAdmin = () => {
             const userInput = document.getElementById('adminUser').value;
             const passInput = document.getElementById('adminPass').value;
-
-            // Convierte el nombre de usuario en el formato de email esperado por Firebase
             const email = userInput.includes('@') ? userInput : `${userInput}@thenewwest.com`;
 
             signInWithEmailAndPassword(auth, email, passInput)
@@ -267,8 +332,8 @@
                     window.location.href = "app/admin.html";
                 })
                 .catch((error) => {
-                    alert("Acceso denegado. Revisa tus credenciales.");
-                    console.error("Error de Auth:", error.message);
+                    alert("Acceso denegado.");
+                    console.error(error.message);
                 });
         };
     </script>
