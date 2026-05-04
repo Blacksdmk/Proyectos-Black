@@ -32,7 +32,7 @@
 
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fdfdfd; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fdfdfd; font-size: 0.9rem; }
         textarea { height: 100px; resize: none; }
 
         .btn-publish { width: 100%; background: var(--primary-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
@@ -55,7 +55,6 @@
         .admin-nav-btns { display: flex; gap: 10px; }
         .btn-logout { background: #ef4444; }
         
-        /* Thumbnail para arte */
         .art-thumb { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; margin-right: 15px; border: 1px solid var(--border-color); }
         .post-flex { display: flex; align-items: center; }
     </style>
@@ -79,68 +78,39 @@
         <div class="tab" onclick="switchTab(event, 'staff')"><i class="far fa-user"></i> Staff</div>
         <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Cronología</div>
         <div class="tab" onclick="switchTab(event, 'arte-admin')"><i class="fas fa-paint-brush"></i> Arte y Galería</div>
+        <div class="tab" onclick="switchTab(event, 'raphael-admin')"><i class="fas fa-microchip"></i> Sistema Raphael</div>
     </div>
 
-    <!-- SECCIONES NOTICIAS, EVENTOS, STAFF, LORE SE MANTIENEN... -->
+    <!-- SECCIONES ANTERIORES SE MANTIENEN IGUAL -->
     <div id="noticias" class="content-section active main-content">
         <div class="card">
             <h2><i class="fas fa-plus"></i> Nueva Noticia</h2>
-            <div class="form-group">
-                <label>Título</label>
-                <input type="text" id="newsTitle" placeholder="Título de la noticia">
-            </div>
-            <div class="form-group">
-                <label>Contenido</label>
-                <textarea id="newsContent" placeholder="Contenido de la noticia..."></textarea>
-            </div>
+            <div class="form-group"><label>Título</label><input type="text" id="newsTitle"></div>
+            <div class="form-group"><label>Contenido</label><textarea id="newsContent"></textarea></div>
             <button class="btn-publish" id="btn-save-news">Publicar Noticia</button>
         </div>
-        <div class="card">
-            <h2><i class="fas fa-chart-line"></i> Noticias Publicadas</h2>
-            <div id="newsList" class="post-list"></div>
-        </div>
+        <div class="card"><h2><i class="fas fa-chart-line"></i> Noticias Publicadas</h2><div id="newsList" class="post-list"></div></div>
     </div>
 
     <div id="eventos" class="content-section main-content">
         <div class="card">
             <h2><i class="fas fa-calendar-plus"></i> Nuevo Evento</h2>
-            <div class="form-group">
-                <label>Nombre del Evento</label>
-                <input type="text" id="eventTitle" placeholder="Ej: Duelo al Sol">
-            </div>
-            <div class="form-group">
-                <label>Fecha y Detalles</label>
-                <textarea id="eventContent" placeholder="Indica fecha, hora y descripción..."></textarea>
-            </div>
+            <div class="form-group"><label>Nombre</label><input type="text" id="eventTitle"></div>
+            <div class="form-group"><label>Detalles</label><textarea id="eventContent"></textarea></div>
             <button class="btn-publish" id="btn-save-event">Programar Evento</button>
         </div>
-        <div class="card">
-            <h2><i class="fas fa-history"></i> Eventos en Agenda</h2>
-            <div id="eventsList" class="post-list"></div>
-        </div>
+        <div class="card"><h2><i class="fas fa-history"></i> Eventos en Agenda</h2><div id="eventsList" class="post-list"></div></div>
     </div>
 
     <div id="staff" class="content-section main-content">
         <div class="card">
             <h2><i class="fas fa-user-plus"></i> Nuevo Miembro</h2>
-            <div class="form-group">
-                <label>Nombre / Nickname</label>
-                <input type="text" id="staffName" placeholder="Nombre del usuario">
-            </div>
-            <div class="form-group">
-                <label>Rango o Frase</label>
-                <input type="text" id="staffRange" placeholder="Ej: Sheriff, Admin, Mod">
-            </div>
-            <div class="form-group">
-                <label>Discord Tag</label>
-                <input type="text" id="staffDiscord" placeholder="Usuario#0000">
-            </div>
+            <div class="form-group"><label>Nombre</label><input type="text" id="staffName"></div>
+            <div class="form-group"><label>Rango</label><input type="text" id="staffRange"></div>
+            <div class="form-group"><label>Discord</label><input type="text" id="staffDiscord"></div>
             <button class="btn-publish" id="btn-save-staff">Agregar al Staff</button>
         </div>
-        <div class="card">
-            <h2><i class="fas fa-users-cog"></i> Equipo Actual</h2>
-            <div id="staffList" class="post-list"></div>
-        </div>
+        <div class="card"><h2><i class="fas fa-users-cog"></i> Equipo Actual</h2><div id="staffList" class="post-list"></div></div>
     </div>
 
     <div id="lore-admin" class="content-section main-content">
@@ -152,39 +122,48 @@
             <div class="form-group"><label>Relato</label><textarea id="loreContent"></textarea></div>
             <button class="btn-publish" id="btn-save-lore">Registrar Hito</button>
         </div>
-        <div class="card">
-            <h2><i class="fas fa-monument"></i> Cronología</h2>
-            <div id="loreAdminList" class="post-list"></div>
-        </div>
+        <div class="card"><h2><i class="fas fa-monument"></i> Cronología</h2><div id="loreAdminList" class="post-list"></div></div>
     </div>
 
-    <!-- NUEVA SECCIÓN: ARTE -->
     <div id="arte-admin" class="content-section main-content">
         <div class="card">
             <h2><i class="fas fa-check-circle"></i> Pendientes de Aprobación</h2>
-            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Dibujos enviados por la comunidad.</p>
             <div id="artPendingList" class="post-list"></div>
-            
             <hr style="margin: 30px 0; border: 0; border-top: 1px solid var(--border-color);">
-            
             <h2><i class="fas fa-plus-circle"></i> Subir Arte Oficial</h2>
-            <div class="form-group">
-                <label>Artista (Nombre)</label>
-                <input type="text" id="artAuthor" placeholder="Nombre del autor">
-            </div>
-            <div class="form-group">
-                <label>URL de la Imagen</label>
-                <input type="text" id="artUrl" placeholder="https://link-de-la-imagen.jpg">
-            </div>
-            <div class="form-group">
-                <label>Título del Dibujo</label>
-                <input type="text" id="artTitle" placeholder="Ej: Mi personaje en el desierto">
-            </div>
+            <div class="form-group"><label>Artista</label><input type="text" id="artAuthor"></div>
+            <div class="form-group"><label>URL</label><input type="text" id="artUrl"></div>
+            <div class="form-group"><label>Título</label><input type="text" id="artTitle"></div>
             <button class="btn-publish" id="btn-save-art">Subir a la Galería</button>
         </div>
+        <div class="card"><h2><i class="fas fa-images"></i> Galería Pública</h2><div id="artList" class="post-list"></div></div>
+    </div>
+
+    <!-- NUEVA SECCIÓN: RAPHAEL ADMIN -->
+    <div id="raphael-admin" class="content-section main-content">
         <div class="card">
-            <h2><i class="fas fa-images"></i> Galería Pública</h2>
-            <div id="artList" class="post-list"></div>
+            <h2><i class="fas fa-plus-square"></i> Nuevo Módulo Raphael</h2>
+            <div class="form-group">
+                <label>Título del Módulo</label>
+                <input type="text" id="raphaelTitle" placeholder="Ej: Sistema de Reputación">
+            </div>
+            <div class="form-group">
+                <label>Etiqueta (Tag)</label>
+                <input type="text" id="raphaelTag" placeholder="Ej: ECONOMY, COMBAT, PROGRESSION">
+            </div>
+            <div class="form-group">
+                <label>Icono (Font Awesome class)</label>
+                <input type="text" id="raphaelIcon" placeholder="Ej: fas fa-bullseye">
+            </div>
+            <div class="form-group">
+                <label>Descripción Corta</label>
+                <textarea id="raphaelContent" placeholder="Explica brevemente cómo funciona..."></textarea>
+            </div>
+            <button class="btn-publish" id="btn-save-raphael">Guardar Módulo</button>
+        </div>
+        <div class="card">
+            <h2><i class="fas fa-microchip"></i> Módulos en la Web</h2>
+            <div id="raphaelList" class="post-list"></div>
         </div>
     </div>
 
@@ -230,7 +209,7 @@
         const saveItem = (path, data) => {
             const newRef = push(ref(db, path));
             set(newRef, { ...data, date: new Date().toLocaleDateString() })
-                .then(() => alert("¡Publicado!"))
+                .then(() => alert("¡Datos actualizados!"))
                 .catch(err => alert("Error: " + err));
         };
 
@@ -262,14 +241,25 @@
             if(year && title) { saveItem('lore', { year, title, tag, content }); document.getElementById('loreYear').value=''; document.getElementById('loreTitle').value=''; }
         };
 
-        // --- ARTE LOGIC ---
         document.getElementById('btn-save-art').onclick = () => {
             const author = document.getElementById('artAuthor').value;
             const url = document.getElementById('artUrl').value;
             const title = document.getElementById('artTitle').value;
-            if(author && url) { 
-                saveItem('art', { author, url, title: title || "Sin título" }); 
-                document.getElementById('artAuthor').value=''; document.getElementById('artUrl').value=''; document.getElementById('artTitle').value='';
+            if(author && url) { saveItem('art', { author, url, title: title || "Sin título" }); document.getElementById('artAuthor').value=''; document.getElementById('artUrl').value=''; }
+        };
+
+        // NUEVO HANDLER: RAPHAEL
+        document.getElementById('btn-save-raphael').onclick = () => {
+            const title = document.getElementById('raphaelTitle').value;
+            const tag = document.getElementById('raphaelTag').value;
+            const icon = document.getElementById('raphaelIcon').value;
+            const content = document.getElementById('raphaelContent').value;
+            if(title && content) { 
+                saveItem('raphael', { title, tag, icon: icon || 'fas fa-cog', content }); 
+                document.getElementById('raphaelTitle').value=''; 
+                document.getElementById('raphaelTag').value='';
+                document.getElementById('raphaelIcon').value='';
+                document.getElementById('raphaelContent').value='';
             }
         };
 
@@ -279,15 +269,15 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     const newPublicRef = push(ref(db, 'art'));
-                    set(newPublicRef, data).then(() => {
-                        remove(pendingRef);
-                        alert("¡Arte aprobado y publicado!");
-                    });
+                    set(newPublicRef, data).then(() => { remove(pendingRef); alert("¡Arte aprobado!"); });
                 }
             });
         };
 
-        // --- RENDER LISTAS ---
+        window.deleteItem = (path, id) => {
+            if(confirm("¿Eliminar permanentemente?")) remove(ref(db, `${path}/${id}`));
+        };
+
         const renderList = (path, listId, metaPrefix, isPendingArt = false) => {
             onValue(ref(db, path), (snapshot) => {
                 const list = document.getElementById(listId);
@@ -297,14 +287,16 @@
                 list.innerHTML = Object.keys(data).map(id => {
                     const item = data[id];
                     const isArt = path.includes('art');
+                    const isRaphael = path === 'raphael';
                     return `
                         <div class="post-item">
                             <div class="post-flex">
-                                ${isArt ? `<img src="${item.url}" class="art-thumb" onerror="this.src='https://via.placeholder.com/50?text=Error'">` : ''}
+                                ${isArt ? `<img src="${item.url}" class="art-thumb">` : ''}
+                                ${isRaphael ? `<i class="${item.icon}" style="font-size:1.5rem; margin-right:15px; color:var(--primary-blue)"></i>` : ''}
                                 <div class="post-info">
-                                    <h3>${item.title || item.year || 'Sin título'}</h3>
+                                    <h3>${item.title || item.year}</h3>
                                     <p>${isArt ? 'Por: ' + item.author : item.content?.substring(0, 40) + '...'}</p>
-                                    <div class="post-meta">${item.date || ''} • ${metaPrefix}</div>
+                                    <div class="post-meta">${item.tag || metaPrefix}</div>
                                 </div>
                             </div>
                             <div class="action-btns">
@@ -317,16 +309,13 @@
             });
         };
 
-        window.deleteItem = (path, id) => {
-            if(confirm("¿Eliminar permanentemente?")) remove(ref(db, `${path}/${id}`));
-        };
-
         renderList('news', 'newsList', 'NOTICIA');
         renderList('events', 'eventsList', 'EVENTO');
         renderList('staff', 'staffList', 'STAFF');
         renderList('lore', 'loreAdminList', 'HITO');
         renderList('art', 'artList', 'GALERÍA');
         renderList('art_submissions', 'artPendingList', 'PENDIENTE', true);
+        renderList('raphael', 'raphaelList', 'MÓDULO');
 
     </script>
 </body>
