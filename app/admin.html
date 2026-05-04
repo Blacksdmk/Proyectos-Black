@@ -1,17 +1,192 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Panel de Control - The New West</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - The New West</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #2c1b10; color: #d2b48c; font-family: sans-serif; padding: 50px; text-align: center; }
-        .panel { border: 2px solid #8b4513; padding: 20px; display: inline-block; }
+        :root {
+            --primary-blue: #2563eb;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .header-title h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
+        .header-title p { color: #64748b; margin-top: 5px; }
+
+        .btn-superadmin {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- TABS (PESTAÑAS) --- */
+        .tabs {
+            display: flex;
+            gap: 30px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 5px;
+            cursor: pointer;
+            color: #64748b;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .tab.active { color: var(--primary-blue); }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-blue);
+        }
+
+        /* --- CONTENIDO --- */
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .card h2 { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+        /* --- FORMULARIO --- */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #fdfdfd;
+            font-size: 0.9rem;
+        }
+
+        textarea { height: 120px; resize: none; }
+
+        .btn-publish {
+            width: 100%;
+            background: #94a3b8;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-publish:hover { background: var(--text-dark); }
+
+        /* --- LISTA DE PUBLICACIONES --- */
+        .post-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .post-info h3 { font-size: 1rem; margin-bottom: 5px; }
+        .post-info p { color: #64748b; font-size: 0.9rem; line-height: 1.5; }
+        .post-meta { font-size: 0.75rem; color: #94a3b8; margin-top: 10px; font-weight: 700; }
+
+        .btn-delete { color: #cbd5e1; cursor: pointer; transition: 0.3s; }
+        .btn-delete:hover { color: #ef4444; }
     </style>
 </head>
 <body>
-    <div class="panel">
-        <h1>Bienvenido al Panel de Administración</h1>
-        <p>Desde aquí podrás gestionar el Sistema Raphael próximamente.</p>
-        <a href="../index.html" style="color: white;">Volver al Inicio</a>
+
+    <header>
+        <div class="header-title">
+            <h1>Panel de Administración</h1>
+            <p>Gestiona el contenido del servidor desde un solo lugar.</p>
+        </div>
+        <button class="btn-superadmin">
+            <span style="color: #2563eb;">●</span> Acceso Superadmin
+        </button>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active"><i class="far fa-newspaper"></i> Noticias</div>
+        <div class="tab"><i class="far fa-calendar-alt"></i> Eventos</div>
+        <div class="tab"><i class="far fa-user"></i> Staff</div>
     </div>
+
+    <div class="main-content">
+        <!-- SECCIÓN IZQUIERDA: FORMULARIO -->
+        <div class="card">
+            <h2><i class="fas fa-plus"></i> Nueva Noticia</h2>
+            
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" placeholder="Título de la noticia">
+            </div>
+
+            <div class="form-group">
+                <label>Autor</label>
+                <input type="text" value="Admin">
+            </div>
+
+            <div class="form-group">
+                <label>Contenido</label>
+                <textarea placeholder="Contenido de la noticia..."></textarea>
+            </div>
+
+            <button class="btn-publish">Publicar Noticia</button>
+        </div>
+
+        <!-- SECCIÓN DERECHA: VISTA PREVIA/LISTA -->
+        <div class="card">
+            <h2><i class="fas fa-chart-line"></i> Noticias Publicadas</h2>
+            
+            <div class="post-item">
+                <div class="post-info">
+                    <h3>¡Bienvenidos al Nuevo Oeste!</h3>
+                    <p>Estamos emocionados de abrir las puertas de The New West. Prepara tus espuelas y tu revólver.</p>
+                    <div class="post-meta">3/5/2026 • POR STAFF</div>
+                </div>
+                <div class="btn-delete"><i class="fas fa-trash"></i></div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
