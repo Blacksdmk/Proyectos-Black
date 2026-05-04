@@ -160,14 +160,17 @@
     <div id="galeria" class="section">
         <h2>Galería de la Frontera</h2>
         
-        <!-- Formulario de Envío -->
+        <!-- Formulario de Envío Actualizado para Archivos -->
         <div class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-style: dashed;">
             <h3 style="color: #d2b48c; margin-bottom: 15px; text-align: center;">¿Tienes un dibujo? ¡Publícalo!</h3>
             <input type="text" id="artAuthor" class="form-input" placeholder="Tu nombre o nick">
             <input type="text" id="artTitle" class="form-input" placeholder="Título de la obra">
-            <input type="text" id="artUrl" class="form-input" placeholder="URL de la imagen (Discord, Imgur, etc.)">
-            <button class="btn-action" style="width:100%" onclick="submitArt()">Enviar Solicitud</button>
-            <p style="font-size: 0.7rem; color: #8b4513; margin-top: 10px; text-align: center;">* El staff revisará tu dibujo antes de publicarlo.</p>
+            
+            <label style="display: block; margin-bottom: 10px; color: #d2b48c;">Selecciona tu imagen (JPG/PNG):</label>
+            <input type="file" id="artFile" accept="image/*" class="form-input" style="border: 1px dashed #8b4513; padding: 10px;">
+            
+            <button class="btn-action" style="width:100%" id="btnSubmitArt" onclick="submitArt()">Enviar Solicitud</button>
+            <p style="font-size: 0.7rem; color: #8b4513; margin-top: 10px; text-align: center;">* El staff revisará tu dibujo. Límite: 1MB.</p>
         </div>
 
         <!-- Mosaico de Arte Aprobado -->
@@ -282,28 +285,63 @@
             </div>
         `, "¡La galería está vacía! Envía tu dibujo.");
 
+        // --- FUNCIÓN PARA CONVERTIR IMAGEN A BASE64 ---
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
         // --- FUNCIONES GLOBALES ---
-        window.submitArt = () => {
+        window.submitArt = async () => {
             const author = document.getElementById('artAuthor').value;
             const title = document.getElementById('artTitle').value;
-            const url = document.getElementById('artUrl').value;
+            const fileInput = document.getElementById('artFile');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('btnSubmitArt');
 
-            if(!author || !url) {
-                alert("Necesitamos al menos tu nombre y el enlace de la imagen.");
+            if(!author || !file) {
+                alert("Necesitamos tu nombre y que selecciones un archivo JPG/PNG.");
                 return;
             }
 
-            const submissionsRef = ref(db, 'art_submissions');
-            const newSubRef = push(submissionsRef);
-            set(newSubRef, {
-                author, title, url, 
-                date: new Date().toLocaleDateString()
-            }).then(() => {
+            // Límite de 1MB para Base64
+            if(file.size > 1048576) {
+                alert("La imagen es demasiado pesada. El límite es 1MB para asegurar que cargue rápido.");
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerText = "Procesando...";
+
+                const base64Img = await toBase64(file);
+
+                const submissionsRef = ref(db, 'art_submissions');
+                const newSubRef = push(submissionsRef);
+                
+                await set(newSubRef, {
+                    author, 
+                    title: title || "Sin título", 
+                    url: base64Img, 
+                    date: new Date().toLocaleDateString()
+                });
+
                 alert("¡Solicitud enviada! El staff la revisará pronto.");
+                
+                // Limpiar campos
                 document.getElementById('artAuthor').value = "";
                 document.getElementById('artTitle').value = "";
-                document.getElementById('artUrl').value = "";
-            });
+                fileInput.value = "";
+                
+            } catch (error) {
+                console.error(error);
+                alert("Hubo un error al procesar la imagen.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Enviar Solicitud";
+            }
         };
 
         window.showSection = (id) => {
