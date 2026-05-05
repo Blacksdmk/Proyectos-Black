@@ -158,8 +158,18 @@
     <div id="raphael-admin" class="content-section main-content">
         <div class="card">
             <h2>Módulo Raphael</h2>
-            <div class="form-group"><label>Título</label><input type="text" id="raphaelTitle"></div>
-            <div class="form-group"><label>Descripción</label><textarea id="raphaelContent"></textarea></div>
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="raphaelTitle" placeholder="Ej: Sistema de Negocios">
+            </div>
+            <div class="form-group">
+                <label>Sello (Etiqueta Roja)</label>
+                <input type="text" id="raphaelTag" placeholder="Ej: ECONOMÍA, PROGRESO Y ROL">
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="raphaelContent" placeholder="Explica cómo funciona el sistema..."></textarea>
+            </div>
             <button class="btn-publish" id="btn-save-raphael">Actualizar Sistema</button>
         </div>
         <div class="card"><h2>Sistemas Activos</h2><div id="raphaelList" class="post-list"></div></div>
@@ -253,9 +263,11 @@
         document.getElementById('btn-save-raphael').onclick = () => {
             saveItem('raphael', { 
                 title: document.getElementById('raphaelTitle').value, 
+                tag: document.getElementById('raphaelTag').value,
                 content: document.getElementById('raphaelContent').value 
             });
             document.getElementById('raphaelTitle').value = "";
+            document.getElementById('raphaelTag').value = "";
             document.getElementById('raphaelContent').value = "";
         };
 
@@ -303,7 +315,7 @@
             });
         };
 
-        // --- RENDER ESPECIAL ARTE (Aprobaciones) ---
+        // --- RENDER ESPECIAL ARTE ---
         onValue(ref(db, 'art_pending'), (snapshot) => {
             const list = document.getElementById('artPendingList');
             const data = snapshot.val();
@@ -330,7 +342,6 @@
             remove(ref(db, `art_pending/${id}`));
         };
 
-        // Inicializar todas las listas
         renderBasic('news', 'newsList');
         renderBasic('events', 'eventsList');
         renderBasic('staff', 'staffList');
