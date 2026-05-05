@@ -5,140 +5,302 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The New West - Servidor de Minecraft</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #2563eb;
-            --dark: #0f172a;
-            --light-bg: #f8fafc;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --raphael: #7c3aed; /* Color para el Sistema Raphael */
+        /* --- ESTILOS BASE Y FONDO RÚSTICO --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+        
+        body {
+            background-color: #2c1b10;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: #f1e4c9;
+            min-height: 100vh;
+            scroll-behavior: smooth;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: white; color: var(--text-main); line-height: 1.6; }
+        /* --- MENÚ DE NAVEGACIÓN --- */
+        nav {
+            background-color: rgba(26, 17, 10, 0.95);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #8b4513;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-        /* --- NAVEGACIÓN --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-        .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.2rem; color: var(--dark); }
-        .nav-links { display: flex; gap: 25px; }
-        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
-        .nav-links a:hover { color: var(--primary); }
+        nav a {
+            color: #d2b48c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover { color: #f1e4c9; text-shadow: 0 0 10px #d2b48c; }
 
         /* --- SECCIONES --- */
-        .section { display: none; padding: 60px 8%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.4s ease; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .section-header { text-align: center; margin-bottom: 50px; }
-        .section-header h2 { font-size: 2.5rem; color: var(--dark); letter-spacing: -1px; }
-
-        /* --- HERO --- */
-        .hero-premium {
-            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
-                        url('https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=2070&auto=format&fit=crop'); 
-            background-size: cover; background-position: center; padding: 120px 40px; border-radius: 24px; color: white; text-align: center; margin-bottom: 50px;
+        .section {
+            display: none;
+            width: 95%;
+            max-width: 1100px;
+            margin: 40px auto;
+            animation: fadeIn 0.4s ease;
         }
-        .badge { background: var(--primary); padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
-        .hero-premium h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 20px 0; color: white; letter-spacing: -2px; }
 
-        .ip-box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 12px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; display: inline-flex; align-items: center; gap: 10px; color: white; }
+        .section.active { display: block; }
 
-        /* --- SISTEMA RAPHAEL --- */
-        .raphael-card { background: #f5f3ff; border: 2px solid var(--raphael); border-radius: 20px; padding: 40px; text-align: center; margin-bottom: 40px; }
-        .raphael-card i { font-size: 3rem; color: var(--raphael); margin-bottom: 20px; }
-        .raphael-status { display: inline-block; padding: 5px 15px; border-radius: 20px; background: #ddd6fe; color: #5b21b6; font-weight: 700; font-size: 0.8rem; margin-top: 10px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- GRID & CARDS --- */
-        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card-post { padding: 30px; border: 1px solid var(--border); border-radius: 16px; background: white; }
-        .staff-card { text-align: center; padding: 30px; border: 1px solid var(--border); border-radius: 16px; }
-        .staff-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin-bottom: 15px; }
+        /* --- TARJETAS Y CONTENIDO --- */
+        .card {
+            background-color: #3e2716;
+            border: 2px solid #8b4513;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
 
-        .bounty-card { background: #fdf5e6; border: 2px solid #4a0404; padding: 20px; text-align: center; color: #4a0404; }
-        .bounty-card img { width: 100%; height: 250px; object-fit: cover; border: 1px solid #4a0404; margin-bottom: 15px; }
+        h1 { font-size: 4rem; color: #d2b48c; text-align: center; margin-bottom: 10px; }
+        h2 { color: #d2b48c; font-size: 2.2rem; margin-bottom: 25px; text-align: center; border-bottom: 1px solid #8b4513; padding-bottom: 10px; }
+        
+        /* --- ESTILO DE CONTENEDORES DINÁMICOS --- */
+        .dynamic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .dynamic-item { background: #1a110a; border-left: 4px solid #d2b48c; padding: 20px; border-radius: 4px; }
+        .dynamic-item h3 { color: #d2b48c; margin-bottom: 10px; }
+        .meta-tag { font-size: 0.8rem; color: #8b4513; font-weight: bold; margin-top: 15px; display: block; text-transform: uppercase; }
 
-        /* --- LOGIN POPUP --- */
-        #loginOverlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.9); z-index: 2000; justify-content: center; align-items: center; }
-        .login-box { background: white; padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
-        .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 8px; }
-        .btn-login { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        /* --- ESTILO ESPECÍFICO RAPHAEL --- */
+        .raphael-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
 
-        footer { padding: 60px 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 80px; }
+        .raphael-module {
+            background: #2a1a0f;
+            border: 1px solid #8b4513;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            transition: 0.3s;
+        }
+
+        .raphael-module:hover {
+            border-color: #d2b48c;
+            background: #352113;
+            transform: translateY(-5px);
+        }
+
+        .raphael-icon-box {
+            background: #1a110a;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #8b4513;
+            flex-shrink: 0;
+        }
+
+        .raphael-icon-box i { font-size: 1.5rem; color: #d2b48c; }
+
+        .raphael-info h3 {
+            font-size: 1.1rem;
+            color: #f1e4c9;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .raphael-tag {
+            font-size: 0.6rem;
+            background: #8b4513;
+            color: #f1e4c9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .raphael-info p { font-size: 0.9rem; color: #d2b48c; line-height: 1.4; }
+
+        /* --- BOTONES --- */
+        .btn-action {
+            display: inline-block;
+            background: #d2b48c;
+            color: #2c1b10;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-action:hover { background: #f1e4c9; transform: scale(1.05); }
+
+        /* --- INPUTS ESTILIZADOS --- */
+        input.form-input, select.form-input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            background: #1a110a; 
+            border: 1px solid #8b4513; 
+            color: #f1e4c9; 
+            border-radius: 4px;
+        }
+
+        /* --- ADMIN LOGIN --- */
+        .admin-trigger { position: fixed; bottom: 15px; right: 15px; opacity: 0.3; transition: 0.5s; }
+        .admin-trigger:hover { opacity: 1; }
+        
+        #loginBox {
+            display: none;
+            position: fixed;
+            bottom: 50px;
+            right: 15px;
+            background: #3e2716;
+            border: 2px solid #8b4513;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        #loginBox input { display: block; margin-bottom: 10px; padding: 8px; background: #1a110a; border: 1px solid #8b4513; color: white; width: 100%; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-hat-cowboy"></i> The New West</div>
-        <div class="nav-links">
-            <a onclick="showSection('inicio')">Inicio</a>
-            <a onclick="showSection('noticias')">Noticias</a>
-            <a onclick="showSection('raphael')">Raphael</a>
-            <a onclick="showSection('lore')">Lore</a>
-            <a onclick="showSection('bounties')">Se Busca</a>
-            <a onclick="showSection('staff')">Staff</a>
-        </div>
+        <a onclick="showSection('inicio')">Inicio</a>
+        <a onclick="showSection('whitelist')">Whitelist</a>
+        <a onclick="showSection('lore')">Lore</a>
+        <a onclick="showSection('eventos')">Eventos</a>
+        <a onclick="showSection('galeria')">Galería</a>
+        <a onclick="showSection('staff')">Staff</a>
+        <a onclick="showSection('raphael')">Sistema Raphael</a>
     </nav>
 
     <!-- INICIO -->
     <div id="inicio" class="section active">
-        <div class="hero-premium">
-            <span class="badge">Temporada 1</span>
+        <div style="text-align: center; margin-top: 60px;">
             <h1>The New West</h1>
-            <p>Escribe tu propia historia en el Salvaje Oeste.</p>
-            <div style="margin-top: 25px;">
-                <div class="ip-box" onclick="copyIP()">
-                    <span id="serverIP">play.thenewwest.com</span> <i class="fas fa-copy"></i>
-                </div>
+            <p style="font-size: 1.4rem; color: #e6dfc3; margin-bottom: 20px;">Tu propia historia en la frontera del Salvaje Oeste.</p>
+            
+            <div style="margin: 40px 0;">
+                <button class="btn-action" style="margin-right: 10px;" onclick="showSection('whitelist')">
+                    <i class="fas fa-id-card"></i> Solicitar Acceso
+                </button>
+                <button class="btn-action" onclick="copyIP()">
+                    <i class="far fa-copy"></i> play.thenewwest.com
+                </button>
+            </div>
+
+            <h2 style="font-size: 1.5rem; text-align: left;">Últimas Noticias</h2>
+            <div id="dynamicNews" class="dynamic-grid">
+                <p style="color: #8b4513;">Cargando telegramas...</p>
             </div>
         </div>
     </div>
 
-    <!-- SISTEMA RAPHAEL -->
+    <!-- WHITELIST -->
+    <div id="whitelist" class="section">
+        <h2>Solicitud de Acceso (Whitelist)</h2>
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <p style="margin-bottom: 20px; text-align: center; color: #d2b48c;">Completa este formulario para que el staff revise tu entrada a la frontera.</p>
+            
+            <label>Usuario de Minecraft</label>
+            <input type="text" id="wlNick" class="form-input" placeholder="Ej: Steve_West">
+
+            <label>Nombre de Discord</label>
+            <input type="text" id="wlDiscord" class="form-input" placeholder="Ej: vaquero#1234">
+
+            <label>¿Ya subiste tu ficha de personaje a Discord?</label>
+            <select id="wlFicha" class="form-input">
+                <option value="no">Aún no</option>
+                <option value="si">Sí, ya está subida</option>
+            </select>
+
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+                <input type="checkbox" id="wlReglas" style="width: 20px; height: 20px; cursor: pointer;">
+                <label for="wlReglas" style="cursor: pointer; color: #f1e4c9; font-size: 0.9rem;">He leído y acepto las reglas del servidor</label>
+            </div>
+
+            <button class="btn-action" style="width: 100%;" onclick="submitWhitelist()">Enviar Solicitud de Acceso</button>
+            <p id="wlMsg" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+        </div>
+    </div>
+
+    <!-- LORE -->
+    <div id="lore" class="section">
+        <h2>Crónicas de la Frontera</h2>
+        <div id="dynamicLore" style="display: flex; flex-direction: column; gap: 20px;">
+            <p style="color: #8b4513; text-align: center;">Desempolvando los archivos históricos...</p>
+        </div>
+    </div>
+
+    <!-- EVENTOS -->
+    <div id="eventos" class="section">
+        <h2>Eventos Planeados</h2>
+        <div id="dynamicEvents" class="dynamic-grid">
+            <p style="color: #8b4513; text-align: center; grid-column: 1/-1;">Buscando eventos en el calendario...</p>
+        </div>
+    </div>
+
+    <!-- GALERIA -->
+    <div id="galeria" class="section">
+        <h2>Galería de la Frontera</h2>
+        <div class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-style: dashed;">
+            <h3 style="color: #d2b48c; margin-bottom: 15px; text-align: center;">¿Tienes un dibujo? ¡Publícalo!</h3>
+            <input type="text" id="artAuthor" class="form-input" placeholder="Tu nombre o nick">
+            <input type="text" id="artTitle" class="form-input" placeholder="Título de la obra">
+            <label style="display: block; margin-bottom: 10px; color: #d2b48c;">Selecciona tu imagen (JPG/PNG):</label>
+            <input type="file" id="artFile" accept="image/*" class="form-input" style="border: 1px dashed #8b4513; padding: 10px;">
+            <button class="btn-action" style="width:100%" id="btnSubmitArt" onclick="submitArt()">Enviar Solicitud</button>
+            <p style="font-size: 0.7rem; color: #8b4513; margin-top: 10px; text-align: center;">* El staff revisará tu dibujo. Límite: 1MB.</p>
+        </div>
+        <div id="dynamicArt" class="dynamic-grid">
+            <p style="color: #8b4513; text-align: center; grid-column: 1/-1;">Cargando obras de arte...</p>
+        </div>
+    </div>
+
+    <!-- STAFF -->
+    <div id="staff" class="section">
+        <h2>Conoce al Equipo</h2>
+        <div id="dynamicStaff" class="dynamic-grid">
+            <p style="color: #8b4513; text-align: center; grid-column: 1/-1;">Reuniendo a la patrulla...</p>
+        </div>
+    </div>
+
+    <!-- RAPHAEL -->
     <div id="raphael" class="section">
-        <div class="section-header"><h2>Sistema Raphael</h2></div>
-        <div class="raphael-card">
-            <i class="fas fa-microchip"></i>
-            <h3>Inteligencia Artificial Vigilante</h3>
-            <p>Raphael monitorea el comportamiento del servidor, gestiona eventos dinámicos y asegura el fair-play en tiempo real.</p>
-            <div class="raphael-status">ESTADO: OPERATIVO</div>
+        <h2>Sistema Raphael</h2>
+        <div class="card" style="margin-bottom: 40px; text-align: center;">
+            <p style="font-style: italic; color: #e6dfc3;">Raphael es nuestro motor de economía y evolución técnica. Controla desde el precio de la pólvora hasta la estabilidad de los portales.</p>
         </div>
-        <div class="content-grid">
-            <div class="card-post"><h4><i class="fas fa-shield-alt"></i> Anti-Grief</h4><p>Protección inteligente de terrenos.</p></div>
-            <div class="card-post"><h4><i class="fas fa-bolt"></i> Eventos</h4><p>Generación de encuentros aleatorios.</p></div>
+        <div id="dynamicRaphael" class="raphael-container">
+            <p style="color: #8b4513; text-align: center; grid-column: 1/-1;">Iniciando protocolos del Sistema Raphael...</p>
         </div>
     </div>
 
-    <!-- NOTICIAS, LORE, STAFF, BOUNTIES (CONTENEDORES) -->
-    <div id="noticias" class="section"><div class="section-header"><h2>Noticias</h2></div><div id="dynamicNews" class="content-grid"></div></div>
-    <div id="lore" class="section"><div class="section-header"><h2>Lore</h2></div><div id="dynamicLore" class="content-grid"></div></div>
-    <div id="staff" class="section"><div class="section-header"><h2>Staff</h2></div><div id="dynamicStaff" class="content-grid"></div></div>
-    <div id="bounties" class="section"><div class="section-header"><h2>Se Busca</h2></div><div id="dynamicBounties" class="content-grid"></div></div>
-
-    <!-- LOGIN OVERLAY -->
-    <div id="loginOverlay">
-        <div class="login-box">
-            <h3>Acceso Staff</h3>
-            <input type="email" id="logEmail" placeholder="Correo">
-            <input type="password" id="logPass" placeholder="Contraseña">
-            <button class="btn-login" id="btnDoLogin">Entrar</button>
-            <button onclick="document.getElementById('loginOverlay').style.display='none'" style="margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Cancelar</button>
-        </div>
+    <div class="admin-trigger">
+        <button onclick="toggleLogin()" style="background:none; border:none; color:#8b4513; cursor:pointer;">[ Acceso Admin ]</button>
     </div>
 
-    <footer>
-        <p>© 2026 The New West</p>
-        <a onclick="document.getElementById('loginOverlay').style.display='flex'" style="color: #64748b; font-size: 0.75rem; cursor: pointer;">
-            <i class="fas fa-lock"></i> Panel Administrativo
-        </a>
-    </footer>
+    <div id="loginBox">
+        <input type="text" id="adminUser" placeholder="Usuario">
+        <input type="password" id="adminPass" placeholder="Contraseña">
+        <button class="btn-action" style="width:100%; padding: 5px;" onclick="checkAdmin()">Entrar</button>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const firebaseConfig = {
@@ -155,42 +317,94 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // --- FUNCIONES ---
-        window.showSection = (id) => {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // --- FUNCIÓN WHITELIST ---
+        window.submitWhitelist = () => {
+            const nick = document.getElementById('wlNick').value.trim();
+            const discord = document.getElementById('wlDiscord').value.trim();
+            const ficha = document.getElementById('wlFicha').value;
+            const reglas = document.getElementById('wlReglas').checked;
+            const msg = document.getElementById('wlMsg');
+
+            if (!nick || !discord) {
+                alert("Por favor, rellena todos los campos.");
+                return;
+            }
+            if (!reglas) {
+                alert("Debes aceptar las reglas para continuar.");
+                return;
+            }
+
+            const wlRef = ref(db, 'whitelist_requests');
+            const newReq = push(wlRef);
+            set(newReq, {
+                nick: nick,
+                discord: discord,
+                fichaSubida: ficha,
+                status: "pendiente",
+                date: new Date().toLocaleString()
+            }).then(() => {
+                msg.style.color = "#22c55e";
+                msg.innerHTML = "¡Solicitud enviada! Revisaremos tu ficha pronto.";
+                document.getElementById('wlNick').value = "";
+                document.getElementById('wlDiscord').value = "";
+                document.getElementById('wlReglas').checked = false;
+            }).catch(() => alert("Error al conectar con la oficina."));
         };
 
-        window.copyIP = () => {
-            navigator.clipboard.writeText("play.thenewwest.com");
-            alert("¡IP Copiada!");
-        };
-
-        // --- LOGIN ---
-        document.getElementById('btnDoLogin').onclick = () => {
-            const email = document.getElementById('logEmail').value;
-            const pass = document.getElementById('logPass').value;
-            signInWithEmailAndPassword(auth, email, pass)
-                .then(() => { window.location.href = "app/admin.html"; })
-                .catch(err => alert("Acceso denegado: " + err.message));
-        };
-
-        // --- CARGA DE DATOS ---
-        const load = (path, divId, draw) => {
-            onValue(ref(db, path), (snap) => {
-                const data = snap.val();
-                const container = document.getElementById(divId);
-                if (!data) { container.innerHTML = "<p>Próximamente...</p>"; return; }
-                container.innerHTML = Object.values(data).reverse().map(draw).join('');
+        const loadSection = (path, containerId, templateFn, emptyMsg) => {
+            const contentRef = ref(db, path);
+            onValue(contentRef, (snapshot) => {
+                const data = snapshot.val();
+                const container = document.getElementById(containerId);
+                if (!data) {
+                    container.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align:center;"><p>${emptyMsg}</p></div>`;
+                    return;
+                }
+                const items = Object.values(data).reverse();
+                container.innerHTML = items.map(templateFn).join('');
             });
         };
 
-        load('news', 'dynamicNews', n => `<div class="card-post"><span>${n.date || ''}</span><h3>${n.title}</h3><p>${n.content}</p></div>`);
-        load('lore', 'dynamicLore', l => `<div class="card-post"><span>Año ${l.year}</span><h3>${l.title}</h3><p>${l.content}</p></div>`);
-        load('staff', 'dynamicStaff', s => `<div class="staff-card"><img src="${s.url}" class="staff-avatar"><h3>${s.name}</h3><p>${s.role}</p></div>`);
-        load('bounties', 'dynamicBounties', b => `<div class="bounty-card"><b>WANTED</b><img src="${b.url}"><h3>${b.name}</h3><p>$${b.reward}</p></div>`);
+        // --- CARGA DE CONTENIDOS ---
+        loadSection('news', 'dynamicNews', n => `<div class="dynamic-item"><h3>${n.title}</h3><p>${n.content}</p><span class="meta-tag">${n.date || 'Reciente'} • NOTICIA</span></div>`, "No hay noticias.");
+        loadSection('events', 'dynamicEvents', e => `<div class="dynamic-item"><h3>${e.title}</h3><p>${e.content}</p><span class="meta-tag">EVENTO PROGRAMADO</span></div>`, "No hay eventos.");
+        loadSection('staff', 'dynamicStaff', s => `<div class="dynamic-item" style="text-align:center;"><i class="fas fa-user-shield" style="font-size: 2rem; color: #d2b48c;"></i><h3>${s.title}</h3><p>"${s.content}"</p></div>`, "No hay staff.");
+        loadSection('lore', 'dynamicLore', l => `<div class="card"><h3>${l.year} - ${l.title}</h3><p>${l.content}</p></div>`, "Sin historia.");
+        loadSection('art', 'dynamicArt', a => `<div class="dynamic-item" style="padding:0; overflow:hidden;"><img src="${a.url}" style="width:100%; height:200px; object-fit:cover;"><div style="padding:15px;"><h3>${a.title}</h3><p>Por: ${a.author}</p></div></div>`, "Galería vacía.");
+        loadSection('raphael', 'dynamicRaphael', r => `
+            <div class="raphael-module">
+                <div class="raphael-icon-box"><i class="${r.icon}"></i></div>
+                <div class="raphael-info">
+                    <h3>${r.title} <span class="raphael-tag">${r.tag}</span></h3>
+                    <p>${r.content}</p>
+                </div>
+            </div>
+        `, "El Sistema Raphael está en mantenimiento.");
 
+        window.showSection = (id) => {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        };
+
+        window.copyIP = () => {
+            navigator.clipboard.writeText('play.thenewwest.com');
+            alert('¡IP copiada!');
+        };
+
+        window.toggleLogin = () => {
+            const box = document.getElementById('loginBox');
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
+        };
+
+        window.checkAdmin = () => {
+            const userInput = document.getElementById('adminUser').value;
+            const passInput = document.getElementById('adminPass').value;
+            const email = userInput.includes('@') ? userInput : `${userInput}@thenewwest.com`;
+            signInWithEmailAndPassword(auth, email, passInput)
+                .then(() => { window.location.href = "app/admin.html"; })
+                .catch((error) => { alert("Acceso denegado."); });
+        };
     </script>
 </body>
 </html>
