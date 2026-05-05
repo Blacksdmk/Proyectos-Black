@@ -38,6 +38,12 @@
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
         input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fdfdfd; font-size: 0.9rem; }
         
+        /* ESTA ES LA CLAVE PARA LOS ENTERS */
+        .preserve-format { 
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+        }
+
         .btn-publish { width: 100%; background: var(--primary-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn-publish:hover { opacity: 0.9; transform: translateY(-1px); }
 
@@ -194,7 +200,6 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // --- SEGURIDAD ---
         onAuthStateChanged(auth, (user) => {
             if (user) { document.body.style.display = "block"; } 
             else { window.location.href = "../index.html"; }
@@ -209,7 +214,6 @@
             document.getElementById(sectionId).classList.add('active');
         };
 
-        // --- CRUD GENERAL ---
         const saveItem = (path, data) => {
             const newRef = push(ref(db, path));
             set(newRef, { ...data, date: new Date().toLocaleString() })
@@ -221,7 +225,6 @@
             if(confirm("¿Estás seguro de eliminar este registro?")) remove(ref(db, `${path}/${id}`));
         };
 
-        // --- ASIGNACIÓN DE BOTONES ---
         document.getElementById('btn-save-news').onclick = () => {
             saveItem('news', { 
                 title: document.getElementById('newsTitle').value, 
@@ -271,7 +274,6 @@
             document.getElementById('raphaelContent').value = "";
         };
 
-        // --- RENDER ESPECIAL WHITELIST ---
         onValue(ref(db, 'whitelist_requests'), (snapshot) => {
             const list = document.getElementById('wlReqList');
             const data = snapshot.val();
@@ -297,7 +299,7 @@
             }).reverse().join('');
         });
 
-        // --- RENDER GENÉRICO PARA LISTAS ---
+        // MODIFICADO: Agregada clase preserve-format para que se vean los espacios y saltos de línea
         const renderBasic = (path, listId) => {
             onValue(ref(db, path), (snapshot) => {
                 const list = document.getElementById(listId);
@@ -307,7 +309,9 @@
                     <div class="post-item">
                         <div class="post-info">
                             <h3>${data[id].title || data[id].name || data[id].year || 'Sin título'}</h3>
-                            <p style="font-size:0.75rem;">${data[id].date}</p>
+                            ${data[id].tag ? `<p style="color:var(--danger); font-weight:bold; font-size:0.7rem;">[${data[id].tag}]</p>` : ''}
+                            <p class="preserve-format" style="font-size:0.85rem; color:#475569; margin-top:5px;">${data[id].content || ''}</p>
+                            <p style="font-size:0.7rem; color:#94a3b8; margin-top:10px;">${data[id].date}</p>
                         </div>
                         <button class="btn-delete" onclick="window.deleteItem('${path}', '${id}')"><i class="fas fa-trash"></i></button>
                     </div>
@@ -315,7 +319,6 @@
             });
         };
 
-        // --- RENDER ESPECIAL ARTE ---
         onValue(ref(db, 'art_pending'), (snapshot) => {
             const list = document.getElementById('artPendingList');
             const data = snapshot.val();
