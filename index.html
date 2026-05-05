@@ -746,28 +746,50 @@
 
 
 
-        load('news', 'dynamicNews', n => `<div class="card"><span class="price-tag">NEW</span><h3>${n.title}</h3><p>${n.content}</p><small style="text-transform:uppercase;">${n.date || 'Hoy'}</small></div>`, "Sin noticias.");
+        load('news', 'dynamicNews', n => `
+            <div class="card">
+                <span class="price-tag">NEW</span>
+                <h3>${n.title}</h3>
+                <p class="preserve-format">${n.content}</p>
+                <small style="text-transform:uppercase;">${n.date || 'Hoy'}</small>
+            </div>`, "Sin noticias.");
 
-        load('events', 'dynamicEvents', e => `<div class="card"><h3>${e.title}</h3><p>${e.content}</p></div>`, "Sin eventos.");
+        load('events', 'dynamicEvents', e => `
+            <div class="card">
+                <h3>${e.title}</h3>
+                <p class="preserve-format">${e.content}</p>
+            </div>`, "Sin eventos.");
 
-        load('staff', 'dynamicStaff', s => `<div class="card" style="text-align:center;"><h3>${s.title}</h3><p>"${s.content}"</p></div>`, "Staff no asignado.");
+        load('staff', 'dynamicStaff', s => `
+            <div class="card" style="text-align:center;">
+                <h3>${s.name || s.title}</h3>
+                <p class="preserve-format">"${s.range || s.content}"</p>
+            </div>`, "Staff no asignado.");
 
-        load('lore', 'dynamicLore', l => `<div class="card"><h3>${l.year} • ${l.title}</h3><p>${l.content}</p></div>`, "Historia no escrita.");
+        load('lore', 'dynamicLore', l => `
+            <div class="card">
+                <h3>${l.year} • ${l.title}</h3>
+                <p class="preserve-format">${l.content}</p>
+            </div>`, "Historia no escrita.");
 
-        load('art', 'dynamicArt', a => `<div class="card" style="padding:5px;"><img src="${a.url}" style="width:100%; border-bottom:1px solid #1a1a1a;"><div style="padding:10px;"><h3>${a.title}</h3><p>Artista: ${a.author}</p></div></div>`, "Galería vacía.");
+        load('art', 'dynamicArt', a => `
+            <div class="card" style="padding:5px;">
+                <img src="${a.url}" style="width:100%; border-bottom:1px solid #1a1a1a;">
+                <div style="padding:10px;">
+                    <h3>${a.title}</h3>
+                    <p>Artista: ${a.author}</p>
+                </div>
+            </div>`, "Galería vacía.");
 
         load('raphael', 'dynamicRaphael', r => `
             <div class="raphael-module">
                 <div class="raphael-icon-box"><i class="fas fa-microchip"></i></div>
                 <div>
                     <h3>${r.title}</h3>
-                    <!-- Sello rojo dinámico -->
                     ${r.tag ? `<span class="stamp" style="font-size:0.6rem; margin:5px 0; display:block; width:fit-content;">${r.tag}</span>` : ''}
-                    <!-- Contenido con respeto a los "enters" -->
                     <p class="preserve-format" style="margin-top:10px;">${r.content}</p>
                 </div>
-            </div>
-        `, "Sistema apagado.");
+            </div>`, "Sistema apagado.");
 
 
 
