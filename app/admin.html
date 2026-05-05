@@ -3,115 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Panel - The New West</title>
+    <title>Panel Maestro - The New West</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #2563eb;
-            --bg-light: #f8fafc;
-            --text-dark: #1e293b;
-            --border-color: #e2e8f0;
-            --success-green: #22c55e;
+            --primary: #2563eb;
+            --raphael: #7c3aed;
             --danger: #ef4444;
-            --west-red: #4a0404;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --border: #334155;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 20px; 
+            display: none; /* Se activa tras verificar login */
+        }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border); }
         
-        /* CORRECCIÓN: Quitamos display: none para que puedas entrar siempre */
-        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; } 
+        .tabs { display: flex; gap: 10px; margin: 20px 0; overflow-x: auto; padding-bottom: 10px; }
+        .tab { 
+            padding: 10px 20px; background: var(--card-bg); border: 1px solid var(--border); 
+            border-radius: 8px; cursor: pointer; color: var(--text); white-space: nowrap; 
+        }
+        .tab.active { background: var(--primary); border-color: var(--primary); }
+        .tab-raphael.active { background: var(--raphael); border-color: var(--raphael); }
 
-        header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
-        .header-title h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
+        .panel-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .panel-container { grid-template-columns: 1fr; } }
 
-        .tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; overflow-x: auto; padding-bottom: 5px; }
-        .tab { padding: 12px 10px; cursor: pointer; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 8px; position: relative; white-space: nowrap; }
-        .tab.active { color: var(--primary-blue); }
-        .tab.active::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 2px; background: var(--primary-blue); }
-
-        .main-content { display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
-        .card { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; height: fit-content; margin-bottom: 20px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
         
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; }
-        
-        .btn-publish { width: 100%; background: var(--primary-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-logout { background: var(--danger); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; }
+        label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #94a3b8; }
+        input, textarea, select { 
+            width: 100%; padding: 10px; background: #0f172a; border: 1px solid var(--border); 
+            color: white; border-radius: 6px; box-sizing: border-box;
+        }
 
-        .post-item { border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; background: #fff; margin-bottom: 10px; }
-        .thumb-preview { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; margin-right: 12px; }
+        .btn { 
+            padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; 
+            font-weight: 600; width: 100%; margin-top: 10px;
+        }
+        .btn-save { background: var(--primary); color: white; }
+        .btn-delete { background: var(--danger); color: white; padding: 5px 10px; font-size: 0.8rem; }
 
-        .content-section { display: none; }
-        .content-section.active { display: grid; }
+        .list-item { 
+            background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 10px; 
+            display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary);
+        }
+
+        .section-content { display: none; }
+        .section-content.active { display: block; }
     </style>
 </head>
-<body>
+<body id="adminBody">
 
     <header>
-        <div class="header-title">
-            <h1>Master Panel</h1>
-            <p id="welcomeUser">Bienvenido al centro de mando.</p>
+        <div>
+            <h1>Control de Mando</h1>
+            <p id="userDisplay" style="color: var(--primary); font-size: 0.9rem;"></p>
         </div>
-        <div style="display: flex; gap: 10px;">
-            <button class="btn-publish" style="width: auto; padding: 8px 16px;" onclick="window.location.href='../index.html'">Ver Web</button>
-            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
-        </div>
+        <button onclick="logout()" class="btn" style="width: auto; background: var(--danger);">Cerrar Sesión</button>
     </header>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchTab(event, 'noticias')"><i class="far fa-newspaper"></i> Noticias</div>
-        <div class="tab" onclick="switchTab(event, 'staff-admin')"><i class="fas fa-users-cog"></i> Staff</div>
-        <div class="tab" onclick="switchTab(event, 'bounties-admin')"><i class="fas fa-skull-crossbones"></i> Wanted</div>
-        <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Lore</div>
+        <div class="tab active" onclick="showTab(event, 'sec-noticias')">Noticias</div>
+        <div class="tab" onclick="showTab(event, 'sec-raphael')">Raphael AI</div>
+        <div class="tab" onclick="showTab(event, 'sec-lore')">Lore / Historia</div>
+        <div class="tab" onclick="showTab(event, 'sec-buscados')">Se Busca</div>
+        <div class="tab" onclick="showTab(event, 'sec-staff')">Staff</div>
     </div>
 
-    <!-- SECCIÓN NOTICIAS -->
-    <div id="noticias" class="content-section active main-content">
-        <div class="card">
-            <h2>Nueva Noticia</h2>
-            <div class="form-group"><label>Título</label><input type="text" id="newsTitle"></div>
-            <div class="form-group"><label>Contenido</label><textarea id="newsContent" rows="4"></textarea></div>
-            <button class="btn-publish" id="btn-save-news">Publicar</button>
+    <!-- NOTICIAS -->
+    <div id="sec-noticias" class="section-content active">
+        <div class="panel-container">
+            <div class="card">
+                <h3>Publicar Noticia</h3>
+                <div class="form-group"><label>Título</label><input type="text" id="newsTitle"></div>
+                <div class="form-group"><label>Contenido</label><textarea id="newsContent" rows="4"></textarea></div>
+                <button class="btn btn-save" onclick="saveData('news', {title: 'newsTitle', content: 'newsContent'})">Publicar</button>
+            </div>
+            <div class="card"><h3>Historial</h3><div id="list-news"></div></div>
         </div>
-        <div class="card"><h2>Publicadas</h2><div id="newsList"></div></div>
     </div>
 
-    <!-- SECCIÓN STAFF -->
-    <div id="staff-admin" class="content-section main-content">
-        <div class="card">
-            <h2>Agregar Staff</h2>
-            <div class="form-group"><label>Nombre</label><input type="text" id="staffName"></div>
-            <div class="form-group"><label>Rango</label><input type="text" id="staffRole"></div>
-            <div class="form-group"><label>URL Avatar</label><input type="text" id="staffUrl"></div>
-            <button class="btn-publish" id="btn-save-staff">Guardar</button>
+    <!-- RAPHAEL AI -->
+    <div id="sec-raphael" class="section-content">
+        <div class="panel-container">
+            <div class="card" style="border-top: 4px solid var(--raphael);">
+                <h3>Raphael: Actualizar Estado</h3>
+                <div class="form-group">
+                    <label>Estado del Sistema</label>
+                    <select id="raphaelStatus">
+                        <option value="OPERATIVO">OPERATIVO</option>
+                        <option value="MANTENIMIENTO">MANTENIMIENTO</option>
+                        <option value="ALERTA">ALERTA CRÍTICA</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Mensaje de Raphael</label><input type="text" id="raphaelMsg"></div>
+                <button class="btn btn-save" style="background: var(--raphael);" onclick="saveData('raphael_system', {status: 'raphaelStatus', msg: 'raphaelMsg'})">Actualizar IA</button>
+            </div>
+            <div class="card"><h3>Logs de Raphael</h3><div id="list-raphael_system"></div></div>
         </div>
-        <div class="card"><h2>Equipo</h2><div id="staffList"></div></div>
     </div>
 
-    <!-- SECCIÓN BOUNTIES -->
-    <div id="bounties-admin" class="content-section main-content">
-        <div class="card">
-            <h2>Nueva Recompensa</h2>
-            <div class="form-group"><label>Fugitivo</label><input type="text" id="bountyName"></div>
-            <div class="form-group"><label>Recompensa</label><input type="text" id="bountyReward"></div>
-            <div class="form-group"><label>URL Foto</label><input type="text" id="bountyUrl"></div>
-            <button class="btn-publish" id="btn-save-bounty" style="background: var(--west-red);">Emitir Orden</button>
+    <!-- LORE -->
+    <div id="sec-lore" class="section-content">
+        <div class="panel-container">
+            <div class="card">
+                <h3>Añadir Lore</h3>
+                <div class="form-group"><label>Año/Época</label><input type="text" id="loreYear"></div>
+                <div class="form-group"><label>Título de la Crónica</label><input type="text" id="loreTitle"></div>
+                <div class="form-group"><label>Historia</label><textarea id="loreText" rows="4"></textarea></div>
+                <button class="btn btn-save" onclick="saveData('lore', {year: 'loreYear', title: 'loreTitle', content: 'loreText'})">Guardar Historia</button>
+            </div>
+            <div class="card"><h3>Biblioteca de Lore</h3><div id="list-lore"></div></div>
         </div>
-        <div class="card"><h2>Buscados</h2><div id="bountiesList"></div></div>
     </div>
 
-    <!-- SECCIÓN LORE -->
-    <div id="lore-admin" class="content-section main-content">
-        <div class="card">
-            <h2>Nueva Cronología</h2>
-            <div class="form-group"><label>Año</label><input type="text" id="loreYear"></div>
-            <div class="form-group"><label>Título</label><input type="text" id="loreTitle"></div>
-            <div class="form-group"><label>Historia</label><textarea id="loreContent" rows="4"></textarea></div>
-            <button class="btn-publish" id="btn-save-lore">Añadir al libro</button>
+    <!-- SE BUSCA -->
+    <div id="sec-buscados" class="section-content">
+        <div class="panel-container">
+            <div class="card">
+                <h3>Nueva Recompensa</h3>
+                <div class="form-group"><label>Nombre del Criminal</label><input type="text" id="bountyName"></div>
+                <div class="form-group"><label>Recompensa ($)</label><input type="text" id="bountyPrice"></div>
+                <div class="form-group"><label>URL de la Imagen</label><input type="text" id="bountyImg"></div>
+                <button class="btn btn-save" onclick="saveData('bounties', {name: 'bountyName', reward: 'bountyPrice', url: 'bountyImg'})">Emitir Orden</button>
+            </div>
+            <div class="card"><h3>Lista de Fugitivos</h3><div id="list-bounties"></div></div>
         </div>
-        <div class="card"><h2>Historia</h2><div id="loreList"></div></div>
+    </div>
+
+    <!-- STAFF -->
+    <div id="sec-staff" class="section-content">
+        <div class="panel-container">
+            <div class="card">
+                <h3>Gestionar Staff</h3>
+                <div class="form-group"><label>Nombre</label><input type="text" id="stName"></div>
+                <div class="form-group"><label>Rango</label><input type="text" id="stRole"></div>
+                <div class="form-group"><label>URL Avatar</label><input type="text" id="stUrl"></div>
+                <button class="btn btn-save" onclick="saveData('staff', {name: 'stName', role: 'stRole', url: 'stUrl'})">Añadir Miembro</button>
+            </div>
+            <div class="card"><h3>Equipo Actual</h3><div id="list-staff"></div></div>
+        </div>
     </div>
 
     <script type="module">
@@ -133,93 +175,64 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // --- SEGURIDAD COMENTADA TEMPORALMENTE ---
+        // --- SEGURIDAD ---
         onAuthStateChanged(auth, (user) => {
-            if (user) { 
-                console.log("Usuario autenticado:", user.email);
-            } else { 
-                console.warn("Sin sesión activa. (Redirección desactivada para pruebas)");
-                // window.location.href = "../index.html"; 
+            if (user) {
+                document.getElementById('adminBody').style.display = 'block';
+                document.getElementById('userDisplay').innerText = "Agente: " + user.email;
+            } else {
+                window.location.href = "../index.html";
             }
         });
 
-        document.getElementById('btnLogout').onclick = () => signOut(auth);
+        window.logout = () => signOut(auth);
 
-        window.switchTab = (event, sectionId) => {
+        // --- NAVEGACIÓN ---
+        window.showTab = (e, id) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            document.getElementById(id).classList.add('active');
         };
 
-        window.deleteItem = (path, id) => {
-            if(confirm("¿Seguro que quieres eliminar este registro?")) {
-                remove(ref(db, `${path}/${id}`));
+        // --- LÓGICA DE DATOS ---
+        window.saveData = (path, fields) => {
+            const data = { date: new Date().toLocaleDateString() };
+            for (let key in fields) {
+                data[key] = document.getElementById(fields[key]).value;
             }
-        };
-
-        const save = (path, data, fields) => {
+            
             const newRef = push(ref(db, path));
-            set(newRef, { ...data, date: new Date().toLocaleDateString() })
-                .then(() => {
-                    alert("¡Guardado correctamente!");
-                    fields.forEach(f => document.getElementById(f).value = "");
-                }).catch(err => alert("Error al guardar: " + err.message));
-        };
-
-        document.getElementById('btn-save-news').onclick = () => save('news', { 
-            title: document.getElementById('newsTitle').value, 
-            content: document.getElementById('newsContent').value 
-        }, ['newsTitle', 'newsContent']);
-
-        document.getElementById('btn-save-staff').onclick = () => save('staff', { 
-            name: document.getElementById('staffName').value, 
-            role: document.getElementById('staffRole').value,
-            url: document.getElementById('staffUrl').value 
-        }, ['staffName', 'staffRole', 'staffUrl']);
-
-        document.getElementById('btn-save-bounty').onclick = () => save('bounties', { 
-            name: document.getElementById('bountyName').value, 
-            reward: document.getElementById('bountyReward').value,
-            url: document.getElementById('bountyUrl').value 
-        }, ['bountyName', 'bountyReward', 'bountyUrl']);
-
-        document.getElementById('btn-save-lore').onclick = () => save('lore', { 
-            year: document.getElementById('loreYear').value, 
-            title: document.getElementById('loreTitle').value,
-            content: document.getElementById('loreContent').value 
-        }, ['loreYear', 'loreTitle', 'loreContent']);
-
-        const syncList = (path, containerId) => {
-            onValue(ref(db, path), (snapshot) => {
-                const container = document.getElementById(containerId);
-                const data = snapshot.val();
-                if (!data) { container.innerHTML = "No hay datos."; return; }
-                
-                container.innerHTML = Object.keys(data).map(id => {
-                    const item = data[id];
-                    return `
-                        <div class="post-item">
-                            <div style="display:flex; align-items:center;">
-                                ${item.url ? `<img src="${item.url}" class="thumb-preview">` : ''}
-                                <div>
-                                    <strong style="display:block;">${item.title || item.name}</strong>
-                                    <small>${item.role || item.year || item.date}</small>
-                                </div>
-                            </div>
-                            <button class="btn-delete" onclick="deleteItem('${path}', '${id}')" style="background:none; border:none; color:red; cursor:pointer;">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                }).reverse().join('');
+            set(newRef, data).then(() => {
+                alert("¡Actualizado con éxito!");
+                for (let key in fields) document.getElementById(fields[key]).value = "";
             });
         };
 
-        syncList('news', 'newsList');
-        syncList('staff', 'staffList');
-        syncList('bounties', 'bountiesList');
-        syncList('lore', 'loreList');
+        window.deleteItem = (path, id) => {
+            if(confirm("¿Eliminar este registro?")) remove(ref(db, `${path}/${id}`));
+        };
+
+        // --- SINCRONIZACIÓN DE LISTAS ---
+        const sync = (path) => {
+            onValue(ref(db, path), (snap) => {
+                const list = document.getElementById(`list-${path}`);
+                const data = snap.val();
+                if (!data) { list.innerHTML = "Vacio..."; return; }
+                
+                list.innerHTML = Object.keys(data).map(id => `
+                    <div class="list-item">
+                        <div>
+                            <strong>${data[id].title || data[id].name || data[id].status}</strong><br>
+                            <small>${data[id].date || ''}</small>
+                        </div>
+                        <button class="btn-delete" onclick="deleteItem('${path}', '${id}')">Borrar</button>
+                    </div>
+                `).reverse().join('');
+            });
+        };
+
+        ['news', 'raphael_system', 'lore', 'bounties', 'staff'].forEach(sync);
 
     </script>
 </body>
