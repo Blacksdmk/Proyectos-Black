@@ -1,363 +1,828 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>The New West - Catálogo Oficial</title>
 <style>
+
     /* --- TIPOGRAFÍA DE CATÁLOGO --- */
+
     @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700;900&display=swap');
+
+
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+
+
     body {
-        background-color: #1a140f; 
+
+        background-color: #1a140f; /* Fondo oscuro exterior */
+
         background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+
         color: #1a1a1a;
-        font-family: 'Special Elite', serif; 
+
+        font-family: 'Special Elite', serif; /* Tipo máquina de escribir */
+
         min-height: 100vh;
+
         display: flex;
+
         flex-direction: column;
+
         align-items: center;
+
     }
+
+
 
     /* --- EL LIBRO / CATÁLOGO --- */
+
     .catalog-page {
-        background-color: #e8d5b5; 
+
+        background-color: #e8d5b5; /* Color papel viejo */
+
         background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+
         width: 95%;
+
         max-width: 1100px;
+
         min-height: 90vh;
+
         margin: 20px auto;
+
         padding: 40px;
+
         border: 15px solid #2a1a0f;
+
         outline: 2px solid #e8d5b5;
+
         box-shadow: 0 0 50px rgba(0,0,0,0.8);
+
         position: relative;
+
     }
+
+
+
+    /* Borde interno decorativo tipo catálogo */
 
     .catalog-page::after {
+
         content: '';
+
         position: absolute;
+
         top: 10px; left: 10px; right: 10px; bottom: 10px;
+
         border: 2px solid #1a1a1a;
+
         pointer-events: none;
+
     }
 
-    /* --- ESTILO PARA RESPETAR ENTERS Y ESPACIOS --- */
+
+
+    /* --- NAVEGACIÓN ESTILO ÍNDICE --- */
+
+    nav {
+
+        display: flex;
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 15px;
+
+        padding: 20px;
+
+        border-bottom: 3px double #1a1a1a;
+
+        margin-bottom: 30px;
+
+    }
+
+
+
+    nav a {
+
+        color: #1a1a1a;
+
+        text-decoration: none;
+
+        font-weight: bold;
+
+        text-transform: uppercase;
+
+        font-size: 0.9rem;
+
+        padding: 5px 10px;
+
+        cursor: pointer;
+
+        border: 1px solid transparent;
+
+    }
+
+
+
+    nav a:hover {
+
+        background: #1a1a1a;
+
+        color: #e8d5b5;
+
+    }
+
+
+
+    /* --- CABECERAS --- */
+
+    h1 {
+
+        font-family: 'Playfair Display', serif;
+
+        font-size: 4.5rem;
+
+        text-transform: uppercase;
+
+        text-align: center;
+
+        letter-spacing: -2px;
+
+        margin-bottom: 0;
+
+        line-height: 1;
+
+    }
+
+
+
+    .catalog-header {
+
+        text-align: center;
+
+        border-bottom: 3px solid #1a1a1a;
+
+        padding-bottom: 20px;
+
+        margin-bottom: 30px;
+
+    }
+
+
+
+    h2 {
+
+        font-family: 'Playfair Display', serif;
+
+        font-size: 2.5rem;
+
+        text-align: center;
+
+        text-transform: uppercase;
+
+        border-top: 2px solid #1a1a1a;
+
+        border-bottom: 2px solid #1a1a1a;
+
+        margin: 20px 0;
+
+        padding: 10px 0;
+
+    }
+
+
+
+    /* --- SECCIONES Y TARJETAS --- */
+
+    .section { display: none; animation: inkBleed 0.5s ease; }
+
+    .section.active { display: block; }
+
+
+
+    @keyframes inkBleed {
+
+        from { opacity: 0; filter: blur(5px); }
+
+        to { opacity: 1; filter: blur(0); }
+
+    }
+
+
+
+    .card, .dynamic-item {
+
+        border: 1px solid #1a1a1a;
+
+        padding: 20px;
+
+        margin-bottom: 20px;
+
+        position: relative;
+
+        background: rgba(0,0,0,0.03);
+
+    }
+
+
+
+    .dynamic-grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+        gap: 20px;
+
+    }
+
+
+
+    /* --- ELEMENTOS DE DISEÑO --- */
+
+    .price-tag {
+
+        font-family: 'Playfair Display', serif;
+
+        font-size: 2rem;
+
+        float: right;
+
+    }
+
+
+
+    .stamp {
+
+        border: 3px double #8b0000;
+
+        color: #8b0000;
+
+        padding: 5px 10px;
+
+        display: inline-block;
+
+        transform: rotate(-5deg);
+
+        font-weight: bold;
+
+        text-transform: uppercase;
+
+        margin: 10px;
+
+    }
+
+
+
+    /* --- BOTONES Y FORMULARIOS --- */
+
+    .btn-action {
+
+        background: #1a1a1a;
+
+        color: #e8d5b5;
+
+        border: none;
+
+        padding: 15px 25px;
+
+        font-family: 'Special Elite', serif;
+
+        text-transform: uppercase;
+
+        cursor: pointer;
+
+        width: 100%;
+
+        transition: 0.3s;
+
+        margin-top: 10px;
+
+    }
+
+
+
+    .btn-action:hover {
+
+        background: #4a3a2a;
+
+    }
+
+
+
+    .form-input {
+
+        width: 100%;
+
+        padding: 10px;
+
+        background: transparent;
+
+        border: none;
+
+        border-bottom: 1px solid #1a1a1a;
+
+        font-family: 'Special Elite', serif;
+
+        margin-bottom: 15px;
+
+        outline: none;
+
+    }
+
+
+
+    /* --- ADAPTACIÓN RAPHAEL --- */
+
+    .raphael-module {
+
+        border: 2px solid #1a1a1a;
+
+        padding: 15px;
+
+        display: flex;
+
+        gap: 15px;
+
+        align-items: center;
+
+    }
+    
+
+
+
+    .raphael-icon-box {
+
+        font-size: 2rem;
+
+        border: 1px solid #1a1a1a;
+
+        padding: 10px;
+
+    }
+
+
+
+    /* --- ADMIN --- */
+
+    .admin-trigger { position: fixed; bottom: 10px; left: 10px; font-size: 0.7rem; opacity: 0.5; }
+
+    #loginBox {
+
+        display: none;
+
+        position: fixed;
+
+        bottom: 40px;
+
+        left: 10px;
+
+        background: #e8d5b5;
+
+        border: 2px solid #1a1a1a;
+
+        padding: 15px;
+
+        z-index: 1000;
+
+    }
+    /* Esto permite que los saltos de línea se vean en la web */
     .preserve-format {
         white-space: pre-wrap;
         word-wrap: break-word;
     }
 
-    /* --- NAVEGACIÓN --- */
-    nav {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        padding: 20px;
-        border-bottom: 3px double #1a1a1a;
-        margin-bottom: 30px;
-    }
-
-    nav a {
-        color: #1a1a1a;
-        text-decoration: none;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-
-    nav a:hover { background: #1a1a1a; color: #e8d5b5; }
-
-    h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 4.5rem;
-        text-transform: uppercase;
-        text-align: center;
-        letter-spacing: -2px;
-        line-height: 1;
-    }
-
-    .catalog-header {
-        text-align: center;
-        border-bottom: 3px solid #1a1a1a;
-        padding-bottom: 20px;
-        margin-bottom: 30px;
-    }
-
-    h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.5rem;
-        text-align: center;
-        text-transform: uppercase;
-        border-top: 2px solid #1a1a1a;
-        border-bottom: 2px solid #1a1a1a;
-        margin: 20px 0;
-        padding: 10px 0;
-    }
-
-    .section { display: none; animation: inkBleed 0.5s ease; }
-    .section.active { display: block; }
-
-    @keyframes inkBleed {
-        from { opacity: 0; filter: blur(5px); }
-        to { opacity: 1; filter: blur(0); }
-    }
-
-    .card, .dynamic-item {
-        border: 1px solid #1a1a1a;
-        padding: 20px;
-        margin-bottom: 20px;
-        position: relative;
-        background: rgba(0,0,0,0.03);
-    }
-
-    .dynamic-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-    }
-
-    .stamp {
-        border: 3px double #8b0000;
-        color: #8b0000;
-        padding: 5px 10px;
-        display: inline-block;
-        transform: rotate(-5deg);
-        font-weight: bold;
-        text-transform: uppercase;
-        margin: 10px;
-    }
-
-    .btn-action {
-        background: #1a1a1a;
-        color: #e8d5b5;
-        border: none;
-        padding: 15px 25px;
-        font-family: 'Special Elite', serif;
-        text-transform: uppercase;
-        cursor: pointer;
-        width: 100%;
-        transition: 0.3s;
-    }
-
-    .form-input {
-        width: 100%;
-        padding: 10px;
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid #1a1a1a;
-        font-family: 'Special Elite', serif;
-        margin-bottom: 15px;
-        outline: none;
-    }
-
-    /* --- ADAPTACIÓN RAPHAEL --- */
-    .raphael-module {
-        border: 2px solid #1a1a1a;
-        padding: 15px;
-        display: flex;
-        gap: 15px;
-        align-items: flex-start; /* Alineado arriba para textos largos */
-    }
-
-    .raphael-icon-box {
-        font-size: 2rem;
-        border: 1px solid #1a1a1a;
-        padding: 10px;
-    }
-
-    .admin-trigger { position: fixed; bottom: 10px; left: 10px; font-size: 0.7rem; opacity: 0.5; }
-    #loginBox {
-        display: none;
-        position: fixed;
-        bottom: 40px;
-        left: 10px;
-        background: #e8d5b5;
-        border: 2px solid #1a1a1a;
-        padding: 15px;
-        z-index: 1000;
-    }
 </style>
+
 </head>
+
 <body>
 
+
+
     <div class="catalog-page">
+
+        <!-- CABECERA DEL CATÁLOGO -->
+
         <div class="catalog-header">
+
             <p style="font-size: 0.8rem; letter-spacing: 2px;">THE NEW WEST</p>
+
             <h1>THE NEW WEST</h1>
+
             <p style="font-style: italic;">"The future is full of lies!"</p>
+
         </div>
+
+
 
         <nav>
+
             <a onclick="showSection('inicio')">Inicio</a>
+
             <a onclick="showSection('whitelist')">Whitelist</a>
+
             <a onclick="showSection('lore')">Lore</a>
+
             <a onclick="showSection('eventos')">Eventos</a>
+
             <a onclick="showSection('galeria')">Galería</a>
+
             <a onclick="showSection('staff')">Staff</a>
+
             <a onclick="showSection('raphael')">Raphael</a>
+
         </nav>
 
-        <!-- SECCIONES -->
+
+
+        <!-- SECCIÓN: INICIO -->
+
         <div id="inicio" class="section active">
+
             <div style="text-align: center; margin-bottom: 40px;">
+
                 <p class="stamp">Aprobado por la Ley</p>
-                <p style="font-size: 1.2rem; margin: 20px 0;">Sea usted bienvenido a la frontera.</p>
-                <div style="display: flex; gap: 20px; justify-content: center;">
+
+                <p style="font-size: 1.2rem; margin: 20px 0;">Sea usted bienvenido a la frontera. Aquí encontrará todo lo necesario para forjar su destino en el lejano oeste.</p>
+
+                
+
+                <div style="display: flex; gap: 20px; justify-content: center; margin: 30px 0;">
+
                     <button class="btn-action" style="width: auto;" onclick="showSection('whitelist')">Solicitar Acceso</button>
-                    <button class="btn-action" style="width: auto; background: transparent; color: #1a1a1a; border: 2px solid #1a1a1a;" onclick="copyIP()">Copiar IP</button>
+
+                    <button class="btn-action" style="width: auto; background: transparent; color: #1a1a1a; border: 2px solid #1a1a1a;" onclick="copyIP()">Copiar Dirección IP</button>
+
                 </div>
+
             </div>
+
+
+
             <h2>Telegramas y Noticias</h2>
-            <div id="dynamicNews" class="dynamic-grid"></div>
+
+            <div id="dynamicNews" class="dynamic-grid">
+
+                <p style="text-align:center; grid-column: 1/-1;">Cargando despachos...</p>
+
+            </div>
+
         </div>
+
+
+
+        <!-- SECCIÓN: WHITELIST -->
 
         <div id="whitelist" class="section">
+
             <h2>Registro de Ciudadanía</h2>
+
             <div style="max-width: 700px; margin: 0 auto; border: 1px solid #1a1a1a; padding: 30px;">
-                <label>Nick MC</label>
-                <input type="text" id="wlNick" class="form-input">
-                <label>Discord</label>
-                <input type="text" id="wlDiscord" class="form-input">
-                <label>Ficha</label>
+
+                <p style="margin-bottom: 25px; text-align: justify; line-height: 1.4;">Debe completar este manifiesto oficial para que el Marshall autorice su entrada a nuestro territorio. Cualquier dato falso será castigado con el destierro.</p>
+
+                
+
+                <label>Nombre del Ciudadano (Nick MC)</label>
+
+                <input type="text" id="wlNick" class="form-input" placeholder="Nombre completo">
+
+
+
+                <label>Registro de Telégrafo (Discord)</label>
+
+                <input type="text" id="wlDiscord" class="form-input" placeholder="Usuario#0000">
+
+
+
+                <label>¿Manifiesto de vida (Ficha) entregado?</label>
+
                 <select id="wlFicha" class="form-input">
-                    <option value="no">En proceso</option>
-                    <option value="si">Entregada</option>
+
+                    <option value="no">Todavía en proceso</option>
+
+                    <option value="si">Sí, entregada en la oficina</option>
+
                 </select>
-                <button class="btn-action" onclick="submitWhitelist()">Enviar Manifiesto</button>
-                <p id="wlMsg" style="text-align: center; margin-top: 15px;"></p>
+
+
+
+                <div style="margin: 20px 0;">
+
+                    <input type="checkbox" id="wlReglas">
+
+                    <label for="wlReglas" style="font-size: 0.8rem;">Juro por mi honor respetar las leyes de esta frontera.</label>
+
+                </div>
+
+
+
+                <button class="btn-action" onclick="submitWhitelist()">Enviar a la Oficina del Marshall</button>
+
+                <p id="wlMsg" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+
             </div>
+
         </div>
+
+
+
+        <!-- SECCIÓN: LORE -->
 
         <div id="lore" class="section">
+
             <h2>Crónicas Históricas</h2>
-            <div id="dynamicLore" style="display: flex; flex-direction: column; gap: 25px;"></div>
+
+            <div id="dynamicLore" style="display: flex; flex-direction: column; gap: 25px;">
+
+                <p style="text-align:center;">Abriendo los archivos de la nación...</p>
+
+            </div>
+
         </div>
+
+
+
+        <!-- SECCIÓN: EVENTOS -->
 
         <div id="eventos" class="section">
-            <h2>Calendario</h2>
+
+            <h2>Calendario de Diligencias</h2>
+
             <div id="dynamicEvents" class="dynamic-grid"></div>
+
         </div>
+
+
+
+        <!-- SECCIÓN: GALERIA -->
 
         <div id="galeria" class="section">
-            <h2>Galería</h2>
+
+            <h2>Retratos y Arte de Campo</h2>
+
+            <div style="border: 2px dashed #1a1a1a; padding: 20px; margin-bottom: 30px; text-align: center;">
+
+                <h3>¿Es usted un artista?</h3>
+
+                <input type="text" id="artAuthor" class="form-input" placeholder="Su firma">
+
+                <input type="text" id="artTitle" class="form-input" placeholder="Nombre de la obra">
+
+                <input type="file" id="artFile" accept="image/*" class="form-input" style="border: none;">
+
+                <button class="btn-action" id="btnSubmitArt" onclick="submitArt()">Enviar para Exposición</button>
+
+            </div>
+
             <div id="dynamicArt" class="dynamic-grid"></div>
+
         </div>
+
+
+
+        <!-- SECCIÓN: STAFF -->
 
         <div id="staff" class="section">
+
             <h2>Marshall y Alguaciles</h2>
+
             <div id="dynamicStaff" class="dynamic-grid"></div>
+
         </div>
 
-        <!-- SECCIÓN RAPHAEL ACTUALIZADA -->
+
+
+        <!-- SECCIÓN: RAPHAEL -->
+
         <div id="raphael" class="section">
-            <h2>Sistema Raphael</h2>
-            <p style="text-align: center; margin-bottom: 30px; font-style: italic;">"La maravilla tecnológica de la frontera"</p>
+
+            <h2>El Sistema Automático Raphael</h2>
+
+            <p style="text-align: center; margin-bottom: 30px; font-style: italic;">"La maravilla tecnológica que coordina el progreso de nuestra frontera"</p>
+
             <div id="dynamicRaphael" class="dynamic-grid"></div>
+
         </div>
+
+
+
+        <!-- PIE DE PÁGINA ESTILO CATÁLOGO -->
 
         <div style="margin-top: 50px; border-top: 2px solid #1a1a1a; padding-top: 20px; text-align: center; font-size: 0.7rem;">
-            <p>THE NEW WEST © 2026</p>
+
+            <p>ESTE CATÁLOGO ES PROPIEDAD DE INDUSTRIAS THE PLACE / THE NEW WEST © 2026</p>
+
+            <p>TODOS LOS PEDIDOS SON ENVIADOS POR DILIGENCIA A CUALQUIER PARTE DEL MUNDO</p>
+
         </div>
+
     </div>
+
+
+
+    <!-- ACCESO ADMIN -->
 
     <div class="admin-trigger">
-        <button onclick="toggleLogin()">[ Master Login ]</button>
+
+        <button onclick="toggleLogin()" style="background:none; border:none; color:#1a1a1a; cursor:pointer;">[ Master Login ]</button>
+
     </div>
+
+
 
     <div id="loginBox">
-        <input type="text" id="adminUser" placeholder="Usuario">
-        <input type="password" id="adminPass" placeholder="Clave">
-        <button class="btn-action" onclick="checkAdmin()">Entrar</button>
+
+        <input type="text" id="adminUser" placeholder="Usuario de la Orden">
+
+        <input type="password" id="adminPass" placeholder="Clave Secreta">
+
+        <button class="btn-action" style="padding: 5px;" onclick="checkAdmin()">Ingresar</button>
+
     </div>
 
+
+
     <script type="module">
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+
         import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
+
+
         const firebaseConfig = {
+
             apiKey: "AIzaSyDo7ebAVDvYEjPDscivWWKXLUoGEAGBeIM",
+
             authDomain: "thenewwest-7eb5f.firebaseapp.com",
+
             projectId: "thenewwest-7eb5f",
+
             storageBucket: "thenewwest-7eb5f.firebasestorage.app",
+
             messagingSenderId: "605270552271",
+
             appId: "1:605270552271:web:a58b5b7f619e5804d7d1ba",
+
             databaseURL: "https://thenewwest-7eb5f-default-rtdb.firebaseio.com/"
+
         };
+
+
 
         const app = initializeApp(firebaseConfig);
+
         const db = getDatabase(app);
+
         const auth = getAuth(app);
 
-        // --- CARGA DINÁMICA MEJORADA ---
-        const load = (path, containerId, templateFn, emptyMsg) => {
-            onValue(ref(db, path), (snapshot) => {
-                const data = snapshot.val();
-                const container = document.getElementById(containerId);
-                if (!data) { container.innerHTML = `<p>${emptyMsg}</p>`; return; }
-                container.innerHTML = Object.values(data).reverse().map(templateFn).join('');
+
+
+        // --- LÓGICA DE WHITELIST ---
+
+        window.submitWhitelist = () => {
+
+            const nick = document.getElementById('wlNick').value.trim();
+
+            const discord = document.getElementById('wlDiscord').value.trim();
+
+            const ficha = document.getElementById('wlFicha').value;
+
+            const reglas = document.getElementById('wlReglas').checked;
+
+            const msg = document.getElementById('wlMsg');
+
+
+
+            if (!nick || !discord) { alert("Complete el manifiesto."); return; }
+
+            if (!reglas) { alert("Debe jurar respeto a las leyes."); return; }
+
+
+
+            const wlRef = ref(db, 'whitelist_requests');
+
+            push(wlRef, {
+
+                nick, discord, fichaSubida: ficha, status: "pendiente", date: new Date().toLocaleString()
+
+            }).then(() => {
+
+                msg.style.color = "#1a1a1a";
+
+                msg.innerHTML = "¡Telegrama enviado con éxito!";
+
+                document.getElementById('wlNick').value = "";
+
+                document.getElementById('wlDiscord').value = "";
+
             });
+
         };
 
-        // NOTICIAS (Con soporte para enters)
-        load('news', 'dynamicNews', n => `
-            <div class="card">
-                <h3>${n.title}</h3>
-                <p class="preserve-format">${n.content}</p>
-                <small>${n.date || ''}</small>
-            </div>`, "Sin noticias.");
 
-        // LORE (Con soporte para enters)
-        load('lore', 'dynamicLore', l => `
-            <div class="card">
-                <h3>${l.year} • ${l.title}</h3>
-                <p class="preserve-format">${l.content}</p>
-            </div>`, "Sin historia.");
 
-        // RAPHAEL (Con SELLO ROJO y ENTERS)
+        // --- CARGA DINÁMICA ---
+
+        const load = (path, containerId, templateFn, emptyMsg) => {
+
+            onValue(ref(db, path), (snapshot) => {
+
+                const data = snapshot.val();
+
+                const container = document.getElementById(containerId);
+
+                if (!data) { container.innerHTML = `<p>${emptyMsg}</p>`; return; }
+
+                container.innerHTML = Object.values(data).reverse().map(templateFn).join('');
+
+            });
+
+        };
+
+
+
+        load('news', 'dynamicNews', n => `<div class="card"><span class="price-tag">NEW</span><h3>${n.title}</h3><p>${n.content}</p><small style="text-transform:uppercase;">${n.date || 'Hoy'}</small></div>`, "Sin noticias.");
+
+        load('events', 'dynamicEvents', e => `<div class="card"><h3>${e.title}</h3><p>${e.content}</p></div>`, "Sin eventos.");
+
+        load('staff', 'dynamicStaff', s => `<div class="card" style="text-align:center;"><h3>${s.title}</h3><p>"${s.content}"</p></div>`, "Staff no asignado.");
+
+        load('lore', 'dynamicLore', l => `<div class="card"><h3>${l.year} • ${l.title}</h3><p>${l.content}</p></div>`, "Historia no escrita.");
+
+        load('art', 'dynamicArt', a => `<div class="card" style="padding:5px;"><img src="${a.url}" style="width:100%; border-bottom:1px solid #1a1a1a;"><div style="padding:10px;"><h3>${a.title}</h3><p>Artista: ${a.author}</p></div></div>`, "Galería vacía.");
+
         load('raphael', 'dynamicRaphael', r => `
             <div class="raphael-module">
                 <div class="raphael-icon-box"><i class="fas fa-microchip"></i></div>
                 <div>
                     <h3>${r.title}</h3>
+                    <!-- Sello rojo dinámico -->
                     ${r.tag ? `<span class="stamp" style="font-size:0.6rem; margin:5px 0; display:block; width:fit-content;">${r.tag}</span>` : ''}
+                    <!-- Contenido con respeto a los "enters" -->
                     <p class="preserve-format" style="margin-top:10px;">${r.content}</p>
                 </div>
             </div>
         `, "Sistema apagado.");
 
-        load('events', 'dynamicEvents', e => `<div class="card"><h3>${e.title}</h3><p class="preserve-format">${e.content}</p></div>`, "Sin eventos.");
-        load('staff', 'dynamicStaff', s => `<div class="card"><h3>${s.name}</h3><p>${s.range}</p></div>`, "Sin staff.");
-        load('art', 'dynamicArt', a => `<div class="card"><img src="${a.url}" style="width:100%;"><h3>${a.title}</h3><p>${a.author}</p></div>`, "Vacio.");
 
-        // NAVEGACIÓN Y OTROS
+
+        // --- NAVEGACIÓN ---
+
         window.showSection = (id) => {
+
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
             document.getElementById(id).classList.add('active');
+
             window.scrollTo(0,0);
+
         };
 
-        window.submitWhitelist = () => {
-            const nick = document.getElementById('wlNick').value;
-            const disc = document.getElementById('wlDiscord').value;
-            if(!nick || !disc) return alert("Faltan datos");
-            push(ref(db, 'whitelist_requests'), { nick, discord: disc, fichaSubida: document.getElementById('wlFicha').value, date: new Date().toLocaleString() });
-            alert("Telegrama enviado");
+
+
+        window.copyIP = () => {
+
+            navigator.clipboard.writeText('play.thenewwest.com');
+
+            alert('¡Dirección IP copiada al portapapeles!');
+
         };
 
-        window.copyIP = () => { navigator.clipboard.writeText('play.thenewwest.com'); alert('IP Copiada'); };
-        window.toggleLogin = () => { const b = document.getElementById('loginBox'); b.style.display = b.style.display === 'block' ? 'none' : 'block'; };
+
+
+        window.toggleLogin = () => {
+
+            const box = document.getElementById('loginBox');
+
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
+
+        };
+
+
+
         window.checkAdmin = () => {
-            const u = document.getElementById('adminUser').value;
-            const p = document.getElementById('adminPass').value;
-            signInWithEmailAndPassword(auth, u.includes('@') ? u : u+'@thenewwest.com', p)
-                .then(() => location.href="app/admin.html").catch(() => alert("Error"));
+
+            const userInput = document.getElementById('adminUser').value;
+
+            const passInput = document.getElementById('adminPass').value;
+
+            const email = userInput.includes('@') ? userInput : `${userInput}@thenewwest.com`;
+
+            signInWithEmailAndPassword(auth, email, passInput)
+
+                .then(() => { window.location.href = "app/admin.html"; })
+
+                .catch(() => alert("Credenciales incorrectas."));
+
         };
+
     </script>
+
 </body>
+
 </html>
