@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Panel - The New West</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-blue: #2563eb;
@@ -12,51 +13,37 @@
             --text-dark: #1e293b;
             --border-color: #e2e8f0;
             --success-green: #22c55e;
-            --gold: #d97706;
             --danger: #ef4444;
             --west-red: #4a0404;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; display: none; } 
+        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; display: none; } /* Se activa con el Auth */
 
         header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
         .header-title h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
-        .header-title p { color: #64748b; margin-top: 5px; }
 
-        .tabs { display: flex; gap: 30px; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; overflow-x: auto; padding-bottom: 5px; }
-        .tab { padding: 12px 5px; cursor: pointer; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 8px; position: relative; white-space: nowrap; }
+        .tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; overflow-x: auto; padding-bottom: 5px; }
+        .tab { padding: 12px 10px; cursor: pointer; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 8px; position: relative; white-space: nowrap; }
         .tab.active { color: var(--primary-blue); }
         .tab.active::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 2px; background: var(--primary-blue); }
 
         .main-content { display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
-        .full-content { display: block; }
-
         .card { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; height: fit-content; margin-bottom: 20px; }
-        .card h2 { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #fdfdfd; font-size: 0.9rem; }
         
-        .btn-publish { width: 100%; background: var(--primary-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn-publish:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        .post-list { display: flex; flex-direction: column; gap: 15px; }
-        .post-item { border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #fff; transition: 0.2s; }
-        .post-info h3 { font-size: 0.95rem; margin-bottom: 3px; }
-        .post-info p { font-size: 0.85rem; color: #64748b; margin: 2px 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; }
         
-        .action-btns { display: flex; gap: 10px; }
-        .btn-delete { color: #cbd5e1; cursor: pointer; border: none; background: none; font-size: 1.1rem; transition: 0.3s; }
-        .btn-delete:hover { color: var(--danger); }
+        .btn-publish { width: 100%; background: var(--primary-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-logout { background: var(--danger); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; }
+
+        .post-item { border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; background: #fff; margin-bottom: 10px; }
+        .thumb-preview { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; margin-right: 12px; }
 
         .content-section { display: none; }
         .content-section.active { display: grid; }
-        .content-section.active.full-content { display: block; }
-
-        .btn-logout { background: var(--danger); }
-        .thumb-preview { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; margin-right: 12px; border: 1px solid var(--border-color); }
+        .full-width { display: block !important; }
     </style>
 </head>
 <body>
@@ -64,105 +51,66 @@
     <header>
         <div class="header-title">
             <h1>Master Panel</h1>
-            <p id="welcomeUser">Gestiona el acceso y contenido del servidor.</p>
+            <p id="welcomeUser">Bienvenido al centro de mando.</p>
         </div>
-        <div class="admin-nav-btns" style="display: flex; gap: 10px;">
-            <button class="btn-publish" style="width: auto; padding: 8px 16px;" onclick="location.href='../index.html'">Ver Web</button>
-            <button class="btn-publish btn-logout" style="width: auto; padding: 8px 16px;" id="btnLogout">Salir</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-publish" style="width: auto; padding: 8px 16px;" onclick="window.location.href='../index.html'">Ver Web</button>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
         </div>
     </header>
 
     <div class="tabs">
         <div class="tab active" onclick="switchTab(event, 'noticias')"><i class="far fa-newspaper"></i> Noticias</div>
-        <div class="tab" onclick="switchTab(event, 'whitelist-admin')"><i class="fas fa-id-card"></i> Whitelist</div>
         <div class="tab" onclick="switchTab(event, 'staff-admin')"><i class="fas fa-users-cog"></i> Staff</div>
-        <div class="tab" onclick="switchTab(event, 'crafts-admin')"><i class="fas fa-hammer"></i> Crafteos</div>
-        <div class="tab" onclick="switchTab(event, 'bounties-admin')"><i class="fas fa-skull-crossbones"></i> Se Busca</div>
-        <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Cronología</div>
-        <div class="tab" onclick="switchTab(event, 'arte-admin')"><i class="fas fa-paint-brush"></i> Arte</div>
-        <div class="tab" onclick="switchTab(event, 'raphael-admin')"><i class="fas fa-microchip"></i> Raphael</div>
+        <div class="tab" onclick="switchTab(event, 'bounties-admin')"><i class="fas fa-skull-crossbones"></i> Wanted</div>
+        <div class="tab" onclick="switchTab(event, 'lore-admin')"><i class="fas fa-book"></i> Lore</div>
     </div>
 
-    <!-- NOTICIAS -->
+    <!-- SECCIÓN NOTICIAS -->
     <div id="noticias" class="content-section active main-content">
         <div class="card">
-            <h2><i class="fas fa-plus"></i> Nueva Noticia</h2>
+            <h2>Nueva Noticia</h2>
             <div class="form-group"><label>Título</label><input type="text" id="newsTitle"></div>
-            <div class="form-group"><label>Contenido</label><textarea id="newsContent"></textarea></div>
-            <button class="btn-publish" id="btn-save-news">Publicar Noticia</button>
+            <div class="form-group"><label>Contenido</label><textarea id="newsContent" rows="4"></textarea></div>
+            <button class="btn-publish" id="btn-save-news">Publicar</button>
         </div>
-        <div class="card"><h2><i class="fas fa-chart-line"></i> Publicadas</h2><div id="newsList" class="post-list"></div></div>
+        <div class="card"><h2>Publicadas</h2><div id="newsList"></div></div>
     </div>
 
-    <!-- STAFF (RECUPERADO) -->
+    <!-- SECCIÓN STAFF -->
     <div id="staff-admin" class="content-section main-content">
         <div class="card">
-            <h2><i class="fas fa-user-plus"></i> Agregar Staff</h2>
-            <div class="form-group"><label>Nombre / Nick</label><input type="text" id="staffName"></div>
-            <div class="form-group"><label>Rango (Ej: Fundador, Admin)</label><input type="text" id="staffRole"></div>
-            <div class="form-group"><label>URL de Skin o Avatar</label><input type="text" id="staffUrl" placeholder="https://..."></div>
-            <div class="form-group"><label>Descripción</label><textarea id="staffDesc"></textarea></div>
-            <button class="btn-publish" id="btn-save-staff">Guardar Miembro</button>
+            <h2>Agregar Staff</h2>
+            <div class="form-group"><label>Nombre</label><input type="text" id="staffName"></div>
+            <div class="form-group"><label>Rango</label><input type="text" id="staffRole"></div>
+            <div class="form-group"><label>URL Avatar</label><input type="text" id="staffUrl"></div>
+            <button class="btn-publish" id="btn-save-staff">Guardar</button>
         </div>
-        <div class="card"><h2>Equipo Actual</h2><div id="staffList" class="post-list"></div></div>
+        <div class="card"><h2>Equipo</h2><div id="staffList"></div></div>
     </div>
 
-    <!-- CRAFTEOS -->
-    <div id="crafts-admin" class="content-section main-content">
-        <div class="card">
-            <h2><i class="fas fa-tools"></i> Registrar Crafteo</h2>
-            <div class="form-group"><label>Nombre del Item</label><input type="text" id="craftTitle"></div>
-            <div class="form-group"><label>URL Imagen del Crafteo</label><input type="text" id="craftUrl"></div>
-            <div class="form-group"><label>Ingredientes</label><textarea id="craftContent"></textarea></div>
-            <button class="btn-publish" id="btn-save-craft">Añadir a la Guía</button>
-        </div>
-        <div class="card"><h2>Manual de Recetas</h2><div id="craftsList" class="post-list"></div></div>
-    </div>
-
-    <!-- SE BUSCA -->
+    <!-- SECCIÓN BOUNTIES -->
     <div id="bounties-admin" class="content-section main-content">
         <div class="card">
-            <h2><i class="fas fa-gavel"></i> Orden de Arresto</h2>
-            <div class="form-group"><label>Nombre del Fugitivo</label><input type="text" id="bountyName"></div>
-            <div class="form-group"><label>URL Retrato</label><input type="text" id="bountyUrl"></div>
-            <div class="form-group"><label>Recompensa ($)</label><input type="number" id="bountyReward"></div>
-            <div class="form-group"><label>Crimen</label><textarea id="bountyReason"></textarea></div>
-            <button class="btn-publish" style="background: var(--west-red);" id="btn-save-bounty">Emitir Wanted</button>
+            <h2>Nueva Recompensa</h2>
+            <div class="form-group"><label>Fugitivo</label><input type="text" id="bountyName"></div>
+            <div class="form-group"><label>Recompensa</label><input type="text" id="bountyReward"></div>
+            <div class="form-group"><label>URL Foto</label><input type="text" id="bountyUrl"></div>
+            <button class="btn-publish" id="btn-save-bounty" style="background: var(--west-red);">Emitir Orden</button>
         </div>
-        <div class="card"><h2>Fugitivos Activos</h2><div id="bountiesList" class="post-list"></div></div>
+        <div class="card"><h2>Buscados</h2><div id="bountiesList"></div></div>
     </div>
 
-    <!-- WHITELIST -->
-    <div id="whitelist-admin" class="content-section full-content">
-        <div class="card"><h2><i class="fas fa-id-badge"></i> Solicitudes</h2><div id="wlReqList" class="post-list"></div></div>
-    </div>
-
-    <!-- LORE, ARTE, RAPHAEL -->
+    <!-- SECCIÓN LORE -->
     <div id="lore-admin" class="content-section main-content">
         <div class="card">
-            <h2>Cronología</h2>
+            <h2>Nueva Cronología</h2>
             <div class="form-group"><label>Año</label><input type="text" id="loreYear"></div>
             <div class="form-group"><label>Título</label><input type="text" id="loreTitle"></div>
-            <div class="form-group"><label>Relato</label><textarea id="loreContent"></textarea></div>
-            <button class="btn-publish" id="btn-save-lore">Guardar</button>
+            <div class="form-group"><label>Historia</label><textarea id="loreContent" rows="4"></textarea></div>
+            <button class="btn-publish" id="btn-save-lore">Añadir al libro</button>
         </div>
-        <div class="card"><div id="loreAdminList" class="post-list"></div></div>
-    </div>
-
-    <div id="arte-admin" class="content-section full-content">
-        <div class="card"><h2>Galería Pública</h2><div id="artList" class="post-list"></div></div>
-    </div>
-
-    <div id="raphael-admin" class="content-section main-content">
-        <div class="card">
-            <h2>Sistema Raphael</h2>
-            <div class="form-group"><label>Módulo</label><input type="text" id="raphaelTitle"></div>
-            <div class="form-group"><label>Icono FontAwesome</label><input type="text" id="raphaelIcon" placeholder="fas fa-bolt"></div>
-            <div class="form-group"><label>Estado/Tag</label><input type="text" id="raphaelTag" placeholder="ESTABLE"></div>
-            <div class="form-group"><label>Descripción</label><textarea id="raphaelContent"></textarea></div>
-            <button class="btn-publish" id="btn-save-raphael">Actualizar</button>
-        </div>
-        <div class="card"><div id="raphaelList" class="post-list"></div></div>
+        <div class="card"><h2>Historia</h2><div id="loreList"></div></div>
     </div>
 
     <script type="module">
@@ -184,12 +132,19 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
+        // --- SEGURIDAD ---
         onAuthStateChanged(auth, (user) => {
-            if (user) { document.body.style.display = "block"; } 
-            else { window.location.href = "../index.html"; }
+            if (user) { 
+                document.body.style.display = "block"; 
+            } else { 
+                // Si no hay usuario, redirigir al index para login
+                window.location.href = "../index.html"; 
+            }
         });
+
         document.getElementById('btnLogout').onclick = () => signOut(auth);
 
+        // --- FUNCIONES GLOBALES (Solución al error) ---
         window.switchTab = (event, sectionId) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -197,84 +152,76 @@
             document.getElementById(sectionId).classList.add('active');
         };
 
-        const saveItem = (path, data, fieldsToClear) => {
+        window.deleteItem = (path, id) => {
+            if(confirm("¿Seguro que quieres eliminar este registro?")) {
+                remove(ref(db, `${path}/${id}`));
+            }
+        };
+
+        // --- LÓGICA DE GUARDADO ---
+        const save = (path, data, fields) => {
             const newRef = push(ref(db, path));
-            set(newRef, { ...data, date: new Date().toLocaleString() })
+            set(newRef, { ...data, date: new Date().toLocaleDateString() })
                 .then(() => {
-                    alert("¡Guardado con éxito!");
-                    fieldsToClear.forEach(id => document.getElementById(id).value = '');
+                    alert("¡Actualizado!");
+                    fields.forEach(f => document.getElementById(f).value = "");
                 });
         };
 
-        // EVENTOS DE BOTONES
-        document.getElementById('btn-save-news').onclick = () => saveItem('news', { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value }, ['newsTitle', 'newsContent']);
-        
-        document.getElementById('btn-save-staff').onclick = () => saveItem('staff', { 
+        document.getElementById('btn-save-news').onclick = () => save('news', { 
+            title: document.getElementById('newsTitle').value, 
+            content: document.getElementById('newsContent').value 
+        }, ['newsTitle', 'newsContent']);
+
+        document.getElementById('btn-save-staff').onclick = () => save('staff', { 
             name: document.getElementById('staffName').value, 
-            role: document.getElementById('staffRole').value, 
-            url: document.getElementById('staffUrl').value, 
-            desc: document.getElementById('staffDesc').value 
-        }, ['staffName', 'staffRole', 'staffUrl', 'staffDesc']);
+            role: document.getElementById('staffRole').value,
+            url: document.getElementById('staffUrl').value 
+        }, ['staffName', 'staffRole', 'staffUrl']);
 
-        document.getElementById('btn-save-craft').onclick = () => saveItem('crafts', { title: document.getElementById('craftTitle').value, url: document.getElementById('craftUrl').value, content: document.getElementById('craftContent').value }, ['craftTitle', 'craftUrl', 'craftContent']);
-        
-        document.getElementById('btn-save-bounty').onclick = () => saveItem('bounties', { name: document.getElementById('bountyName').value, url: document.getElementById('bountyUrl').value, reward: document.getElementById('bountyReward').value, reason: document.getElementById('bountyReason').value }, ['bountyName', 'bountyUrl', 'bountyReward', 'bountyReason']);
-        
-        document.getElementById('btn-save-lore').onclick = () => saveItem('lore', { year: document.getElementById('loreYear').value, title: document.getElementById('loreTitle').value, content: document.getElementById('loreContent').value }, ['loreYear', 'loreTitle', 'loreContent']);
-        
-        document.getElementById('btn-save-raphael').onclick = () => saveItem('raphael', { title: document.getElementById('raphaelTitle').value, icon: document.getElementById('raphaelIcon').value, tag: document.getElementById('raphaelTag').value, content: document.getElementById('raphaelContent').value }, ['raphaelTitle', 'raphaelIcon', 'raphaelTag', 'raphaelContent']);
+        document.getElementById('btn-save-bounty').onclick = () => save('bounties', { 
+            name: document.getElementById('bountyName').value, 
+            reward: document.getElementById('bountyReward').value,
+            url: document.getElementById('bountyUrl').value 
+        }, ['bountyName', 'bountyReward', 'bountyUrl']);
 
-        window.deleteItem = (path, id) => {
-            if(confirm("¿Seguro que quieres borrar esto?")) remove(ref(db, `${path}/${id}`));
-        };
+        document.getElementById('btn-save-lore').onclick = () => save('lore', { 
+            year: document.getElementById('loreYear').value, 
+            title: document.getElementById('loreTitle').value,
+            content: document.getElementById('loreContent').value 
+        }, ['loreYear', 'loreTitle', 'loreContent']);
 
-        // RENDERS
-        const renderList = (path, listId) => {
+        // --- RENDERS ---
+        const syncList = (path, containerId) => {
             onValue(ref(db, path), (snapshot) => {
-                const list = document.getElementById(listId);
+                const container = document.getElementById(containerId);
                 const data = snapshot.val();
-                if (!data) { list.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">No hay registros.</p>'; return; }
-                list.innerHTML = Object.keys(data).map(id => {
+                if (!data) { container.innerHTML = "No hay datos."; return; }
+                
+                container.innerHTML = Object.keys(data).map(id => {
                     const item = data[id];
                     return `
                         <div class="post-item">
                             <div style="display:flex; align-items:center;">
                                 ${item.url ? `<img src="${item.url}" class="thumb-preview">` : ''}
-                                <div class="post-info">
-                                    <h3>${item.title || item.name || item.nick || 'Sin título'}</h3>
-                                    <p>${item.role || item.date || ''}</p>
+                                <div>
+                                    <strong style="display:block;">${item.title || item.name}</strong>
+                                    <small>${item.role || item.year || item.date}</small>
                                 </div>
                             </div>
-                            <button class="btn-delete" onclick="window.deleteItem('${path}', '${id}')"><i class="fas fa-trash"></i></button>
+                            <button class="btn-delete" onclick="deleteItem('${path}', '${id}')" style="background:none; border:none; color:red; cursor:pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     `;
                 }).reverse().join('');
             });
         };
 
-        // Whitelist Especial
-        onValue(ref(db, 'whitelist_requests'), (snapshot) => {
-            const list = document.getElementById('wlReqList');
-            const data = snapshot.val();
-            if (!data) { list.innerHTML = 'Vacío'; return; }
-            list.innerHTML = Object.keys(data).map(id => `
-                <div class="post-item">
-                    <div class="post-info"><h3>${data[id].nick}</h3><p>Discord: ${data[id].discord}</p></div>
-                    <div class="action-btns">
-                        <button class="btn-delete" style="color:var(--success-green)" onclick="window.deleteItem('whitelist_requests', '${id}')"><i class="fas fa-check"></i></button>
-                        <button class="btn-delete" onclick="window.deleteItem('whitelist_requests', '${id}')"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
-        });
-
-        renderList('news', 'newsList');
-        renderList('staff', 'staffList');
-        renderList('crafts', 'craftsList');
-        renderList('bounties', 'bountiesList');
-        renderList('lore', 'loreAdminList');
-        renderList('art', 'artList');
-        renderList('raphael', 'raphaelList');
+        syncList('news', 'newsList');
+        syncList('staff', 'staffList');
+        syncList('bounties', 'bountiesList');
+        syncList('lore', 'loreList');
 
     </script>
 </body>
