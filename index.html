@@ -34,19 +34,12 @@
         .section-header { text-align: center; margin-bottom: 50px; }
         .section-header h2 { font-size: 2.5rem; color: var(--dark); letter-spacing: -1px; }
 
-        /* --- HERO CON IMAGEN DE DESIERTO --- */
+        /* --- HERO --- */
         .hero-premium {
             background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
                         url('https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=2070&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            padding: 120px 40px;
-            border-radius: 24px;
-            color: white;
-            text-align: center;
-            margin-bottom: 50px;
+            background-size: cover; background-position: center; padding: 120px 40px; border-radius: 24px; color: white; text-align: center; margin-bottom: 50px;
         }
-
         .badge { background: var(--primary); padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
         .hero-premium h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 20px 0; color: white; letter-spacing: -2px; }
         .hero-premium p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
@@ -56,29 +49,21 @@
         .ip-box:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         .btn-discord { background: #5865F2; color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-discord:hover { background: #4752c4; transform: translateY(-2px); }
-
-        /* --- CARDS Y GRIDS --- */
+        
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
-        .f-card { padding: 40px 30px; background: var(--light-bg); border-radius: 20px; text-align: center; transition: 0.3s; border: 1px solid transparent; }
-        .f-card:hover { transform: translateY(-10px); background: white; border-color: var(--border); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); }
+        .f-card { padding: 40px 30px; background: var(--light-bg); border-radius: 20px; text-align: center; border: 1px solid transparent; }
         .f-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
 
         .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .card-post { padding: 30px; border: 1px solid var(--border); border-radius: 16px; background: white; }
-        .card-post span { color: var(--primary); font-weight: 700; font-size: 0.8rem; }
-        .card-post h3 { margin: 10px 0; font-size: 1.4rem; }
-
-        /* FORMULARIO GALERÍA */
         .upload-card { background: var(--light-bg); border-radius: 16px; padding: 30px; margin-bottom: 40px; border: 2px dashed var(--border); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
         .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
         .btn-upload { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; }
 
-        .staff-card { text-align: center; padding: 30px; border: 1px solid var(--border); border-radius: 16px; background: white; }
+        .staff-card { text-align: center; padding: 30px; border: 1px solid var(--border); border-radius: 16px; }
         .staff-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--primary); }
-
         .bounty-card { background: #fdf5e6; border: 2px solid #4a0404; padding: 20px; text-align: center; color: #4a0404; }
         .bounty-card img { width: 100%; height: 250px; object-fit: cover; border: 1px solid #4a0404; margin-bottom: 15px; }
 
@@ -86,7 +71,6 @@
     </style>
 </head>
 <body>
-
     <nav>
         <div class="logo"><i class="fas fa-hat-cowboy"></i> The New West</div>
         <div class="nav-links">
@@ -99,52 +83,45 @@
         </div>
     </nav>
 
-    <!-- INICIO -->
     <div id="inicio" class="section active">
         <div class="hero-premium">
             <div class="hero-content">
-                <span class="badge">Temporada 1: El Despertar</span>
+                <span class="badge">Temporada 1</span>
                 <h1>The New West</h1>
-                <p>Escribe tu propia historia en un mundo donde la ley la dictas tú. Únete a la experiencia definitiva de Rol en el Salvaje Oeste.</p>
+                <p>Escribe tu propia historia en el Salvaje Oeste.</p>
                 <div class="hero-actions">
                     <div class="ip-box" onclick="copyIP()">
-                        <span id="serverIP">play.thenewwest.com</span>
-                        <i class="fas fa-copy"></i>
+                        <span id="serverIP">play.thenewwest.com</span> <i class="fas fa-copy"></i>
                     </div>
-                    <a href="#" class="btn-discord"><i class="fab fa-discord"></i> Discord</a>
                 </div>
             </div>
         </div>
         <div class="features-grid">
-            <div class="f-card"><i class="fas fa-horse-head"></i><h3>Caballos Únicos</h3><p>Razas con estadísticas reales para cruzar el desierto.</p></div>
-            <div class="f-card"><i class="fas fa-gun"></i><h3>Duelos de Honor</h3><p>Combate personalizado para resolver disputas.</p></div>
-            <div class="f-card"><i class="fas fa-coins"></i><h3>Economía Viva</h3><p>Asalta bancos o conviértete en un magnate minero.</p></div>
+            <div class="f-card"><i class="fas fa-horse-head"></i><h3>Caballos</h3><p>Estadísticas reales.</p></div>
+            <div class="f-card"><i class="fas fa-gun"></i><h3>Duelos</h3><p>Resuelve disputas.</p></div>
+            <div class="f-card"><i class="fas fa-coins"></i><h3>Economía</h3><p>Asalta bancos.</p></div>
         </div>
     </div>
 
-    <!-- SECCIONES DINÁMICAS -->
-    <div id="noticias" class="section"><div class="section-header"><h2>Últimas Noticias</h2></div><div id="dynamicNews" class="content-grid"></div></div>
-    <div id="lore" class="section"><div class="section-header"><h2>Cronología del Oeste</h2></div><div id="dynamicLore" class="content-grid"></div></div>
-    <div id="staff" class="section"><div class="section-header"><h2>Nuestro Equipo</h2></div><div id="dynamicStaff" class="content-grid"></div></div>
-    <div id="bounties" class="section"><div class="section-header"><h2>Fugitivos de la Ley</h2></div><div id="dynamicBounties" class="content-grid"></div></div>
+    <div id="noticias" class="section"><div class="section-header"><h2>Noticias</h2></div><div id="dynamicNews" class="content-grid"></div></div>
+    <div id="lore" class="section"><div class="section-header"><h2>Lore</h2></div><div id="dynamicLore" class="content-grid"></div></div>
+    <div id="staff" class="section"><div class="section-header"><h2>Staff</h2></div><div id="dynamicStaff" class="content-grid"></div></div>
+    <div id="bounties" class="section"><div class="section-header"><h2>Se Busca</h2></div><div id="dynamicBounties" class="content-grid"></div></div>
 
-    <!-- GALERÍA CON FORMULARIO RESTAURADO -->
     <div id="galeria" class="section">
-        <div class="section-header"><h2>Galería de la Comunidad</h2></div>
+        <div class="section-header"><h2>Galería</h2></div>
         <div class="upload-card">
-            <h3><i class="fas fa-camera"></i> Subir tu captura</h3>
-            <div class="form-group"><label>Título de la imagen</label><input type="text" id="artTitle" placeholder="Ej: Atardecer en el Saloon"></div>
-            <div class="form-group"><label>URL de la imagen (Link)</label><input type="text" id="artUrl" placeholder="https://imgur.com/..."></div>
-            <button class="btn-upload" id="btn-upload-art">Publicar en Galería</button>
+            <div class="form-group"><label>Título</label><input type="text" id="artTitle"></div>
+            <div class="form-group"><label>URL Link</label><input type="text" id="artUrl"></div>
+            <button class="btn-upload" id="btn-upload-art">Publicar</button>
         </div>
         <div id="dynamicArt" class="content-grid"></div>
     </div>
 
-   <footer>
-        <p>© 2026 The New West - Minecraft Roleplay</p>
-        <!-- He añadido target="_self" para asegurar que intente navegar a la ruta del archivo -->
-        <a href="app/admin.html" target="_self" style="color: #cbd5e1; font-size: 0.75rem; text-decoration: none; margin-top: 10px; display: inline-block; cursor: pointer;">
-            <i class="fas fa-lock"></i> Panel de Administración
+    <footer>
+        <p>© 2026 The New West</p>
+        <a href="./app/admin.html" style="color: #cbd5e1; font-size: 0.75rem; text-decoration: none; margin-top: 10px; display: inline-block;">
+            <i class="fas fa-lock"></i> Panel Staff
         </a>
     </footer>
     <script type="module">
@@ -164,7 +141,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- NAVEGACIÓN ---
+        // --- ESTO CORRIGE LOS BOTONES ---
         window.showSection = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -172,41 +149,36 @@
         };
 
         window.copyIP = () => {
-            const ip = "play.thenewwest.com";
-            navigator.clipboard.writeText(ip);
+            navigator.clipboard.writeText("play.thenewwest.com");
             alert("¡IP Copiada!");
         };
 
-        // --- CARGAR CONTENIDO ---
-        const loadContent = (path, containerId, templateFn) => {
-            onValue(ref(db, path), (snapshot) => {
-                const data = snapshot.val();
-                const container = document.getElementById(containerId);
-                if (!data) { container.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Vacío</p>"; return; }
-                container.innerHTML = Object.values(data).reverse().map(templateFn).join('');
+        // --- CARGA DE DATOS ---
+        const load = (path, divId, draw) => {
+            onValue(ref(db, path), (snap) => {
+                const data = snap.val();
+                const container = document.getElementById(divId);
+                if (!data) { container.innerHTML = "<p>Vacío</p>"; return; }
+                container.innerHTML = Object.values(data).reverse().map(draw).join('');
             });
         };
 
-        // Renders
-        loadContent('news', 'dynamicNews', n => `<div class="card-post"><span>${n.date || 'Hoy'}</span><h3>${n.title}</h3><p>${n.content}</p></div>`);
-        loadContent('lore', 'dynamicLore', l => `<div class="card-post"><span>Año ${l.year}</span><h3>${l.title}</h3><p>${l.content}</p></div>`);
-        loadContent('staff', 'dynamicStaff', s => `<div class="staff-card"><img src="${s.url}" class="staff-avatar"><h3>${s.name}</h3><p style="color:var(--primary); font-weight:700;">${s.role}</p><p style="font-size:0.8rem; color:var(--text-muted);">${s.desc}</p></div>`);
-        loadContent('bounties', 'dynamicBounties', b => `<div class="bounty-card"><p style="font-weight:900;">WANTED</p><img src="${b.url}"><h3>${b.name}</h3><p>${b.reason}</p><p style="font-weight:bold; font-size:1.2rem;">$${b.reward}</p></div>`);
-        loadContent('art', 'dynamicArt', a => `<div class="card-post" style="padding:10px;"><img src="${a.url}" style="width:100%; border-radius:10px;"><p style="text-align:center; margin-top:10px; font-weight:600;">${a.title}</p></div>`);
+        load('news', 'dynamicNews', n => `<div class="card-post"><span>${n.date}</span><h3>${n.title}</h3><p>${n.content}</p></div>`);
+        load('lore', 'dynamicLore', l => `<div class="card-post"><span>Año ${l.year}</span><h3>${l.title}</h3><p>${l.content}</p></div>`);
+        load('staff', 'dynamicStaff', s => `<div class="staff-card"><img src="${s.url}" class="staff-avatar"><h3>${s.name}</h3><p>${s.role}</p></div>`);
+        load('bounties', 'dynamicBounties', b => `<div class="bounty-card"><b>WANTED</b><img src="${b.url}"><h3>${b.name}</h3><p>$${b.reward}</p></div>`);
+        load('art', 'dynamicArt', a => `<div class="card-post"><img src="${a.url}" style="width:100%"><p>${a.title}</p></div>`);
 
-        // --- LÓGICA DE SUBIDA DE GALERÍA (PÚBLICA) ---
         document.getElementById('btn-upload-art').onclick = () => {
-            const title = document.getElementById('artTitle').value;
-            const url = document.getElementById('artUrl').value;
-            if(!title || !url) { alert("Llena todos los campos"); return; }
-
-            const newArtRef = push(ref(db, 'art'));
-            set(newArtRef, { title: title, url: url })
-            .then(() => {
-                alert("¡Imagen subida con éxito!");
-                document.getElementById('artTitle').value = "";
-                document.getElementById('artUrl').value = "";
-            });
+            const t = document.getElementById('artTitle').value;
+            const u = document.getElementById('artUrl').value;
+            if(t && u) {
+                push(ref(db, 'art'), { title: t, url: u }).then(() => {
+                    alert("Subido");
+                    document.getElementById('artTitle').value = "";
+                    document.getElementById('artUrl').value = "";
+                });
+            }
         };
     </script>
 </body>
