@@ -18,7 +18,9 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; display: none; } /* Se activa con el Auth */
+        
+        /* CORRECCIÓN: Quitamos display: none para que puedas entrar siempre */
+        body { background-color: var(--bg-light); color: var(--text-dark); padding: 40px; } 
 
         header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
         .header-title h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
@@ -43,7 +45,6 @@
 
         .content-section { display: none; }
         .content-section.active { display: grid; }
-        .full-width { display: block !important; }
     </style>
 </head>
 <body>
@@ -132,19 +133,18 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // --- SEGURIDAD ---
+        // --- SEGURIDAD COMENTADA TEMPORALMENTE ---
         onAuthStateChanged(auth, (user) => {
             if (user) { 
-                document.body.style.display = "block"; 
+                console.log("Usuario autenticado:", user.email);
             } else { 
-                // Si no hay usuario, redirigir al index para login
-                window.location.href = "../index.html"; 
+                console.warn("Sin sesión activa. (Redirección desactivada para pruebas)");
+                // window.location.href = "../index.html"; 
             }
         });
 
         document.getElementById('btnLogout').onclick = () => signOut(auth);
 
-        // --- FUNCIONES GLOBALES (Solución al error) ---
         window.switchTab = (event, sectionId) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -158,14 +158,13 @@
             }
         };
 
-        // --- LÓGICA DE GUARDADO ---
         const save = (path, data, fields) => {
             const newRef = push(ref(db, path));
             set(newRef, { ...data, date: new Date().toLocaleDateString() })
                 .then(() => {
-                    alert("¡Actualizado!");
+                    alert("¡Guardado correctamente!");
                     fields.forEach(f => document.getElementById(f).value = "");
-                });
+                }).catch(err => alert("Error al guardar: " + err.message));
         };
 
         document.getElementById('btn-save-news').onclick = () => save('news', { 
@@ -191,7 +190,6 @@
             content: document.getElementById('loreContent').value 
         }, ['loreYear', 'loreTitle', 'loreContent']);
 
-        // --- RENDERS ---
         const syncList = (path, containerId) => {
             onValue(ref(db, path), (snapshot) => {
                 const container = document.getElementById(containerId);
