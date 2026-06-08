@@ -2,115 +2,322 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DANGAN PROJECT - Raphael Execution</title>
-    <!-- Firebase Realtime Database SDK -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>BMS v3.0 · Danganronpa Executive Dashboard</title>
+    <!-- Firebase SDK (Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Chart.js para gráficos elegantes -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Font Awesome 6 (iconos) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* DANGANRONPA THEME */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #000;
-            background-image: repeating-linear-gradient(45deg, #111 0px, #111 2px, #1a0000 2px, #1a0000 8px);
-            font-family: 'Courier New', 'MS Gothic', monospace;
-            color: #f0f0f0;
-            padding: 1.5rem;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
+
+        body {
+            background: #0b0b0f;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 26, 79, 0.03) 0%, transparent 50%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #ededef;
+            padding: 2rem;
+        }
+
+        /* Contenedor principal */
+        .dashboard {
             max-width: 1600px;
             margin: 0 auto;
-            border: 3px solid #ff1a4f;
-            box-shadow: 0 0 0 2px #000, 0 0 0 5px #ff1a4f;
-            background: rgba(0,0,0,0.85);
-            padding: 1.5rem;
         }
-        header {
+
+        /* Header Danganronpa */
+        .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px dashed #ff1a4f;
-            padding-bottom: 0.8rem;
+            align-items: flex-end;
+            border-bottom: 2px solid #ff1a4f;
+            padding-bottom: 0.75rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
+            gap: 1rem;
         }
-        .mono-icon { font-size: 2rem; filter: drop-shadow(0 0 3px #ff1a4f); }
-        h1 { font-size: 1.6rem; letter-spacing: -1px; color: #ff1a4f; text-transform: uppercase; text-shadow: 2px 2px 0 #4a0000; }
-        .stats { background: #1a0000; padding: 0.3rem 0.8rem; border-left: 4px solid #ff1a4f; font-size: 0.75rem; }
-        .dashboard { display: flex; gap: 2rem; flex-wrap: wrap; }
-        .projects-section { flex: 3; min-width: 280px; }
-        .chat-section {
-            flex: 1.5; min-width: 280px; background: #0a0000; border: 1px solid #ff1a4f;
-            display: flex; flex-direction: column; height: 70vh; position: sticky; top: 1rem;
+        .title-area h1 {
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff 30%, #ff1a4f 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .chat-header { background: #ff1a4f; color: #000; padding: 0.6rem; font-weight: bold; text-align: center; }
-        .chat-messages { flex: 1; overflow-y: auto; padding: 0.8rem; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.8rem; }
-        .message { border-left: 3px solid; padding: 0.4rem 0.6rem; background: #110000; }
-        .message.user { border-left-color: #ff1a4f; align-self: flex-end; text-align: right; background: #2a0000; }
-        .message.raphael { border-left-color: #ffffff; }
-        .chat-input-area { display: flex; border-top: 1px solid #ff1a4f; padding: 0.6rem; gap: 0.5rem; }
-        .chat-input-area input { flex: 1; background: #000; border: 1px solid #ff1a4f; color: #ffb0c0; padding: 0.5rem; font-family: monospace; }
-        .chat-input-area button, .key-config button { background: #ff1a4f; border: none; color: #000; font-weight: bold; padding: 0.5rem 1rem; cursor: pointer; }
-        .key-config { padding: 0.6rem; border-top: 1px dashed #ff1a4f; display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.7rem; }
-        .key-config input { flex: 2; background: #111; border: 1px solid #ff1a4f; color: white; padding: 0.3rem; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
-        .project-card { background: #0a0505; border: 1px solid #ff1a4f; padding: 1rem; transition: 0.05s linear; }
-        .project-card:hover { border-width: 2px; box-shadow: 0 0 8px #ff1a4f; }
-        .project-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
-        .project-title { font-size: 1.2rem; background: none; border: none; color: #ffb7c5; font-weight: bold; width: 70%; }
-        .delete-project { background: none; border: none; color: #ff1a4f; font-size: 1.2rem; cursor: pointer; }
-        .progress-bar-bg { background: #2a1515; height: 8px; margin: 0.8rem 0; }
-        .progress-fill { background: #ff1a4f; width: 0%; height: 100%; }
-        .progress-text { font-size: 0.7rem; text-align: right; color: #ff8aa0; }
-        .task-list { list-style: none; margin: 0.8rem 0; max-height: 200px; overflow-y: auto; }
-        .task-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; border-bottom: 1px dotted #4a1a1a; }
-        .task-check { width: 16px; height: 16px; accent-color: #ff1a4f; }
-        .task-text { flex: 1; background: none; border: none; color: #ddd; font-family: monospace; font-size: 0.8rem; }
-        .delete-task { background: none; border: none; color: #ff6666; cursor: pointer; }
-        .add-task { display: flex; gap: 0.3rem; margin-top: 0.6rem; }
-        .add-task input { flex: 1; background: #1a0505; border: 1px solid #ff1a4f; color: white; padding: 0.3rem; }
-        .add-task button, .add-project-btn { background: #2a0a0a; border: 1px solid #ff1a4f; color: #ffb0c0; padding: 0.3rem 0.6rem; cursor: pointer; }
-        .new-project-form { margin-top: 2rem; display: flex; gap: 0.6rem; border-top: 2px solid #ff1a4f; padding-top: 1.5rem; }
-        .new-project-form input { flex: 1; background: #000; border: 1px solid #ff1a4f; padding: 0.5rem; color: white; }
-        button { font-family: monospace; }
+        .title-area p {
+            font-size: 0.8rem;
+            color: #ff7b9c;
+            font-family: 'Courier New', monospace;
+        }
+        .mono-badge {
+            background: #1e1e2a;
+            padding: 0.4rem 1rem;
+            border-left: 3px solid #ff1a4f;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Tarjetas KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .kpi-card {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 26, 79, 0.3);
+            border-radius: 24px;
+            padding: 1.2rem 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .kpi-card:hover {
+            border-color: #ff1a4f;
+            box-shadow: 0 0 12px rgba(255, 26, 79, 0.3);
+        }
+        .kpi-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            color: #ff8aaa;
+            margin-bottom: 0.5rem;
+        }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            line-height: 1;
+        }
+        .kpi-unit {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-left: 0.2rem;
+        }
+        .kpi-trend {
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            color: #ff7b9c;
+        }
+
+        /* Filtros y búsqueda */
+        .filters-bar {
+            background: #12121a;
+            border-radius: 28px;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2a2a35;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        .filter-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #ff7b9c;
+            margin-bottom: 0.3rem;
+        }
+        .filter-group input, .filter-group select {
+            width: 100%;
+            background: #1e1e2a;
+            border: 1px solid #333;
+            padding: 0.6rem 0.8rem;
+            border-radius: 16px;
+            color: white;
+            font-family: 'Inter', monospace;
+            transition: 0.1s;
+        }
+        .filter-group input:focus, .filter-group select:focus {
+            outline: none;
+            border-color: #ff1a4f;
+        }
+        .btn-reset {
+            background: #ff1a4f20;
+            border: 1px solid #ff1a4f;
+            color: #ff7b9c;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.1s;
+        }
+        .btn-reset:hover {
+            background: #ff1a4f;
+            color: black;
+        }
+
+        /* Layout dos columnas */
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .left-table {
+            flex: 2;
+            min-width: 280px;
+        }
+        .right-charts {
+            flex: 1.2;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .chart-card {
+            background: #12121a;
+            border-radius: 28px;
+            padding: 1.2rem;
+            border: 1px solid #2a2a35;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ff8aaa;
+            border-left: 3px solid #ff1a4f;
+            padding-left: 0.7rem;
+        }
+
+        /* Tabla de puentes */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 24px;
+            background: #0e0e16;
+            border: 1px solid #2a2a35;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        th {
+            text-align: left;
+            padding: 1rem 0.8rem;
+            background: #1a1a26;
+            color: #ffb0c2;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #22222e;
+        }
+        tr:hover td {
+            background: #1f1f2a;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            background: #222;
+        }
+        .status-Bueno { background: #1f5f3a; color: #b0ffd0; }
+        .status-Regular { background: #aa6f1e; color: #ffe0aa; }
+        .status-Crítico { background: #8b2c2c; color: #ffbcbc; }
+        .status-En\ revisión { background: #3a5f8a; color: #c0e0ff; }
+
+        /* pie */
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #ff7b9c;
+            border-top: 1px solid #2a2a35;
+            padding-top: 1.5rem;
+        }
+        i {
+            margin-right: 0.3rem;
+        }
+        @media (max-width: 900px) {
+            body { padding: 1rem; }
+            .kpi-value { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <div class="mono-icon">🔴⚫ MONOKUMA EXECUTION</div>
-        <h1>RAPHAEL // DANGAN PROJECT MANAGER</h1>
-        <div class="stats" id="statsDisplay">---</div>
-    </header>
-    <div class="dashboard">
-        <div class="projects-section">
-            <div class="projects-grid" id="projectsContainer"></div>
-            <div class="new-project-form">
-                <input type="text" id="newProjectName" placeholder="Nuevo caso / proyecto..." autocomplete="off">
-                <button id="addProjectBtn">+ EJECUTAR PROYECTO</button>
+<div class="dashboard">
+    <div class="header">
+        <div class="title-area">
+            <h1><i class="fas fa-skull"></i> BMS v3.0 · DANGAN BRIDGE MONITOR</h1>
+            <p>⚡ ANÁLISIS ESTRUCTURAL | DATOS EN TIEMPO REAL | FIRESTORE</p>
+        </div>
+        <div class="mono-badge">
+            <i class="fas fa-dice-d6"></i> MONOKUMA EXECUTIVE
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid" id="kpiContainer">
+        <div class="kpi-card"><div class="kpi-label">TOTAL PUENTES</div><div class="kpi-value" id="totalPuentes">0</div><div class="kpi-trend">estructuras registradas</div></div>
+        <div class="kpi-card"><div class="kpi-label">IEP PROMEDIO</div><div class="kpi-value" id="iepPromedio">0.0</div><div class="kpi-trend">Índice de estado</div></div>
+        <div class="kpi-card"><div class="kpi-label">ESTADO CRÍTICO</div><div class="kpi-value" id="porcCritico">0%</div><div class="kpi-trend">del total</div></div>
+        <div class="kpi-card"><div class="kpi-label">INTERVENCIÓN URGENTE</div><div class="kpi-value" id="urgentes">0</div><div class="kpi-trend">acción inmediata (IEP &lt; 3.0)</div></div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-bar">
+        <div class="filter-group"><label>🔎 BUSCAR PUENTE</label><input type="text" id="searchInput" placeholder="ID, nombre, proyecto..."></div>
+        <div class="filter-group"><label>📌 PROYECTO</label><select id="filterProyecto"><option value="">Todos</option></select></div>
+        <div class="filter-group"><label>⚙️ ESTADO</label><select id="filterEstado"><option value="">Todos</option><option>Bueno</option><option>Regular</option><option>Crítico</option><option>En revisión</option></select></div>
+        <div class="filter-group"><label>⚠️ INTERVENCIÓN</label><select id="filterIntervencion"><option value="">Todas</option><option>Urgente</option><option>Programada</option><option>Ninguna</option></select></div>
+        <button class="btn-reset" id="resetFilters"><i class="fas fa-broom"></i> Limpiar</button>
+    </div>
+
+    <div class="two-columns">
+        <!-- Tabla de puentes -->
+        <div class="left-table">
+            <div class="table-wrapper">
+                <table id="puentesTable">
+                    <thead>
+                        <tr><th>ID</th><th>NOMBRE</th><th>PROYECTO</th><th>TIPO</th><th>IEP</th><th>ESTADO</th><th>INTERVENCIÓN</th></tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="7">Cargando datos...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="chat-section">
-            <div class="chat-header">⚡ CHAT CON RAPHAEL ⚡</div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message raphael">[Raphael] Sistema listo. Proporcione API key para consultas.</div>
+
+        <!-- Gráficos -->
+        <div class="right-charts">
+            <div class="chart-card">
+                <div class="chart-title"><i class="fas fa-chart-pie"></i> DISTRIBUCIÓN POR ESTADO</div>
+                <canvas id="estadoChart" width="400" height="250" style="max-height: 250px;"></canvas>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Pregúntame...">
-                <button id="sendChatBtn">ENVIAR</button>
-            </div>
-            <div class="key-config">
-                <input type="password" id="apiKeyInput" placeholder="DeepSeek API Key" autocomplete="off">
-                <button id="saveApiKeyBtn">GUARDAR CLAVE</button>
-                <span id="keyStatus" style="color:#ff8aa0; font-size:0.7rem;"></span>
+            <div class="chart-card">
+                <div class="chart-title"><i class="fas fa-chart-line"></i> IEP PROMEDIO POR PROYECTO</div>
+                <canvas id="proyectoChart" width="400" height="250" style="max-height: 250px;"></canvas>
             </div>
         </div>
+    </div>
+    <div class="footer">
+        <i class="fas fa-database"></i> Firebase Firestore · Datos sincronizados en tiempo real · Interfaz Danganronpa Elegance
     </div>
 </div>
 
 <script>
     // --------------------------------------------------------------
-    // CONFIGURACIÓN FIREBASE (Realtime Database)
+    // Configuración Firebase (usando la misma credencial del usuario)
     // --------------------------------------------------------------
     const firebaseConfig = {
         apiKey: "AIzaSyDo7ebAVDvYEjPDscivWWKXLUoGEAGBeIM",
@@ -122,280 +329,174 @@
         appId: "1:605270552271:web:a58b5b7f619e5804d7d1ba"
     };
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    // Usaremos el nodo "raphael_projects" dentro de "pre_registros" (que tiene write true según reglas)
-    // Si prefiere usar "raphael", modifique la regla a write true. Por ahora usamos "pre_registros/raphael_projects"
-    const projectsRef = database.ref('pre_registros/raphael_projects');
+    const db = firebase.firestore();
+    const puentesCollection = db.collection('puentes');
 
-    let projects = [];
-    let currentUserId = "user_default"; // para múltiples usuarios, pero aquí es fijo
+    // Datos locales
+    let puentes = [];
+    let estadoChart, proyectoChart;
 
     // --------------------------------------------------------------
-    // SINCRONIZACIÓN CON REALTIME DATABASE
+    // Inicializar gráficos
     // --------------------------------------------------------------
-    function syncToFirestore() {  // nombre legacy, pero es Realtime
-        projectsRef.set(projects).catch(err => {
-            console.error("Error escribiendo en RTDB:", err);
-            alert("Alerta. Error de escritura. Revise reglas de Firebase.");
+    function initCharts() {
+        const ctxEstado = document.getElementById('estadoChart').getContext('2d');
+        const ctxProyecto = document.getElementById('proyectoChart').getContext('2d');
+        estadoChart = new Chart(ctxEstado, {
+            type: 'doughnut',
+            data: { labels: ['Bueno', 'Regular', 'Crítico', 'En revisión'], datasets: [{ data: [0,0,0,0], backgroundColor: ['#1f5f3a', '#aa6f1e', '#8b2c2c', '#3a5f8a'], borderWidth: 0 }] },
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#ddd' } } } }
+        });
+        proyectoChart = new Chart(ctxProyecto, {
+            type: 'bar',
+            data: { labels: [], datasets: [{ label: 'IEP Promedio', data: [], backgroundColor: '#ff1a4f', borderRadius: 8 }] },
+            options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true, max: 10, grid: { color: '#333' }, ticks: { color: '#ccc' } }, x: { ticks: { color: '#ccc', rotation: -15 } } }, plugins: { legend: { labels: { color: '#ddd' } } } }
         });
     }
 
-    projectsRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data && Array.isArray(data)) {
-            projects = data;
-        } else if (data && typeof data === 'object') {
-            // si por algún motivo es objeto, convertir a array
-            projects = Object.values(data);
-        } else {
-            projects = [];
-        }
-        renderProjects();
-    });
+    // Actualizar KPIs y gráficos desde array puentes
+    function updateDashboard() {
+        // KPIs
+        const total = puentes.length;
+        const iepSum = puentes.reduce((acc, p) => acc + (p.iep || 0), 0);
+        const iepProm = total ? (iepSum / total).toFixed(2) : 0;
+        const criticos = puentes.filter(p => p.estado === 'Crítico').length;
+        const porcCritico = total ? ((criticos / total) * 100).toFixed(1) : 0;
+        const urgentes = puentes.filter(p => (p.iep || 0) < 3.0).length;
+        document.getElementById('totalPuentes').innerText = total;
+        document.getElementById('iepPromedio').innerText = iepProm;
+        document.getElementById('porcCritico').innerText = `${porcCritico}%`;
+        document.getElementById('urgentes').innerText = urgentes;
 
-    // --------------------------------------------------------------
-    // RENDER Y EVENTOS
-    // --------------------------------------------------------------
-    function updateStats() {
-        const totalTasks = projects.reduce((acc, p) => acc + (p.tasks?.length || 0), 0);
-        const completedTasks = projects.reduce((acc, p) => acc + (p.tasks?.filter(t => t.done).length || 0), 0);
-        document.getElementById('statsDisplay').innerHTML = `📊 PROYECTOS: ${projects.length} | TAREAS: ${completedTasks}/${totalTasks}`;
-    }
+        // Gráfico de estado
+        const countEstado = { 'Bueno':0, 'Regular':0, 'Crítico':0, 'En revisión':0 };
+        puentes.forEach(p => { if (countEstado[p.estado] !== undefined) countEstado[p.estado]++; else countEstado['En revisión']++; });
+        estadoChart.data.datasets[0].data = [countEstado.Bueno, countEstado.Regular, countEstado.Crítico, countEstado['En revisión']];
+        estadoChart.update();
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
+        // Gráfico IEP por proyecto (agrupar)
+        const proyectosMap = new Map();
+        puentes.forEach(p => {
+            const proy = p.proyecto || 'Sin proyecto';
+            if (!proyectosMap.has(proy)) proyectosMap.set(proy, { sum: 0, count: 0 });
+            const data = proyectosMap.get(proy);
+            data.sum += (p.iep || 0);
+            data.count++;
         });
+        const labels = Array.from(proyectosMap.keys());
+        const avgData = labels.map(l => (proyectosMap.get(l).sum / proyectosMap.get(l).count).toFixed(2));
+        proyectoChart.data.labels = labels;
+        proyectoChart.data.datasets[0].data = avgData;
+        proyectoChart.update();
+
+        // Poblar filtro de proyectos
+        const selectProy = document.getElementById('filterProyecto');
+        const currentVal = selectProy.value;
+        const uniqueProy = [...new Set(puentes.map(p => p.proyecto).filter(Boolean))];
+        selectProy.innerHTML = '<option value="">Todos</option>' + uniqueProy.map(p => `<option value="${p}">${p}</option>`).join('');
+        selectProy.value = currentVal;
     }
 
-    function renderProjects() {
-        const container = document.getElementById('projectsContainer');
-        if (!container) return;
-        if (projects.length === 0) {
-            container.innerHTML = `<div style="text-align:center; border:1px solid #ff1a4f; padding:2rem;">⚠️ No hay proyectos activos. Cree uno nuevo.</div>`;
-            updateStats();
+    // Renderizar tabla con filtros
+    function renderTable() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const filterProy = document.getElementById('filterProyecto').value;
+        const filterEstado = document.getElementById('filterEstado').value;
+        const filterInterv = document.getElementById('filterIntervencion').value;
+
+        let filtered = puentes.filter(p => {
+            const matchSearch = (p.id?.toLowerCase().includes(searchTerm) || p.nombre?.toLowerCase().includes(searchTerm) || p.proyecto?.toLowerCase().includes(searchTerm));
+            const matchProy = filterProy ? p.proyecto === filterProy : true;
+            const matchEstado = filterEstado ? p.estado === filterEstado : true;
+            let intervencionMatch = true;
+            if (filterInterv === 'Urgente') intervencionMatch = (p.iep || 0) < 3.0;
+            else if (filterInterv === 'Programada') intervencionMatch = p.intervencion === 'Programada';
+            else if (filterInterv === 'Ninguna') intervencionMatch = !p.intervencion || p.intervencion === 'Ninguna';
+            return matchSearch && matchProy && matchEstado && intervencionMatch;
+        });
+
+        const tbody = document.getElementById('tableBody');
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7">No hay puentes que coincidan con los filtros.</td></tr>';
             return;
         }
-        container.innerHTML = projects.map(proj => {
-            const tasks = proj.tasks || [];
-            const completed = tasks.filter(t => t.done).length;
-            const percent = tasks.length === 0 ? 0 : (completed / tasks.length) * 100;
-            return `
-                <div class="project-card" data-id="${proj.id}">
-                    <div class="project-header">
-                        <input type="text" class="project-title" value="${escapeHtml(proj.name)}" data-id="${proj.id}" data-field="name">
-                        <button class="delete-project" data-id="${proj.id}">🗡️ ELIMINAR</button>
-                    </div>
-                    <div class="progress-bar-bg"><div class="progress-fill" style="width:${percent}%;"></div></div>
-                    <div class="progress-text">${percent.toFixed(0)}% COMPLETADO</div>
-                    <ul class="task-list" data-id="${proj.id}">
-                        ${tasks.map((task, idx) => `
-                            <li class="task-item" data-taskidx="${idx}">
-                                <input type="checkbox" class="task-check" ${task.done ? 'checked' : ''} data-projid="${proj.id}" data-taskidx="${idx}">
-                                <input type="text" class="task-text" value="${escapeHtml(task.text)}" data-projid="${proj.id}" data-taskidx="${idx}">
-                                <button class="delete-task" data-projid="${proj.id}" data-taskidx="${idx}">✖</button>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <div class="add-task">
-                        <input type="text" placeholder="Nueva tarea..." id="newtask-${proj.id}">
-                        <button data-addtask="${proj.id}">+</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        updateStats();
-        attachProjectEvents();
+        tbody.innerHTML = filtered.map(p => `
+            <tr>
+                <td>${p.id || ''}</td>
+                <td>${p.nombre || ''}</td>
+                <td>${p.proyecto || ''}</td>
+                <td>${p.tipo || ''}</td>
+                <td>${p.iep || 0}</td>
+                <td><span class="status-badge status-${p.estado?.replace(' ', '')}">${p.estado || 'N/A'}</span></td>
+                <td>${p.intervencion || 'Ninguna'}</td>
+            </tr>
+        `).join('');
     }
 
-    function attachProjectEvents() {
-        // Eliminar proyecto
-        document.querySelectorAll('.delete-project').forEach(btn => {
-            btn.onclick = () => {
-                const id = btn.getAttribute('data-id');
-                projects = projects.filter(p => p.id !== id);
-                syncToFirestore();
-            };
-        });
-        // Editar nombre proyecto
-        document.querySelectorAll('.project-title').forEach(input => {
-            input.onblur = () => {
-                const id = input.getAttribute('data-id');
-                const newName = input.value.trim();
-                if (newName) {
-                    const proj = projects.find(p => p.id === id);
-                    if (proj) proj.name = newName;
-                    syncToFirestore();
-                } else {
-                    input.value = projects.find(p => p.id === id)?.name || '';
-                }
-            };
-        });
-        // Checkbox tareas
-        document.querySelectorAll('.task-check').forEach(cb => {
-            cb.onchange = (e) => {
-                const projid = cb.getAttribute('data-projid');
-                const taskidx = parseInt(cb.getAttribute('data-taskidx'));
-                const proj = projects.find(p => p.id === projid);
-                if (proj && proj.tasks[taskidx]) {
-                    proj.tasks[taskidx].done = cb.checked;
-                    syncToFirestore();
-                }
-            };
-        });
-        // Editar texto tarea
-        document.querySelectorAll('.task-text').forEach(txt => {
-            txt.onblur = () => {
-                const projid = txt.getAttribute('data-projid');
-                const taskidx = parseInt(txt.getAttribute('data-taskidx'));
-                const newText = txt.value.trim();
-                if (newText) {
-                    const proj = projects.find(p => p.id === projid);
-                    if (proj && proj.tasks[taskidx]) {
-                        proj.tasks[taskidx].text = newText;
-                        syncToFirestore();
-                    }
-                } else {
-                    txt.value = projects.find(p => p.id === projid)?.tasks[taskidx]?.text || '';
-                }
-            };
-        });
-        // Eliminar tarea
-        document.querySelectorAll('.delete-task').forEach(btn => {
-            btn.onclick = () => {
-                const projid = btn.getAttribute('data-projid');
-                const taskidx = parseInt(btn.getAttribute('data-taskidx'));
-                const proj = projects.find(p => p.id === projid);
-                if (proj) {
-                    proj.tasks.splice(taskidx, 1);
-                    syncToFirestore();
-                }
-            };
-        });
-        // Añadir tarea
-        document.querySelectorAll('[data-addtask]').forEach(btn => {
-            btn.onclick = () => {
-                const projid = btn.getAttribute('data-addtask');
-                const inputField = document.getElementById(`newtask-${projid}`);
-                const taskText = inputField.value.trim();
-                if (taskText) {
-                    const proj = projects.find(p => p.id === projid);
-                    if (proj) {
-                        if (!proj.tasks) proj.tasks = [];
-                        proj.tasks.push({ text: taskText, done: false });
-                        syncToFirestore();
-                        inputField.value = '';
-                    }
-                }
-            };
+    // Escuchar cambios en filtros
+    function bindFilters() {
+        document.getElementById('searchInput').addEventListener('input', () => renderTable());
+        document.getElementById('filterProyecto').addEventListener('change', () => renderTable());
+        document.getElementById('filterEstado').addEventListener('change', () => renderTable());
+        document.getElementById('filterIntervencion').addEventListener('change', () => renderTable());
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterProyecto').value = '';
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterIntervencion').value = '';
+            renderTable();
         });
     }
-
-    // Añadir nuevo proyecto
-    document.getElementById('addProjectBtn').onclick = () => {
-        const nameInput = document.getElementById('newProjectName');
-        const name = nameInput.value.trim();
-        if (name === "") return;
-        const newProject = {
-            id: Date.now().toString(),
-            name: name,
-            tasks: [],
-            createdAt: new Date().toISOString()
-        };
-        projects.push(newProject);
-        syncToFirestore();
-        nameInput.value = "";
-    };
 
     // --------------------------------------------------------------
-    // MINI CHAT CON RAPHAEL (DeepSeek API)
+    // Cargar datos de Firestore en tiempo real
     // --------------------------------------------------------------
-    let apiKey = localStorage.getItem('deepseek_api_key') || '';
-    const apiKeyInput = document.getElementById('apiKeyInput');
-    const keyStatus = document.getElementById('keyStatus');
-    if (apiKey) {
-        apiKeyInput.value = apiKey;
-        keyStatus.innerText = '✅ Clave cargada';
-    } else {
-        keyStatus.innerText = '⚠️ Sin clave';
-    }
-
-    document.getElementById('saveApiKeyBtn').onclick = () => {
-        const newKey = apiKeyInput.value.trim();
-        if (newKey) {
-            apiKey = newKey;
-            localStorage.setItem('deepseek_api_key', apiKey);
-            keyStatus.innerText = '✅ Guardada';
-        } else {
-            localStorage.removeItem('deepseek_api_key');
-            apiKey = '';
-            keyStatus.innerText = '❌ Eliminada';
-        }
-    };
-
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendChatBtn');
-    const chatMessages = document.getElementById('chatMessages');
-
-    function addMessage(sender, text) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${sender}`;
-        msgDiv.innerText = sender === 'raphael' ? `[Raphael] ${text}` : `[TÚ] ${text}`;
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    async function askRaphael(userQuestion) {
-        if (!apiKey) {
-            addMessage('raphael', "ERROR: No se ha configurado API key. Guárdela en el campo inferior.");
-            return;
-        }
-        addMessage('user', userQuestion);
-        addMessage('raphael', "Procesando...");
-        const loadingMsg = chatMessages.lastChild;
-        try {
-            const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: 'deepseek-chat',
-                    messages: [
-                        { role: 'system', content: 'Eres Raphael, un núcleo analítico sin emociones, estilo Danganronpa. Responde de forma directa, fría, sin cortesía. Usa "Aviso.", "Respuesta.", "Alerta." cuando corresponda. No uses saludos ni despedidas.' },
-                        { role: 'user', content: userQuestion }
-                    ],
-                    temperature: 0.7
-                })
+    function loadRealtimeData() {
+        puentesCollection.onSnapshot(snapshot => {
+            puentes = [];
+            snapshot.forEach(doc => {
+                puentes.push({ id: doc.id, ...doc.data() });
             });
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || `HTTP ${response.status}`);
-            }
-            const data = await response.json();
-            const reply = data.choices[0].message.content;
-            loadingMsg.remove(); // eliminar el "Procesando..."
-            addMessage('raphael', reply);
-        } catch (err) {
-            loadingMsg.remove();
-            addMessage('raphael', `Alerta. Error de conexión con API: ${err.message}`);
+            updateDashboard();
+            renderTable();
+        }, error => {
+            console.error("Error Firestore:", error);
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="7">⚠️ Error de conexión con Firebase. Verifique reglas.</td></tr>';
+        });
+    }
+
+    // --------------------------------------------------------------
+    // Datos de ejemplo (solo si la colección está vacía)
+    // --------------------------------------------------------------
+    async function seedInitialData() {
+        const snapshot = await puentesCollection.limit(1).get();
+        if (snapshot.empty) {
+            const samplePuentes = [
+                { nombre: "Puente Norte", proyecto: "Autopista Central", tipo: "Viga", iep: 7.2, estado: "Bueno", intervencion: "Ninguna" },
+                { nombre: "Puente Sur", proyecto: "Vía Costanera", tipo: "Arco", iep: 4.5, estado: "Regular", intervencion: "Programada" },
+                { nombre: "Puente Este", proyecto: "Corredor Metropolitano", tipo: "Colgante", iep: 2.1, estado: "Crítico", intervencion: "Urgente" },
+                { nombre: "Viaducto Oeste", proyecto: "Autopista Central", tipo: "Losas", iep: 8.0, estado: "Bueno", intervencion: "Ninguna" },
+                { nombre: "Puente Viejo", proyecto: "Ruta Nacional", tipo: "Metal", iep: 1.5, estado: "Crítico", intervencion: "Urgente" },
+                { nombre: "Puente Nuevo", proyecto: "Vía Costanera", tipo: "Viga", iep: 6.9, estado: "Regular", intervencion: "Programada" },
+                { nombre: "Puente Central", proyecto: "Corredor Metropolitano", tipo: "Arco", iep: 5.2, estado: "En revisión", intervencion: "Ninguna" }
+            ];
+            const batch = db.batch();
+            samplePuentes.forEach(p => {
+                const docRef = puentesCollection.doc(); // id automático
+                batch.set(docRef, p);
+            });
+            await batch.commit();
+            console.log("Datos de ejemplo insertados.");
         }
     }
 
-    sendBtn.onclick = () => {
-        const question = chatInput.value.trim();
-        if (!question) return;
-        chatInput.value = '';
-        askRaphael(question);
+    // Inicialización
+    window.onload = () => {
+        initCharts();
+        bindFilters();
+        loadRealtimeData();
+        seedInitialData();
     };
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendBtn.click();
-    });
 </script>
 </body>
 </html>
