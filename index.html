@@ -1,850 +1,401 @@
-<style>
-
-    /* --- TIPOGRAFÍA DE CATÁLOGO --- */
-
-    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700;900&display=swap');
-
-
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-
-
-    body {
-
-        background-color: #1a140f; /* Fondo oscuro exterior */
-
-        background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-
-        color: #1a1a1a;
-
-        font-family: 'Special Elite', serif; /* Tipo máquina de escribir */
-
-        min-height: 100vh;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-    }
-
-
-
-    /* --- EL LIBRO / CATÁLOGO --- */
-
-    .catalog-page {
-
-        background-color: #e8d5b5; /* Color papel viejo */
-
-        background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-
-        width: 95%;
-
-        max-width: 1100px;
-
-        min-height: 90vh;
-
-        margin: 20px auto;
-
-        padding: 40px;
-
-        border: 15px solid #2a1a0f;
-
-        outline: 2px solid #e8d5b5;
-
-        box-shadow: 0 0 50px rgba(0,0,0,0.8);
-
-        position: relative;
-
-    }
-
-
-
-    /* Borde interno decorativo tipo catálogo */
-
-    .catalog-page::after {
-
-        content: '';
-
-        position: absolute;
-
-        top: 10px; left: 10px; right: 10px; bottom: 10px;
-
-        border: 2px solid #1a1a1a;
-
-        pointer-events: none;
-
-    }
-
-
-
-    /* --- NAVEGACIÓN ESTILO ÍNDICE --- */
-
-    nav {
-
-        display: flex;
-
-        justify-content: center;
-
-        flex-wrap: wrap;
-
-        gap: 15px;
-
-        padding: 20px;
-
-        border-bottom: 3px double #1a1a1a;
-
-        margin-bottom: 30px;
-
-    }
-
-
-
-    nav a {
-
-        color: #1a1a1a;
-
-        text-decoration: none;
-
-        font-weight: bold;
-
-        text-transform: uppercase;
-
-        font-size: 0.9rem;
-
-        padding: 5px 10px;
-
-        cursor: pointer;
-
-        border: 1px solid transparent;
-
-    }
-
-
-
-    nav a:hover {
-
-        background: #1a1a1a;
-
-        color: #e8d5b5;
-
-    }
-
-
-
-    /* --- CABECERAS --- */
-
-    h1 {
-
-        font-family: 'Playfair Display', serif;
-
-        font-size: 4.5rem;
-
-        text-transform: uppercase;
-
-        text-align: center;
-
-        letter-spacing: -2px;
-
-        margin-bottom: 0;
-
-        line-height: 1;
-
-    }
-
-
-
-    .catalog-header {
-
-        text-align: center;
-
-        border-bottom: 3px solid #1a1a1a;
-
-        padding-bottom: 20px;
-
-        margin-bottom: 30px;
-
-    }
-
-
-
-    h2 {
-
-        font-family: 'Playfair Display', serif;
-
-        font-size: 2.5rem;
-
-        text-align: center;
-
-        text-transform: uppercase;
-
-        border-top: 2px solid #1a1a1a;
-
-        border-bottom: 2px solid #1a1a1a;
-
-        margin: 20px 0;
-
-        padding: 10px 0;
-
-    }
-
-
-
-    /* --- SECCIONES Y TARJETAS --- */
-
-    .section { display: none; animation: inkBleed 0.5s ease; }
-
-    .section.active { display: block; }
-
-
-
-    @keyframes inkBleed {
-
-        from { opacity: 0; filter: blur(5px); }
-
-        to { opacity: 1; filter: blur(0); }
-
-    }
-
-
-
-    .card, .dynamic-item {
-
-        border: 1px solid #1a1a1a;
-
-        padding: 20px;
-
-        margin-bottom: 20px;
-
-        position: relative;
-
-        background: rgba(0,0,0,0.03);
-
-    }
-
-
-
-    .dynamic-grid {
-
-        display: grid;
-
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-
-        gap: 20px;
-
-    }
-
-
-
-    /* --- ELEMENTOS DE DISEÑO --- */
-
-    .price-tag {
-
-        font-family: 'Playfair Display', serif;
-
-        font-size: 2rem;
-
-        float: right;
-
-    }
-
-
-
-    .stamp {
-
-        border: 3px double #8b0000;
-
-        color: #8b0000;
-
-        padding: 5px 10px;
-
-        display: inline-block;
-
-        transform: rotate(-5deg);
-
-        font-weight: bold;
-
-        text-transform: uppercase;
-
-        margin: 10px;
-
-    }
-
-
-
-    /* --- BOTONES Y FORMULARIOS --- */
-
-    .btn-action {
-
-        background: #1a1a1a;
-
-        color: #e8d5b5;
-
-        border: none;
-
-        padding: 15px 25px;
-
-        font-family: 'Special Elite', serif;
-
-        text-transform: uppercase;
-
-        cursor: pointer;
-
-        width: 100%;
-
-        transition: 0.3s;
-
-        margin-top: 10px;
-
-    }
-
-
-
-    .btn-action:hover {
-
-        background: #4a3a2a;
-
-    }
-
-
-
-    .form-input {
-
-        width: 100%;
-
-        padding: 10px;
-
-        background: transparent;
-
-        border: none;
-
-        border-bottom: 1px solid #1a1a1a;
-
-        font-family: 'Special Elite', serif;
-
-        margin-bottom: 15px;
-
-        outline: none;
-
-    }
-
-
-
-    /* --- ADAPTACIÓN RAPHAEL --- */
-
-    .raphael-module {
-
-        border: 2px solid #1a1a1a;
-
-        padding: 15px;
-
-        display: flex;
-
-        gap: 15px;
-
-        align-items: center;
-
-    }
-    
-
-
-
-    .raphael-icon-box {
-
-        font-size: 2rem;
-
-        border: 1px solid #1a1a1a;
-
-        padding: 10px;
-
-    }
-
-
-
-    /* --- ADMIN --- */
-
-    .admin-trigger { position: fixed; bottom: 10px; left: 10px; font-size: 0.7rem; opacity: 0.5; }
-
-    #loginBox {
-
-        display: none;
-
-        position: fixed;
-
-        bottom: 40px;
-
-        left: 10px;
-
-        background: #e8d5b5;
-
-        border: 2px solid #1a1a1a;
-
-        padding: 15px;
-
-        z-index: 1000;
-
-    }
-    /* Esto permite que los saltos de línea se vean en la web */
-    .preserve-format {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-
-</style>
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANGAN PROJECT - Raphael Execution</title>
+    <!-- Firebase Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <style>
+        /* DANGANRONPA THEME */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            background-image: repeating-linear-gradient(45deg, #111 0px, #111 2px, #1a0000 2px, #1a0000 8px);
+            font-family: 'Courier New', 'MS Gothic', monospace;
+            color: #f0f0f0;
+            padding: 1.5rem;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            border: 3px solid #ff1a4f;
+            box-shadow: 0 0 0 2px #000, 0 0 0 5px #ff1a4f;
+            background: rgba(0,0,0,0.85);
+            padding: 1.5rem;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #ff1a4f;
+            padding-bottom: 0.8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .mono-icon { font-size: 2rem; filter: drop-shadow(0 0 3px #ff1a4f); }
+        h1 { font-size: 1.6rem; letter-spacing: -1px; color: #ff1a4f; text-transform: uppercase; text-shadow: 2px 2px 0 #4a0000; }
+        .stats { background: #1a0000; padding: 0.3rem 0.8rem; border-left: 4px solid #ff1a4f; font-size: 0.75rem; }
+        .dashboard { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .projects-section { flex: 3; min-width: 280px; }
+        .chat-section {
+            flex: 1.5; min-width: 280px; background: #0a0000; border: 1px solid #ff1a4f;
+            display: flex; flex-direction: column; height: 70vh; position: sticky; top: 1rem;
+        }
+        .chat-header { background: #ff1a4f; color: #000; padding: 0.6rem; font-weight: bold; text-align: center; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 0.8rem; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.8rem; }
+        .message { border-left: 3px solid; padding: 0.4rem 0.6rem; background: #110000; }
+        .message.user { border-left-color: #ff1a4f; align-self: flex-end; text-align: right; background: #2a0000; }
+        .message.raphael { border-left-color: #ffffff; }
+        .chat-input-area { display: flex; border-top: 1px solid #ff1a4f; padding: 0.6rem; gap: 0.5rem; }
+        .chat-input-area input { flex: 1; background: #000; border: 1px solid #ff1a4f; color: #ffb0c0; padding: 0.5rem; font-family: monospace; }
+        .chat-input-area button, .key-config button { background: #ff1a4f; border: none; color: #000; font-weight: bold; padding: 0.5rem 1rem; cursor: pointer; }
+        .key-config { padding: 0.6rem; border-top: 1px dashed #ff1a4f; display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.7rem; }
+        .key-config input { flex: 2; background: #111; border: 1px solid #ff1a4f; color: white; padding: 0.3rem; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
+        .project-card { background: #0a0505; border: 1px solid #ff1a4f; padding: 1rem; transition: 0.05s linear; }
+        .project-card:hover { border-width: 2px; box-shadow: 0 0 8px #ff1a4f; }
+        .project-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
+        .project-title { font-size: 1.2rem; background: none; border: none; color: #ffb7c5; font-weight: bold; width: 70%; }
+        .delete-project { background: none; border: none; color: #ff1a4f; font-size: 1.2rem; cursor: pointer; }
+        .progress-bar-bg { background: #2a1515; height: 8px; margin: 0.8rem 0; }
+        .progress-fill { background: #ff1a4f; width: 0%; height: 100%; }
+        .progress-text { font-size: 0.7rem; text-align: right; color: #ff8aa0; }
+        .task-list { list-style: none; margin: 0.8rem 0; max-height: 200px; overflow-y: auto; }
+        .task-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; border-bottom: 1px dotted #4a1a1a; }
+        .task-check { width: 16px; height: 16px; accent-color: #ff1a4f; }
+        .task-text { flex: 1; background: none; border: none; color: #ddd; font-family: monospace; font-size: 0.8rem; }
+        .delete-task { background: none; border: none; color: #ff6666; cursor: pointer; }
+        .add-task { display: flex; gap: 0.3rem; margin-top: 0.6rem; }
+        .add-task input { flex: 1; background: #1a0505; border: 1px solid #ff1a4f; color: white; padding: 0.3rem; }
+        .add-task button, .add-project-btn { background: #2a0a0a; border: 1px solid #ff1a4f; color: #ffb0c0; padding: 0.3rem 0.6rem; cursor: pointer; }
+        .new-project-form { margin-top: 2rem; display: flex; gap: 0.6rem; border-top: 2px solid #ff1a4f; padding-top: 1.5rem; }
+        .new-project-form input { flex: 1; background: #000; border: 1px solid #ff1a4f; padding: 0.5rem; color: white; }
+        button { font-family: monospace; }
+    </style>
 </head>
-
 <body>
-
-
-
-    <div class="catalog-page">
-
-        <!-- CABECERA DEL CATÁLOGO -->
-
-        <div class="catalog-header">
-
-            <p style="font-size: 0.8rem; letter-spacing: 2px;">THE NEW WEST</p>
-
-            <h1>THE NEW WEST</h1>
-
-            <p style="font-style: italic;">"The future is full of lies!"</p>
-
+<div class="container">
+    <header>
+        <div class="mono-icon">🔴⚫ MONOKUMA EXECUTION</div>
+        <h1>RAPHAEL // DANGAN PROJECT MANAGER</h1>
+        <div class="stats" id="statsDisplay">---</div>
+    </header>
+    <div class="dashboard">
+        <div class="projects-section">
+            <div class="projects-grid" id="projectsContainer"></div>
+            <div class="new-project-form">
+                <input type="text" id="newProjectName" placeholder="Nuevo caso / proyecto..." autocomplete="off">
+                <button id="addProjectBtn">+ EJECUTAR PROYECTO</button>
+            </div>
         </div>
+        <div class="chat-section">
+            <div class="chat-header">⚡ CHAT CON RAPHAEL ⚡</div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message raphael">[Raphael] Sistema listo. Proporcione API key para consultas.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Pregúntame...">
+                <button id="sendChatBtn">ENVIAR</button>
+            </div>
+            <div class="key-config">
+                <input type="password" id="apiKeyInput" placeholder="DeepSeek API Key" autocomplete="off">
+                <button id="saveApiKeyBtn">GUARDAR CLAVE</button>
+                <span id="keyStatus" style="color:#ff8aa0; font-size:0.7rem;"></span>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    // --------------------------------------------------------------
+    // CONFIGURACIÓN FIREBASE (Realtime Database)
+    // --------------------------------------------------------------
+    const firebaseConfig = {
+        apiKey: "AIzaSyDo7ebAVDvYEjPDscivWWKXLUoGEAGBeIM",
+        authDomain: "thenewwest-7eb5f.firebaseapp.com",
+        databaseURL: "https://thenewwest-7eb5f-default-rtdb.firebaseio.com",
+        projectId: "thenewwest-7eb5f",
+        storageBucket: "thenewwest-7eb5f.firebasestorage.app",
+        messagingSenderId: "605270552271",
+        appId: "1:605270552271:web:a58b5b7f619e5804d7d1ba"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    // Usaremos el nodo "raphael_projects" dentro de "pre_registros" (que tiene write true según reglas)
+    // Si prefiere usar "raphael", modifique la regla a write true. Por ahora usamos "pre_registros/raphael_projects"
+    const projectsRef = database.ref('pre_registros/raphael_projects');
 
+    let projects = [];
+    let currentUserId = "user_default"; // para múltiples usuarios, pero aquí es fijo
 
-        <nav>
+    // --------------------------------------------------------------
+    // SINCRONIZACIÓN CON REALTIME DATABASE
+    // --------------------------------------------------------------
+    function syncToFirestore() {  // nombre legacy, pero es Realtime
+        projectsRef.set(projects).catch(err => {
+            console.error("Error escribiendo en RTDB:", err);
+            alert("Alerta. Error de escritura. Revise reglas de Firebase.");
+        });
+    }
 
-            <a onclick="showSection('inicio')">Inicio</a>
+    projectsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data && Array.isArray(data)) {
+            projects = data;
+        } else if (data && typeof data === 'object') {
+            // si por algún motivo es objeto, convertir a array
+            projects = Object.values(data);
+        } else {
+            projects = [];
+        }
+        renderProjects();
+    });
 
-            <a onclick="showSection('whitelist')">Whitelist</a>
+    // --------------------------------------------------------------
+    // RENDER Y EVENTOS
+    // --------------------------------------------------------------
+    function updateStats() {
+        const totalTasks = projects.reduce((acc, p) => acc + (p.tasks?.length || 0), 0);
+        const completedTasks = projects.reduce((acc, p) => acc + (p.tasks?.filter(t => t.done).length || 0), 0);
+        document.getElementById('statsDisplay').innerHTML = `📊 PROYECTOS: ${projects.length} | TAREAS: ${completedTasks}/${totalTasks}`;
+    }
 
-            <a onclick="showSection('lore')">Lore</a>
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
 
-            <a onclick="showSection('eventos')">Eventos</a>
-
-            <a onclick="showSection('galeria')">Galería</a>
-
-            <a onclick="showSection('staff')">Staff</a>
-
-            <a onclick="showSection('raphael')">Raphael</a>
-
-        </nav>
-
-
-
-        <!-- SECCIÓN: INICIO -->
-
-        <div id="inicio" class="section active">
-
-            <div style="text-align: center; margin-bottom: 40px;">
-
-                <p class="stamp">Aprobado por la Ley</p>
-
-                <p style="font-size: 1.2rem; margin: 20px 0;">Sea usted bienvenido a la frontera. Aquí encontrará todo lo necesario para forjar su destino en el lejano oeste.</p>
-
-                
-
-                <div style="display: flex; gap: 20px; justify-content: center; margin: 30px 0;">
-
-                    <button class="btn-action" style="width: auto;" onclick="showSection('whitelist')">Solicitar Acceso</button>
-
-                    <button class="btn-action" style="width: auto; background: transparent; color: #1a1a1a; border: 2px solid #1a1a1a;" onclick="copyIP()">Copiar Dirección IP</button>
-
+    function renderProjects() {
+        const container = document.getElementById('projectsContainer');
+        if (!container) return;
+        if (projects.length === 0) {
+            container.innerHTML = `<div style="text-align:center; border:1px solid #ff1a4f; padding:2rem;">⚠️ No hay proyectos activos. Cree uno nuevo.</div>`;
+            updateStats();
+            return;
+        }
+        container.innerHTML = projects.map(proj => {
+            const tasks = proj.tasks || [];
+            const completed = tasks.filter(t => t.done).length;
+            const percent = tasks.length === 0 ? 0 : (completed / tasks.length) * 100;
+            return `
+                <div class="project-card" data-id="${proj.id}">
+                    <div class="project-header">
+                        <input type="text" class="project-title" value="${escapeHtml(proj.name)}" data-id="${proj.id}" data-field="name">
+                        <button class="delete-project" data-id="${proj.id}">🗡️ ELIMINAR</button>
+                    </div>
+                    <div class="progress-bar-bg"><div class="progress-fill" style="width:${percent}%;"></div></div>
+                    <div class="progress-text">${percent.toFixed(0)}% COMPLETADO</div>
+                    <ul class="task-list" data-id="${proj.id}">
+                        ${tasks.map((task, idx) => `
+                            <li class="task-item" data-taskidx="${idx}">
+                                <input type="checkbox" class="task-check" ${task.done ? 'checked' : ''} data-projid="${proj.id}" data-taskidx="${idx}">
+                                <input type="text" class="task-text" value="${escapeHtml(task.text)}" data-projid="${proj.id}" data-taskidx="${idx}">
+                                <button class="delete-task" data-projid="${proj.id}" data-taskidx="${idx}">✖</button>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="add-task">
+                        <input type="text" placeholder="Nueva tarea..." id="newtask-${proj.id}">
+                        <button data-addtask="${proj.id}">+</button>
+                    </div>
                 </div>
-
-            </div>
-
-
-
-            <h2>Telegramas y Noticias</h2>
-
-            <div id="dynamicNews" class="dynamic-grid">
-
-                <p style="text-align:center; grid-column: 1/-1;">Cargando despachos...</p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- SECCIÓN: WHITELIST -->
-
-        <div id="whitelist" class="section">
-
-            <h2>Registro de Ciudadanía</h2>
-
-            <div style="max-width: 700px; margin: 0 auto; border: 1px solid #1a1a1a; padding: 30px;">
-
-                <p style="margin-bottom: 25px; text-align: justify; line-height: 1.4;">Debe completar este manifiesto oficial para que el Marshall autorice su entrada a nuestro territorio. Cualquier dato falso será castigado con el destierro.</p>
-
-                
-
-                <label>Nombre del Ciudadano (Nick MC)</label>
-
-                <input type="text" id="wlNick" class="form-input" placeholder="Nombre completo">
-
-
-
-                <label>Registro de Telégrafo (Discord)</label>
-
-                <input type="text" id="wlDiscord" class="form-input" placeholder="Usuario#0000">
-
-
-
-                <label>¿Manifiesto de vida (Ficha) entregado?</label>
-
-                <select id="wlFicha" class="form-input">
-
-                    <option value="no">Todavía en proceso</option>
-
-                    <option value="si">Sí, entregada en la oficina</option>
-
-                </select>
-
-
-
-                <div style="margin: 20px 0;">
-
-                    <input type="checkbox" id="wlReglas">
-
-                    <label for="wlReglas" style="font-size: 0.8rem;">Juro por mi honor respetar las leyes de esta frontera.</label>
-
-                </div>
-
-
-
-                <button class="btn-action" onclick="submitWhitelist()">Enviar a la Oficina del Marshall</button>
-
-                <p id="wlMsg" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- SECCIÓN: LORE -->
-
-        <div id="lore" class="section">
-
-            <h2>Crónicas Históricas</h2>
-
-            <div id="dynamicLore" style="display: flex; flex-direction: column; gap: 25px;">
-
-                <p style="text-align:center;">Abriendo los archivos de la nación...</p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- SECCIÓN: EVENTOS -->
-
-        <div id="eventos" class="section">
-
-            <h2>Calendario de Diligencias</h2>
-
-            <div id="dynamicEvents" class="dynamic-grid"></div>
-
-        </div>
-
-
-
-        <!-- SECCIÓN: GALERIA -->
-
-        <div id="galeria" class="section">
-
-            <h2>Retratos y Arte de Campo</h2>
-
-            <div style="border: 2px dashed #1a1a1a; padding: 20px; margin-bottom: 30px; text-align: center;">
-
-                <h3>¿Es usted un artista?</h3>
-
-                <input type="text" id="artAuthor" class="form-input" placeholder="Su firma">
-
-                <input type="text" id="artTitle" class="form-input" placeholder="Nombre de la obra">
-
-                <input type="file" id="artFile" accept="image/*" class="form-input" style="border: none;">
-
-                <button class="btn-action" id="btnSubmitArt" onclick="submitArt()">Enviar para Exposición</button>
-
-            </div>
-
-            <div id="dynamicArt" class="dynamic-grid"></div>
-
-        </div>
-
-
-
-        <!-- SECCIÓN: STAFF -->
-
-        <div id="staff" class="section">
-
-            <h2>Marshall y Alguaciles</h2>
-
-            <div id="dynamicStaff" class="dynamic-grid"></div>
-
-        </div>
-
-
-
-        <!-- SECCIÓN: RAPHAEL -->
-
-        <div id="raphael" class="section">
-
-            <h2>El Sistema Automático Raphael</h2>
-
-            <p style="text-align: center; margin-bottom: 30px; font-style: italic;">"La maravilla tecnológica que coordina el progreso de nuestra frontera"</p>
-
-            <div id="dynamicRaphael" class="dynamic-grid"></div>
-
-        </div>
-
-
-
-        <!-- PIE DE PÁGINA ESTILO CATÁLOGO -->
-
-        <div style="margin-top: 50px; border-top: 2px solid #1a1a1a; padding-top: 20px; text-align: center; font-size: 0.7rem;">
-
-            <p>ESTE CATÁLOGO ES PROPIEDAD DE INDUSTRIAS THE PLACE / THE NEW WEST © 2026</p>
-
-            <p>TODOS LOS PEDIDOS SON ENVIADOS POR DILIGENCIA A CUALQUIER PARTE DEL MUNDO</p>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ACCESO ADMIN -->
-
-    <div class="admin-trigger">
-
-        <button onclick="toggleLogin()" style="background:none; border:none; color:#1a1a1a; cursor:pointer;">[ Master Login ]</button>
-
-    </div>
-
-
-
-    <div id="loginBox">
-
-        <input type="text" id="adminUser" placeholder="Usuario de la Orden">
-
-        <input type="password" id="adminPass" placeholder="Clave Secreta">
-
-        <button class="btn-action" style="padding: 5px;" onclick="checkAdmin()">Ingresar</button>
-
-    </div>
-
-
-
-    <script type="module">
-
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-
-        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
-
-
-        const firebaseConfig = {
-
-            apiKey: "AIzaSyDo7ebAVDvYEjPDscivWWKXLUoGEAGBeIM",
-
-            authDomain: "thenewwest-7eb5f.firebaseapp.com",
-
-            projectId: "thenewwest-7eb5f",
-
-            storageBucket: "thenewwest-7eb5f.firebasestorage.app",
-
-            messagingSenderId: "605270552271",
-
-            appId: "1:605270552271:web:a58b5b7f619e5804d7d1ba",
-
-            databaseURL: "https://thenewwest-7eb5f-default-rtdb.firebaseio.com/"
-
+            `;
+        }).join('');
+        updateStats();
+        attachProjectEvents();
+    }
+
+    function attachProjectEvents() {
+        // Eliminar proyecto
+        document.querySelectorAll('.delete-project').forEach(btn => {
+            btn.onclick = () => {
+                const id = btn.getAttribute('data-id');
+                projects = projects.filter(p => p.id !== id);
+                syncToFirestore();
+            };
+        });
+        // Editar nombre proyecto
+        document.querySelectorAll('.project-title').forEach(input => {
+            input.onblur = () => {
+                const id = input.getAttribute('data-id');
+                const newName = input.value.trim();
+                if (newName) {
+                    const proj = projects.find(p => p.id === id);
+                    if (proj) proj.name = newName;
+                    syncToFirestore();
+                } else {
+                    input.value = projects.find(p => p.id === id)?.name || '';
+                }
+            };
+        });
+        // Checkbox tareas
+        document.querySelectorAll('.task-check').forEach(cb => {
+            cb.onchange = (e) => {
+                const projid = cb.getAttribute('data-projid');
+                const taskidx = parseInt(cb.getAttribute('data-taskidx'));
+                const proj = projects.find(p => p.id === projid);
+                if (proj && proj.tasks[taskidx]) {
+                    proj.tasks[taskidx].done = cb.checked;
+                    syncToFirestore();
+                }
+            };
+        });
+        // Editar texto tarea
+        document.querySelectorAll('.task-text').forEach(txt => {
+            txt.onblur = () => {
+                const projid = txt.getAttribute('data-projid');
+                const taskidx = parseInt(txt.getAttribute('data-taskidx'));
+                const newText = txt.value.trim();
+                if (newText) {
+                    const proj = projects.find(p => p.id === projid);
+                    if (proj && proj.tasks[taskidx]) {
+                        proj.tasks[taskidx].text = newText;
+                        syncToFirestore();
+                    }
+                } else {
+                    txt.value = projects.find(p => p.id === projid)?.tasks[taskidx]?.text || '';
+                }
+            };
+        });
+        // Eliminar tarea
+        document.querySelectorAll('.delete-task').forEach(btn => {
+            btn.onclick = () => {
+                const projid = btn.getAttribute('data-projid');
+                const taskidx = parseInt(btn.getAttribute('data-taskidx'));
+                const proj = projects.find(p => p.id === projid);
+                if (proj) {
+                    proj.tasks.splice(taskidx, 1);
+                    syncToFirestore();
+                }
+            };
+        });
+        // Añadir tarea
+        document.querySelectorAll('[data-addtask]').forEach(btn => {
+            btn.onclick = () => {
+                const projid = btn.getAttribute('data-addtask');
+                const inputField = document.getElementById(`newtask-${projid}`);
+                const taskText = inputField.value.trim();
+                if (taskText) {
+                    const proj = projects.find(p => p.id === projid);
+                    if (proj) {
+                        if (!proj.tasks) proj.tasks = [];
+                        proj.tasks.push({ text: taskText, done: false });
+                        syncToFirestore();
+                        inputField.value = '';
+                    }
+                }
+            };
+        });
+    }
+
+    // Añadir nuevo proyecto
+    document.getElementById('addProjectBtn').onclick = () => {
+        const nameInput = document.getElementById('newProjectName');
+        const name = nameInput.value.trim();
+        if (name === "") return;
+        const newProject = {
+            id: Date.now().toString(),
+            name: name,
+            tasks: [],
+            createdAt: new Date().toISOString()
         };
+        projects.push(newProject);
+        syncToFirestore();
+        nameInput.value = "";
+    };
 
+    // --------------------------------------------------------------
+    // MINI CHAT CON RAPHAEL (DeepSeek API)
+    // --------------------------------------------------------------
+    let apiKey = localStorage.getItem('deepseek_api_key') || '';
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const keyStatus = document.getElementById('keyStatus');
+    if (apiKey) {
+        apiKeyInput.value = apiKey;
+        keyStatus.innerText = '✅ Clave cargada';
+    } else {
+        keyStatus.innerText = '⚠️ Sin clave';
+    }
 
+    document.getElementById('saveApiKeyBtn').onclick = () => {
+        const newKey = apiKeyInput.value.trim();
+        if (newKey) {
+            apiKey = newKey;
+            localStorage.setItem('deepseek_api_key', apiKey);
+            keyStatus.innerText = '✅ Guardada';
+        } else {
+            localStorage.removeItem('deepseek_api_key');
+            apiKey = '';
+            keyStatus.innerText = '❌ Eliminada';
+        }
+    };
 
-        const app = initializeApp(firebaseConfig);
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendChatBtn');
+    const chatMessages = document.getElementById('chatMessages');
 
-        const db = getDatabase(app);
+    function addMessage(sender, text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${sender}`;
+        msgDiv.innerText = sender === 'raphael' ? `[Raphael] ${text}` : `[TÚ] ${text}`;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-        const auth = getAuth(app);
-
-
-
-        // --- LÓGICA DE WHITELIST ---
-
-        window.submitWhitelist = () => {
-
-            const nick = document.getElementById('wlNick').value.trim();
-
-            const discord = document.getElementById('wlDiscord').value.trim();
-
-            const ficha = document.getElementById('wlFicha').value;
-
-            const reglas = document.getElementById('wlReglas').checked;
-
-            const msg = document.getElementById('wlMsg');
-
-
-
-            if (!nick || !discord) { alert("Complete el manifiesto."); return; }
-
-            if (!reglas) { alert("Debe jurar respeto a las leyes."); return; }
-
-
-
-            const wlRef = ref(db, 'whitelist_requests');
-
-            push(wlRef, {
-
-                nick, discord, fichaSubida: ficha, status: "pendiente", date: new Date().toLocaleString()
-
-            }).then(() => {
-
-                msg.style.color = "#1a1a1a";
-
-                msg.innerHTML = "¡Telegrama enviado con éxito!";
-
-                document.getElementById('wlNick').value = "";
-
-                document.getElementById('wlDiscord').value = "";
-
+    async function askRaphael(userQuestion) {
+        if (!apiKey) {
+            addMessage('raphael', "ERROR: No se ha configurado API key. Guárdela en el campo inferior.");
+            return;
+        }
+        addMessage('user', userQuestion);
+        addMessage('raphael', "Procesando...");
+        const loadingMsg = chatMessages.lastChild;
+        try {
+            const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'deepseek-chat',
+                    messages: [
+                        { role: 'system', content: 'Eres Raphael, un núcleo analítico sin emociones, estilo Danganronpa. Responde de forma directa, fría, sin cortesía. Usa "Aviso.", "Respuesta.", "Alerta." cuando corresponda. No uses saludos ni despedidas.' },
+                        { role: 'user', content: userQuestion }
+                    ],
+                    temperature: 0.7
+                })
             });
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error?.message || `HTTP ${response.status}`);
+            }
+            const data = await response.json();
+            const reply = data.choices[0].message.content;
+            loadingMsg.remove(); // eliminar el "Procesando..."
+            addMessage('raphael', reply);
+        } catch (err) {
+            loadingMsg.remove();
+            addMessage('raphael', `Alerta. Error de conexión con API: ${err.message}`);
+        }
+    }
 
-        };
-
-
-
-        // --- CARGA DINÁMICA ---
-
-        const load = (path, containerId, templateFn, emptyMsg) => {
-
-            onValue(ref(db, path), (snapshot) => {
-
-                const data = snapshot.val();
-
-                const container = document.getElementById(containerId);
-
-                if (!data) { container.innerHTML = `<p>${emptyMsg}</p>`; return; }
-
-                container.innerHTML = Object.values(data).reverse().map(templateFn).join('');
-
-            });
-
-        };
-
-
-
-        load('news', 'dynamicNews', n => `
-            <div class="card">
-                <span class="price-tag">NEW</span>
-                <h3>${n.title}</h3>
-                <p class="preserve-format">${n.content}</p>
-                <small style="text-transform:uppercase;">${n.date || 'Hoy'}</small>
-            </div>`, "Sin noticias.");
-
-        load('events', 'dynamicEvents', e => `
-            <div class="card">
-                <h3>${e.title}</h3>
-                <p class="preserve-format">${e.content}</p>
-            </div>`, "Sin eventos.");
-
-        load('staff', 'dynamicStaff', s => `
-            <div class="card" style="text-align:center;">
-                <h3>${s.name || s.title}</h3>
-                <p class="preserve-format">"${s.range || s.content}"</p>
-            </div>`, "Staff no asignado.");
-
-        load('lore', 'dynamicLore', l => `
-            <div class="card">
-                <h3>${l.year} • ${l.title}</h3>
-                <p class="preserve-format">${l.content}</p>
-            </div>`, "Historia no escrita.");
-
-        load('art', 'dynamicArt', a => `
-            <div class="card" style="padding:5px;">
-                <img src="${a.url}" style="width:100%; border-bottom:1px solid #1a1a1a;">
-                <div style="padding:10px;">
-                    <h3>${a.title}</h3>
-                    <p>Artista: ${a.author}</p>
-                </div>
-            </div>`, "Galería vacía.");
-
-        load('raphael', 'dynamicRaphael', r => `
-            <div class="raphael-module">
-                <div class="raphael-icon-box"><i class="fas fa-microchip"></i></div>
-                <div>
-                    <h3>${r.title}</h3>
-                    ${r.tag ? `<span class="stamp" style="font-size:0.6rem; margin:5px 0; display:block; width:fit-content;">${r.tag}</span>` : ''}
-                    <p class="preserve-format" style="margin-top:10px;">${r.content}</p>
-                </div>
-            </div>`, "Sistema apagado.");
-
-
-
-        // --- NAVEGACIÓN ---
-
-        window.showSection = (id) => {
-
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-
-            document.getElementById(id).classList.add('active');
-
-            window.scrollTo(0,0);
-
-        };
-
-
-
-        window.copyIP = () => {
-
-            navigator.clipboard.writeText('play.thenewwest.com');
-
-            alert('¡Dirección IP copiada al portapapeles!');
-
-        };
-
-
-
-        window.toggleLogin = () => {
-
-            const box = document.getElementById('loginBox');
-
-            box.style.display = box.style.display === 'block' ? 'none' : 'block';
-
-        };
-
-
-
-        window.checkAdmin = () => {
-
-            const userInput = document.getElementById('adminUser').value;
-
-            const passInput = document.getElementById('adminPass').value;
-
-            const email = userInput.includes('@') ? userInput : `${userInput}@thenewwest.com`;
-
-            signInWithEmailAndPassword(auth, email, passInput)
-
-                .then(() => { window.location.href = "app/admin.html"; })
-
-                .catch(() => alert("Credenciales incorrectas."));
-
-        };
-
-    </script>
-
+    sendBtn.onclick = () => {
+        const question = chatInput.value.trim();
+        if (!question) return;
+        chatInput.value = '';
+        askRaphael(question);
+    };
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendBtn.click();
+    });
+</script>
 </body>
-
 </html>
